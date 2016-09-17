@@ -1,4 +1,5 @@
 using System;
+using System.IO;
 using System.Text.RegularExpressions;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,14 +16,29 @@ namespace seedtable {
             ClosedXml,
         }
 
-        [Value(0, Required = true, HelpText = "Excel file name")]
-        public string excel_name { get; set; }
+        [Value(0, Required = true, HelpText = "xlsx files")]
+        public IEnumerable<string> files { get; set; }
+
+        [Option('S', "subdivide", Separator = ',', HelpText = "subdivide rules")]
+        public IEnumerable<string> subdivide { get; set; }
+
+        [Option('I', "ignore", Separator = ',', HelpText = "ignore sheet names")]
+        public IEnumerable<string> ignore { get; set; }
         
-        [Value(1, HelpText = "sheet names (default = all)")]
-        public IEnumerable<string> sheet_names { get; set; }
+        [Option('O', "only", Separator = ',', HelpText = "only sheet names")]
+        public IEnumerable<string> only { get; set; }
+
+        [Option('i', "input", Default = ".", HelpText = "input directory")]
+        public string input { get; set; }
 
         [Option('o', "output", Default = ".", HelpText = "output directory")]
-        public string directory { get; set; }
+        public string output { get; set; }
+
+        [Option('d', "stdout", Default = false, HelpText = "output one sheets to stdout")]
+        public bool stdout { get; set; }
+
+        [Option('n', "ignore-columns", Separator = ',', HelpText = "ignore columns")]
+        public IEnumerable<string> ignoreColumns { get; set; }
 
         [Option('e', "engine", Default = Engine.OpenXml, HelpText = "parser engine")]
         public Engine engine { get; set; }
@@ -30,20 +46,30 @@ namespace seedtable {
 
     [Verb("to", HelpText = "Yaml to Excel")]
     class ToOptions {
-        [Value(0, Required = true, HelpText = "Excel file name")]
-        public string excel_name { get; set; }
+        public enum Engine {
+            ClosedXml,
+        }
 
-        [Value(1, HelpText = "sheet names (default = all) ex. sheetname--3 = subdivide 3")]
-        public IEnumerable<string> sheet_names { get; set; }
+        [Value(0, Required = true, HelpText = "xlsx files")]
+        public IEnumerable<string> files { get; set; }
+
+        [Option('I', "ignore", Separator = ',', HelpText = "ignore sheet names")]
+        public IEnumerable<string> ignore { get; set; }
+        
+        [Option('O', "only", Separator = ',', HelpText = "only sheet names")]
+        public IEnumerable<string> only { get; set; }
 
         [Option('i', "input", Default = ".", HelpText = "input directory")]
-        public string directory { get; set; }
+        public string input { get; set; }
 
-        [Option('o', "output", Default = "", HelpText = "output xlsx name (or overwrite)")]
-        public string output_excel_name { get; set; }
+        [Option('o', "output", Default = ".", HelpText = "output directory (or overwrite)")]
+        public string output { get; set; }
 
         [Option('d', "delete", Default = false, HelpText = "delete enabled")]
         public bool delete { get; set; }
+
+        [Option('e', "engine", Default = Engine.ClosedXml, HelpText = "parser engine")]
+        public Engine engine { get; set; }
     }
 
     class MainClass {
@@ -57,53 +83,112 @@ namespace seedtable {
         }
 
         static bool SeedToExcel(ToOptions options) {
-            using (var workbook = new XLWorkbook(options.excel_name)) {
-                var excel = new ClosedExcelData(workbook);
-                (options.sheet_names.Count() > 0 ? options.sheet_names : excel.SheetNames).ForEach(
-                    sheet_name => excel.GetSeedTable(SheetNameOriginal(sheet_name)).DataToExcel(YamlData.ReadFrom(SheetNameOriginal(sheet_name), options.directory).data, options.delete)
-                    );
-                if (options.output_excel_name.Length == 0) {
-                    workbook.Save();
-                } else {
-                    workbook.SaveAs(options.output_excel_name);
+            var sheetsConfig = new SheetsConfig(options.only, options.ignore);
+            foreach (var file in options.files) {
+                var filePath = Path.Combine(options.input, file);
+                if (options.engine == ToOptions.Engine.ClosedXml) {
+                    using (var workbook = new XLWorkbook(filePath)) {
+                        var excel = new ClosedExcelData(workbook);
+                        var sheetNames = excel.SheetNames.Where(sheetName => sheetsConfig.IsUseSheet(sheetName));
+                        foreach (var sheetName in sheetNames) {
+                            var yamlData = YamlData.ReadFrom(sheetName, options.input);
+                            excel.GetSeedTable(sheetName).DataToExcel(yamlData.data, options.delete);
+                        }
+                        if (options.output.Length == 0) {
+                            workbook.Save();
+                        } else {
+                            workbook.SaveAs(Path.Combine(options.output, file));
+                        }
+                    }
                 }
             }
             return true;
         }
 
         static bool ExcelToSeed(FromOptions options) {
-            if (options.engine == FromOptions.Engine.OpenXml) {
-                using (var document = SpreadsheetDocument.Open(options.excel_name, false)) {
-                    var excel = new ExcelData(document);
-                    (options.sheet_names.Count() > 0 ? options.sheet_names : excel.SheetNames).ForEach(
-                        sheet_name => new YamlData(excel.ExcelToData(SheetNameOriginal(sheet_name)))
-                            .WriteTo(SheetNameOriginal(sheet_name), options.directory, SheetNamePreCut(sheet_name), SheetNamePostCut(sheet_name))
-                        );
-                }
-            } else {
-                using (var workbook = new XLWorkbook(options.excel_name)) {
-                    var excel = new ClosedExcelData(workbook);
-                    (options.sheet_names.Count() > 0 ? options.sheet_names : excel.SheetNames).ForEach(
-                        sheet_name => new YamlData(excel.GetSeedTable(SheetNameOriginal(sheet_name)).ExcelToData())
-                            .WriteTo(SheetNameOriginal(sheet_name), options.directory, SheetNamePreCut(sheet_name), SheetNamePostCut(sheet_name))
-                        );
+            var sheetsConfig = new SheetsConfig(options.only, options.ignore, options.subdivide);
+            foreach (var file in options.files) {
+                var filePath = Path.Combine(options.input, file);
+                if (options.engine == FromOptions.Engine.OpenXml) {
+                    using (var document = SpreadsheetDocument.Open(filePath, false)) {
+                        var excel = new ExcelData(document);
+                        var sheetNames = excel.SheetNames.Where(sheetName => sheetsConfig.IsUseSheet(sheetName));
+                        foreach (var sheetName in sheetNames) {
+                            var subdivide = sheetsConfig.subdivide(sheetName);
+                            new YamlData(excel.ExcelToData(sheetName))
+                                .WriteTo(sheetName, options.output, subdivide.cut_prefix, subdivide.cut_postfix);
+                        }
+                    }
+                } else {
+                    using (var workbook = new XLWorkbook(filePath)) {
+                        var excel = new ClosedExcelData(workbook);
+                        var sheetNames = excel.SheetNames.Where(sheetName => sheetsConfig.IsUseSheet(sheetName));
+                        foreach (var sheetName in sheetNames) {
+                            var subdivide = sheetsConfig.subdivide(sheetName);
+                            new YamlData(excel.GetSeedTable(sheetName).ExcelToData())
+                                .WriteTo(sheetName, options.output, subdivide.cut_prefix, subdivide.cut_postfix);
+                        }
+                    }
                 }
             }
             return true;
         }
 
-        static string SheetNameOriginal(string sheet_name) {
-            return Regex.Replace(Regex.Replace(sheet_name, @"^\d+--", ""), @"--\d+$", "");
+        class SheetsConfig {
+            public SheetsConfig(IEnumerable<string> only, IEnumerable<string> ignore, IEnumerable<string> subdivide = null) {
+                var subdivideSheetNameWithSubdivides = subdivide == null ? new SheetNameWithSubdivide[] { } : subdivide.Select((sheetName) => SheetNameWithSubdivide.FromMixed(sheetName));
+                var onlySheetNameWithSubdivides = only.Select((sheetName) => SheetNameWithSubdivide.FromMixed(sheetName));
+                foreach(var sheetNameWithSubdivide in onlySheetNameWithSubdivides.Concat(subdivideSheetNameWithSubdivides)) {
+                    subdivideRules[sheetNameWithSubdivide.ToString()] = sheetNameWithSubdivide;
+                }
+                onlySheetNames = new HashSet<string>(onlySheetNameWithSubdivides.Select((sheetNameWithSubdivide) => sheetNameWithSubdivide.ToString()));
+                ignoreSheetNames = new HashSet<string>(ignore.Select((sheetName) => SheetNameWithSubdivide.FromMixed(sheetName).ToString()));
+            }
+
+            Dictionary<string, SheetNameWithSubdivide> subdivideRules = new Dictionary<string, SheetNameWithSubdivide>();
+            HashSet<string> onlySheetNames;
+            HashSet<string> ignoreSheetNames;
+
+            public bool IsUseSheet(string sheetName) {
+                if (ignoreSheetNames.Contains(sheetName)) return false;
+                if (onlySheetNames.Count != 0 && !onlySheetNames.Contains(sheetName)) return false;
+                return true;
+            }
+
+            public SheetNameWithSubdivide subdivide(string sheetName) {
+                return subdivideRules.ContainsKey(sheetName) ? subdivideRules[sheetName] : new SheetNameWithSubdivide(sheetName);
+            }
         }
 
-        static int SheetNamePreCut(string sheet_name) {
-            var result = Regex.Match(sheet_name, @"^(\d+)--");
-            return result.Success ? Convert.ToInt32(result.Groups[1].Value) : 0;
-        }
+        class SheetNameWithSubdivide {
+            public SheetNameWithSubdivide(string sheet_name, bool need_cut = false, int cut_prefix = 0, int cut_postfix = 0) {
+                this.sheet_name = sheet_name;
+                this.need_cut = need_cut;
+                this.cut_prefix = cut_prefix;
+                this.cut_postfix = cut_postfix;
+            }
 
-        static int SheetNamePostCut(string sheet_name) {
-            var result = Regex.Match(sheet_name, @"--(\d+)$");
-            return result.Success ? Convert.ToInt32(result.Groups[1].Value) : 0;
+            public string sheet_name { get; }
+            public bool need_cut { get; }
+            public int cut_prefix { get; }
+            public int cut_postfix { get; }
+
+            public override string ToString() => this.sheet_name;
+
+            public static SheetNameWithSubdivide FromMixed(string sheet_name_mixed) {
+                var result = Regex.Match(sheet_name_mixed, @"^(?:(\d+):)?(.+?)(?::(\d+))?$");
+                if (!result.Success) throw new Exception($"{sheet_name_mixed} is wrong sheet name and subdivide rule definition");
+                var cut_prefix = result.Groups[1].Value;
+                var sheet_name = result.Groups[2].Value;
+                var cut_postfix = result.Groups[3].Value;
+                var need_cut = cut_prefix.Length != 0 || cut_postfix.Length != 0;
+                return new SheetNameWithSubdivide(
+                    sheet_name,
+                    need_cut,
+                    cut_prefix.Length == 0 ? 0 : Convert.ToInt32(cut_prefix),
+                    cut_postfix.Length == 0 ? 0 :Convert.ToInt32(cut_postfix)
+                    );
+            }
         }
     }
 
