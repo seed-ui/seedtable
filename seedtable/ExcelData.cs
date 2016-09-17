@@ -46,7 +46,7 @@ namespace SeedTable {
 
         private Sheet Sheet(string sheetName) {
             try {
-                return this.Sheets.First(_sheet => _sheet.Name == sheetName);
+                return this.Sheets.First(sheet => sheet.Name == sheetName);
             } catch (Exception exception) {
                 throw new InvalidOperationException(string.Format("シート[{0}]が見つかりません", sheetName), exception);
             }
