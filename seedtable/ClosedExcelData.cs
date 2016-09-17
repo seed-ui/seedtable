@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using ClosedXML.Excel;
 
-namespace seedtable {
+namespace SeedTable {
     class ClosedExcelData {
         private XLWorkbook workbook;
 

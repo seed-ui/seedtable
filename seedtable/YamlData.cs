@@ -4,7 +4,7 @@ using System.IO;
 using YamlDotNet.RepresentationModel;
 using YamlDotNet.Serialization;
 
-namespace seedtable {
+namespace SeedTable {
     class YamlData {
         public DataDictionaryList data { get; private set; }
 

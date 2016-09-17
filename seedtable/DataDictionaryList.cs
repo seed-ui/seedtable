@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace seedtable {
+namespace SeedTable {
     class DataDictionaryList {
         public IEnumerable<Dictionary<string, string>> table { get; private set; }
         public DataDictionaryList(IEnumerable<Dictionary<string, string>> table) {

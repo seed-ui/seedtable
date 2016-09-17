@@ -65,18 +65,31 @@
   <PropertyGroup>
     <ApplicationIcon>seedtable.ico</ApplicationIcon>
   </PropertyGroup>
+  <PropertyGroup>
+    <TargetZone>LocalIntranet</TargetZone>
+  </PropertyGroup>
+  <PropertyGroup>
+    <GenerateManifests>false</GenerateManifests>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationManifest>Properties\app.manifest</ApplicationManifest>
+  </PropertyGroup>
   <ItemGroup>
-    <Reference Include="ClosedXML, Version=0.76.0.0, Culture=neutral, PublicKeyToken=fd1eb21b62ae805b, processorArchitecture=MSIL">
-      <HintPath>..\packages\ClosedXML.0.76.0\lib\net40-client\ClosedXML.dll</HintPath>
+    <Reference Include="ClosedXML, Version=0.80.0.0, Culture=neutral, PublicKeyToken=fd1eb21b62ae805b, processorArchitecture=MSIL">
+      <HintPath>..\packages\ClosedXML.0.80.1\lib\net40-client\ClosedXML.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="CommandLine, Version=2.0.275.0, Culture=neutral, PublicKeyToken=de6f01bd326f8c32, processorArchitecture=MSIL">
       <HintPath>..\packages\CommandLineParser.2.0.275-beta\lib\net40\CommandLine.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="EPPlus, Version=4.1.0.0, Culture=neutral, PublicKeyToken=ea159fdaa78159a1, processorArchitecture=MSIL">
+      <HintPath>..\packages\EPPlus.4.1.0\lib\net40\EPPlus.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
-    <Reference Include="YamlDotNet, Version=3.8.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\YamlDotNet.3.8.0\lib\net35\YamlDotNet.dll</HintPath>
+    <Reference Include="YamlDotNet, Version=4.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\YamlDotNet.4.0.1-pre285\lib\net35\YamlDotNet.dll</HintPath>
       <Private>True</Private>
     </Reference>
   </ItemGroup>
@@ -102,6 +115,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+    <None Include="Properties\app.manifest" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.0">

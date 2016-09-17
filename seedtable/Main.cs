@@ -8,7 +8,7 @@ using DocumentFormat.OpenXml.Spreadsheet;
 using ClosedXML.Excel;
 using CommandLine;
 
-namespace seedtable {
+namespace SeedTable {
     [Verb("from", HelpText ="Yaml from Excel")]
     class FromOptions {
         public enum Engine {
@@ -116,7 +116,7 @@ namespace seedtable {
                         foreach (var sheetName in sheetNames) {
                             var subdivide = sheetsConfig.subdivide(sheetName);
                             new YamlData(excel.ExcelToData(sheetName))
-                                .WriteTo(sheetName, options.output, subdivide.cut_prefix, subdivide.cut_postfix);
+                                .WriteTo(sheetName, options.output, subdivide.CutPrefix, subdivide.CutPostfix);
                         }
                     }
                 } else {
@@ -126,7 +126,7 @@ namespace seedtable {
                         foreach (var sheetName in sheetNames) {
                             var subdivide = sheetsConfig.subdivide(sheetName);
                             new YamlData(excel.GetSeedTable(sheetName).ExcelToData())
-                                .WriteTo(sheetName, options.output, subdivide.cut_prefix, subdivide.cut_postfix);
+                                .WriteTo(sheetName, options.output, subdivide.CutPrefix, subdivide.CutPostfix);
                         }
                     }
                 }
@@ -161,32 +161,32 @@ namespace seedtable {
         }
 
         class SheetNameWithSubdivide {
-            public SheetNameWithSubdivide(string sheet_name, bool need_cut = false, int cut_prefix = 0, int cut_postfix = 0) {
-                this.sheet_name = sheet_name;
-                this.need_cut = need_cut;
-                this.cut_prefix = cut_prefix;
-                this.cut_postfix = cut_postfix;
+            public SheetNameWithSubdivide(string sheetName, bool needSubdivide = false, int cutPrefix = 0, int cutPostfix = 0) {
+                this.SheetName = sheetName;
+                this.NeedSubdivide = needSubdivide;
+                this.CutPrefix = cutPrefix;
+                this.CutPostfix = cutPostfix;
             }
 
-            public string sheet_name { get; }
-            public bool need_cut { get; }
-            public int cut_prefix { get; }
-            public int cut_postfix { get; }
+            public string SheetName { get; }
+            public bool NeedSubdivide { get; }
+            public int CutPrefix { get; }
+            public int CutPostfix { get; }
 
-            public override string ToString() => this.sheet_name;
+            public override string ToString() => this.SheetName;
 
-            public static SheetNameWithSubdivide FromMixed(string sheet_name_mixed) {
-                var result = Regex.Match(sheet_name_mixed, @"^(?:(\d+):)?(.+?)(?::(\d+))?$");
-                if (!result.Success) throw new Exception($"{sheet_name_mixed} is wrong sheet name and subdivide rule definition");
-                var cut_prefix = result.Groups[1].Value;
-                var sheet_name = result.Groups[2].Value;
-                var cut_postfix = result.Groups[3].Value;
-                var need_cut = cut_prefix.Length != 0 || cut_postfix.Length != 0;
+            public static SheetNameWithSubdivide FromMixed(string sheetNameMixed) {
+                var result = Regex.Match(sheetNameMixed, @"^(?:(\d+):)?(.+?)(?::(\d+))?$");
+                if (!result.Success) throw new Exception($"{sheetNameMixed} is wrong sheet name and subdivide rule definition");
+                var cutPrefix = result.Groups[1].Value;
+                var sheetName = result.Groups[2].Value;
+                var cutPostfix = result.Groups[3].Value;
+                var needSubdivide = cutPrefix.Length != 0 || cutPostfix.Length != 0;
                 return new SheetNameWithSubdivide(
-                    sheet_name,
-                    need_cut,
-                    cut_prefix.Length == 0 ? 0 : Convert.ToInt32(cut_prefix),
-                    cut_postfix.Length == 0 ? 0 :Convert.ToInt32(cut_postfix)
+                    sheetName,
+                    needSubdivide,
+                    cutPrefix.Length == 0 ? 0 : Convert.ToInt32(cutPrefix),
+                    cutPostfix.Length == 0 ? 0 :Convert.ToInt32(cutPostfix)
                     );
             }
         }
