@@ -121,8 +121,8 @@ namespace SeedTable {
                 }
                 // add
                 var restIdGroups = GetReversedIdGroups(
-                    idIndexes.Select(idIndex => int.Parse(idIndex.Id)).ToList(),
-                    restIds.Select(id => int.Parse(id)).ToList()
+                    idIndexes.Select(idIndex => long.Parse(idIndex.Id)).ToList(),
+                    restIds.Select(id => long.Parse(id)).ToList()
                 );
                 var doAdd = restIdGroups.Count != 0;
                 List<string> lastRestIdGroup = null;
@@ -203,7 +203,7 @@ namespace SeedTable {
                 }
             }
 
-            Dictionary<string, List<string>> GetReversedIdGroups(List<int> existIds, List<int> restIds) {
+            Dictionary<string, List<string>> GetReversedIdGroups(List<long> existIds, List<long> restIds) {
                 // 逆順にする理由:
                 //   - 行挿入時逆順に挿入するとインデックスの移動を気にしなくとも良くなる
                 //   - 境界判定の最終比較値が0になるので扱いやすい
