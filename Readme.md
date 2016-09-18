@@ -8,6 +8,12 @@ seed yaml <-> xlsx を相互変換するツール
 
 Monoだと4.4で動きます。
 
+## Install
+
+[Releases](https://github.com/seed-ui/seedtable/releases)にあるzipをおとしてきてコマンドラインで叩いて下さい。
+
+Monoの場合は`mono seedtable.exe`等として下さい。
+
 ## Usage
 
 ```
