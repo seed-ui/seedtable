@@ -2,6 +2,12 @@
 
 seed yaml <-> xlsx を相互変換するツール
 
+## Requires
+
+.NET Framework 4.0だか4.6だかあたりが必要だと思います。
+
+Monoだと4.4で動きます。
+
 ## Usage
 
 ```
