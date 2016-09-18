@@ -8,8 +8,8 @@ RubyにはExcel変換は荷が重い(遅い)のでMS謹製のC#。
 
 ```
 # xlsx -> yaml
-$ seedtable from quest.xlsx -o db/seeds stages quests
-$ seedtable from limit_break.xlsx -o db/seeds limit_break_materials--2
+$ seedtable from foo.xlsx -o db/seeds hoges piyos
+$ seedtable from foo.xlsx -o db/seeds hoges--2
 $ seedtable from card.xlsx -o db/seeds 1--cards
 ```
 

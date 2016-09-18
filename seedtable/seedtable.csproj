@@ -106,10 +106,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ClosedExcelData.cs" />
+    <Compile Include="ClosedXML.cs" />
     <Compile Include="DataDictionaryList.cs" />
     <Compile Include="EPPlus.cs" />
-    <Compile Include="ExcelData.cs" />
+    <Compile Include="OpenXml.cs" />
     <Compile Include="Main.cs" />
     <Compile Include="AssemblyInfo.cs" />
     <Compile Include="SeedTable.cs" />
