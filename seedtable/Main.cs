@@ -3,21 +3,22 @@ using System.IO;
 using System.Text.RegularExpressions;
 using System.Collections.Generic;
 using System.Linq;
-using DocumentFormat.OpenXml.Packaging;
-using DocumentFormat.OpenXml.Spreadsheet;
-using ClosedXML.Excel;
 using CommandLine;
 
 namespace SeedTable {
-    [Verb("from", HelpText ="Yaml from Excel")]
-    class FromOptions {
+
+    class CommonOptions {
         public enum Engine {
             OpenXml,
-            ClosedXml,
+            ClosedXML,
+            EPPlus,
         }
 
         [Value(0, Required = true, HelpText = "xlsx files")]
         public IEnumerable<string> files { get; set; }
+
+        [Option('o', "output", Default = ".", HelpText = "output directory")]
+        public string output { get; set; }
 
         [Option('S', "subdivide", Separator = ',', HelpText = "subdivide rules")]
         public IEnumerable<string> subdivide { get; set; }
@@ -28,48 +29,50 @@ namespace SeedTable {
         [Option('O', "only", Separator = ',', HelpText = "only sheet names")]
         public IEnumerable<string> only { get; set; }
 
-        [Option('i', "input", Default = ".", HelpText = "input directory")]
-        public string input { get; set; }
+        [Option('R', "require-version", Default = "", HelpText = "require version (with version column)")]
+        public string requireVersion { get; set; }
 
-        [Option('o', "output", Default = ".", HelpText = "output directory")]
-        public string output { get; set; }
-
-        [Option('d', "stdout", Default = false, HelpText = "output one sheets to stdout")]
-        public bool stdout { get; set; }
+        [Option('v', "version-column", HelpText = "version column")]
+        public string versionColumn { get; set; }
 
         [Option('n', "ignore-columns", Separator = ',', HelpText = "ignore columns")]
         public IEnumerable<string> ignoreColumns { get; set; }
 
+        [Option("column-names-row", Default = 2, HelpText = "column names row index")]
+        public int columnNamesRow { get; set; }
+
+        [Option("data-start-row", Default = 3, HelpText = "data start row index")]
+        public int dataStartRow { get; set; }
+
         [Option('e', "engine", Default = Engine.OpenXml, HelpText = "parser engine")]
-        public Engine engine { get; set; }
+        public virtual Engine engine { get; set; }
     }
 
-    [Verb("to", HelpText = "Yaml to Excel")]
-    class ToOptions {
-        public enum Engine {
-            ClosedXml,
-        }
+    [Verb("from", HelpText ="Yaml from Excel")]
+    class FromOptions : CommonOptions {
+        [Option('e', "engine", Default = Engine.OpenXml, HelpText = "parser engine")]
+        public override Engine engine { get; set; }
 
-        [Value(0, Required = true, HelpText = "xlsx files")]
-        public IEnumerable<string> files { get; set; }
-
-        [Option('I', "ignore", Separator = ',', HelpText = "ignore sheet names")]
-        public IEnumerable<string> ignore { get; set; }
-        
-        [Option('O', "only", Separator = ',', HelpText = "only sheet names")]
-        public IEnumerable<string> only { get; set; }
+        // [Option('d', "stdout", Default = false, HelpText = "output one sheets to stdout")]
+        // public bool stdout { get; set; }
 
         [Option('i', "input", Default = ".", HelpText = "input directory")]
         public string input { get; set; }
+    }
 
-        [Option('o', "output", Default = ".", HelpText = "output directory (or overwrite)")]
-        public string output { get; set; }
+    [Verb("to", HelpText = "Yaml to Excel")]
+    class ToOptions : CommonOptions {
+        [Option('e', "engine", Default = Engine.EPPlus, HelpText = "parser engine")]
+        public override Engine engine { get; set; }
+
+        [Option('s', "seed-input", Default = ".", HelpText = "seed input directory")]
+        public string seedInput { get; set; }
+
+        [Option('x', "xlsx-input", Default = ".", HelpText = "xlsx input directory")]
+        public string xlsxInput { get; set; }
 
         [Option('d', "delete", Default = false, HelpText = "delete enabled")]
         public bool delete { get; set; }
-
-        [Option('e', "engine", Default = Engine.ClosedXml, HelpText = "parser engine")]
-        public Engine engine { get; set; }
     }
 
     class MainClass {
@@ -83,55 +86,173 @@ namespace SeedTable {
         }
 
         static bool SeedToExcel(ToOptions options) {
-            var sheetsConfig = new SheetsConfig(options.only, options.ignore);
+            Log("engine", options.engine);
+            Log("output-directory", options.output);
+            var startTime = DateTime.Now;
+            var previousTime = startTime;
             foreach (var file in options.files) {
-                var filePath = Path.Combine(options.input, file);
-                if (options.engine == ToOptions.Engine.ClosedXml) {
-                    using (var workbook = new XLWorkbook(filePath)) {
-                        var excel = new ClosedExcelData(workbook);
-                        var sheetNames = excel.SheetNames.Where(sheetName => sheetsConfig.IsUseSheet(sheetName));
-                        foreach (var sheetName in sheetNames) {
-                            var yamlData = YamlData.ReadFrom(sheetName, options.input);
-                            excel.GetSeedTable(sheetName).DataToExcel(yamlData.data, options.delete);
+                var filePath = Path.Combine(options.xlsxInput, file);
+                Log(file);
+                Log("  full-path", filePath);
+                CheckFileExists(filePath);
+                switch (options.engine) {
+                    case ToOptions.Engine.OpenXml:
+                        using (var excelData = OpenXml.ExcelData.FromFile(filePath, true)) {
+                            var parseFinishTime = DateTime.Now;
+                            DurationLog("  parse-time", previousTime, parseFinishTime);
+                            previousTime = SeedToExcelCore(excelData, file, options, startTime, parseFinishTime);
                         }
-                        if (options.output.Length == 0) {
-                            workbook.Save();
-                        } else {
-                            workbook.SaveAs(Path.Combine(options.output, file));
+                        break;
+                    case ToOptions.Engine.ClosedXML:
+                        using (var excelData = ClosedXML.ExcelData.FromFile(filePath)) {
+                            var parseFinishTime = DateTime.Now;
+                            DurationLog("  parse-time", previousTime, parseFinishTime);
+                            previousTime = SeedToExcelCore(excelData, file, options, startTime, parseFinishTime);
                         }
-                    }
+                        break;
+                    case ToOptions.Engine.EPPlus:
+                        using (var excelData = EPPlus.ExcelData.FromFile(filePath)) {
+                            var parseFinishTime = DateTime.Now;
+                            DurationLog("  parse-time", previousTime, parseFinishTime);
+                            previousTime = SeedToExcelCore(excelData, file, options, startTime, parseFinishTime);
+                        }
+                        break;
                 }
             }
+            DurationLog("total", startTime, DateTime.Now);
             return true;
         }
 
+        static DateTime SeedToExcelCore(IExcelData excelData, string file, ToOptions options, DateTime startTime, DateTime previousTime) {
+            Log("  sheets");
+            var sheetsConfig = new SheetsConfig(options.only, options.ignore);
+            foreach (var sheetName in excelData.SheetNames) {
+                Log($"    {sheetName}");
+                if (!sheetsConfig.IsUseSheet(sheetName)) {
+                    Log("      ignore", "skip");
+                    continue;
+                }
+                var seedTable = GetSeedTable(excelData, sheetName, options);
+                if (seedTable.Errors.Count != 0) {
+                    continue;
+                }
+                YamlData yamlData = null;
+                try {
+                    yamlData = YamlData.ReadFrom(sheetName, options.seedInput);
+                } catch (FileNotFoundException exception) {
+                    Log("      skip", $"seed file [{exception.FileName}] not found");
+                    continue;
+                }
+                seedTable.DataToExcel(yamlData.data, options.delete);
+                var now = DateTime.Now;
+                DurationLog("      write-time", previousTime, now);
+                previousTime = now;
+            }
+            if (options.output.Length == 0) {
+                excelData.Save();
+                Log("  write-path", "overwrite");
+            } else {
+                var writePath = Path.Combine(options.output, file);
+                Log("  write-path", writePath);
+                if (!Directory.Exists(options.output)) Directory.CreateDirectory(options.output);
+                excelData.SaveAs(writePath);
+            }
+            var end = DateTime.Now;
+            DurationLog("  write-time", previousTime, end);
+            return end;
+        }
+
         static bool ExcelToSeed(FromOptions options) {
-            var sheetsConfig = new SheetsConfig(options.only, options.ignore, options.subdivide);
+            Log("engine", options.engine);
+            Log("output-directory", options.output);
+            var startTime = DateTime.Now;
+            var previousTime = startTime;
             foreach (var file in options.files) {
                 var filePath = Path.Combine(options.input, file);
-                if (options.engine == FromOptions.Engine.OpenXml) {
-                    using (var document = SpreadsheetDocument.Open(filePath, false)) {
-                        var excel = new ExcelData(document);
-                        var sheetNames = excel.SheetNames.Where(sheetName => sheetsConfig.IsUseSheet(sheetName));
-                        foreach (var sheetName in sheetNames) {
-                            var subdivide = sheetsConfig.subdivide(sheetName);
-                            new YamlData(excel.ExcelToData(sheetName))
-                                .WriteTo(sheetName, options.output, subdivide.CutPrefix, subdivide.CutPostfix);
+                Log(file);
+                Log("  full-path", filePath);
+                CheckFileExists(filePath);
+                switch (options.engine) {
+                    case FromOptions.Engine.OpenXml:
+                        using (var excelData = OpenXml.ExcelData.FromFile(filePath, false)) {
+                            var parseFinishTime = DateTime.Now;
+                            DurationLog("  parse-time", startTime, parseFinishTime);
+                            previousTime = ExcelToSeedCore(excelData, options, previousTime, parseFinishTime);
                         }
-                    }
-                } else {
-                    using (var workbook = new XLWorkbook(filePath)) {
-                        var excel = new ClosedExcelData(workbook);
-                        var sheetNames = excel.SheetNames.Where(sheetName => sheetsConfig.IsUseSheet(sheetName));
-                        foreach (var sheetName in sheetNames) {
-                            var subdivide = sheetsConfig.subdivide(sheetName);
-                            new YamlData(excel.GetSeedTable(sheetName).ExcelToData())
-                                .WriteTo(sheetName, options.output, subdivide.CutPrefix, subdivide.CutPostfix);
+                        break;
+                    case FromOptions.Engine.ClosedXML:
+                        using (var excelData = ClosedXML.ExcelData.FromFile(filePath)) {
+                            var parseFinishTime = DateTime.Now;
+                            DurationLog("  parse-time", startTime, parseFinishTime);
+                            previousTime = ExcelToSeedCore(excelData, options, previousTime, parseFinishTime);
                         }
-                    }
+                        break;
+                    case FromOptions.Engine.EPPlus:
+                        using (var excelData = EPPlus.ExcelData.FromFile(filePath)) {
+                            var parseFinishTime = DateTime.Now;
+                            DurationLog("  parse-time", startTime, parseFinishTime);
+                            previousTime = ExcelToSeedCore(excelData, options, previousTime, parseFinishTime);
+                        }
+                        break;
                 }
             }
+            DurationLog("total", startTime, DateTime.Now);
             return true;
+        }
+
+        static DateTime ExcelToSeedCore(IExcelData excelData, FromOptions options, DateTime startTime, DateTime previousTime) {
+            Log("  sheets");
+            var sheetsConfig = new SheetsConfig(options.only, options.ignore, options.subdivide);
+            foreach (var sheetName in excelData.SheetNames) {
+                Log($"    {sheetName}");
+                if (!sheetsConfig.IsUseSheet(sheetName)) {
+                    Log("      ignore", "skip");
+                    continue;
+                }
+                var subdivide = sheetsConfig.subdivide(sheetName);
+                var seedTable = GetSeedTable(excelData, sheetName, options);
+                if (seedTable.Errors.Count != 0) {
+                    continue;
+                }
+                new YamlData(seedTable.ExcelToData(options.requireVersion)).WriteTo(sheetName, options.output, subdivide.CutPrefix, subdivide.CutPostfix);
+                var now = DateTime.Now;
+                DurationLog("      write-time", previousTime, now);
+                previousTime = now;
+            }
+            return previousTime;
+        }
+
+        static SeedTableBase GetSeedTable(IExcelData excelData, string sheetName, CommonOptions options) {
+            var seedTable = excelData.GetSeedTable(sheetName, options.columnNamesRow, options.dataStartRow, options.ignoreColumns, options.versionColumn);
+            if (seedTable.Errors.Count != 0) {
+                var skipExceptions = seedTable.Errors.Where(error => error is NoIdColumnException);
+                if (skipExceptions.Count() != 0) {
+                    foreach (var error in skipExceptions) {
+                        Console.Error.WriteLine($"      skip: {error.Message}");
+                    }
+                } else {
+                    foreach(var error in seedTable.Errors) {
+                        Console.Error.WriteLine($"      ERROR: {error.Message}");
+                    }
+                    Environment.Exit(1);
+                }
+            }
+            return seedTable;
+        }
+
+        static void CheckFileExists(string file) {
+            if (!File.Exists(file)) {
+                Console.Error.WriteLine($"file not found [{file}]");
+                Environment.Exit(1);
+            }
+        }
+
+        static void Log(string prefix, object value = null) {
+            Console.Error.WriteLine($"{prefix}: {value}");
+        }
+
+        static void DurationLog(string prefix, DateTime start, DateTime end) {
+            Console.Error.WriteLine($"{prefix}: {(end - start).TotalMilliseconds} ms");
         }
 
         class SheetsConfig {
@@ -191,17 +312,4 @@ namespace SeedTable {
             }
         }
     }
-
-    /*class DataTable {
-        public List<string> columns { get; private set; }
-        public IEnumerable<IEnumerable<string>> table { get; private set; }
-        public DataTable(List<string> columns, IEnumerable<IEnumerable<string>> table) {
-            this.columns = columns;
-            this.table = table;
-        }
-        public DataDictionaryList ToDictionaryList() {
-            var table = this.table.Select(row => row.Select((col, index) => new { col, index }).ToDictionary(elem => this.columns[elem.index], elem => elem.col));
-            return new DataDictionaryList(table);
-        }
-    }*/
 }

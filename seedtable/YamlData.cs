@@ -60,7 +60,7 @@ namespace SeedTable {
             var yaml_stream = new YamlStream();
             yaml_stream.Load(stream);
             var root = (YamlMappingNode)yaml_stream.Documents[0].RootNode;
-            var table = root.Children.Select(child => (YamlMappingNode)child.Value).Select(row => row.ToDictionary(pair => ((YamlScalarNode)pair.Key).Value, pair => ((YamlScalarNode)pair.Value).Value));
+            var table = root.Children.Select(child => (YamlMappingNode)child.Value).Select(row => row.ToDictionary(pair => ((YamlScalarNode)pair.Key).Value, pair => (object)((YamlScalarNode)pair.Value).Value));
             return new DataDictionaryList(table);
         }
 
@@ -68,7 +68,7 @@ namespace SeedTable {
             return YamlToData(new StringReader(yaml));
         }
 
-        public static void DataToYaml(TextWriter writer, Dictionary<string, Dictionary<string, string>> datatable) {
+        public static void DataToYaml(TextWriter writer, Dictionary<string, Dictionary<string, object>> datatable) {
             var serializer = new Serializer(SerializationOptions.EmitDefaults);
             serializer.Serialize(writer, datatable);
         }
@@ -77,7 +77,7 @@ namespace SeedTable {
             DataToYaml(writer, datatable.ToDictionaryDictionary());
         }
 
-        public static string DataToYaml(Dictionary<string, Dictionary<string, string>> datatable) {
+        public static string DataToYaml(Dictionary<string, Dictionary<string, object>> datatable) {
             var writer = new StringWriter();
             DataToYaml(writer, datatable);
             return writer.ToString();

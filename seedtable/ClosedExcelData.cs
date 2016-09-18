@@ -4,119 +4,125 @@ using System.Linq;
 using ClosedXML.Excel;
 
 namespace SeedTable {
-    class ClosedExcelData {
-        private XLWorkbook workbook;
+    namespace ClosedXML {
+        class ExcelData : IExcelData {
+            XLWorkbook Workbook;
 
-        public ClosedExcelData(XLWorkbook workbook) {
-            this.workbook = workbook;
-        }
+            public static ExcelData FromFile(string file) => new ExcelData(new XLWorkbook(file));
 
-        public IEnumerable<string> SheetNames {
-            get { return this.workbook.Worksheets.Select(worksheet => worksheet.Name); }
-        }
-
-        private IXLWorksheet WorkSheet(string sheet_name) {
-            try {
-                return this.workbook.Worksheets.First(_sheet => _sheet.Name == sheet_name);
-            } catch (Exception exception) {
-                throw new InvalidOperationException(string.Format("シート[{0}]が見つかりません", sheet_name), exception);
-            }
-        }
-
-        public ClosedSeedTable GetSeedTable(string sheet_name, int column_row = 2) {
-            return new ClosedSeedTable(this.WorkSheet(sheet_name), column_row);
-        }
-    }
-
-    class ClosedSeedTable {
-        public IXLWorksheet worksheet { get; private set; }
-        public int column_row { get; private set; }
-        public ClosedSeedTable(IXLWorksheet worksheet, int column_row = 2) {
-            this.worksheet = worksheet;
-            this.column_row = column_row;
-        }
-
-        public string SheetName {
-            get { return this.worksheet.Name; }
-        }
-
-        public IXLCells ColumnCells {
-            get { return this._ColumnCells = this._ColumnCells ?? worksheet.Row(this.column_row).Cells(); }
-        }
-        private IXLCells _ColumnCells;
-
-        public Dictionary<string, int> Columns {
-            get {
-                return this._Columns = this._Columns ?? this.ColumnCells
-                    .Where(cell => cell.GetValue<string>() != "")
-                    .Where(cell => cell.GetValue<string>() != "dummy")
-                    .ToDictionary(cell => cell.GetValue<string>(), cell => cell.Address.ColumnNumber);
-            }
-        }
-        private Dictionary<string, int> _Columns;
-
-        public IEnumerable<string> ColumnValues {
-            get {
-                return this.ColumnCells.Select(cell => cell.GetValue<string>());
-            }
-        }
-
-        public int IDColumn {
-            get { return this.Columns.First(column => column.Key == "id").Value; }
-        }
-
-        public int ColumnIndex(string column_name) {
-            return this.Columns[column_name];
-        }
-
-        public void DataToExcel(DataDictionaryList data, bool delete = false) {
-
-            if (this.ColumnCells.First().GetValue<string>() != "id") {
-                throw new NotSupportedException("2行目の先頭がidでないので[" + this.SheetName + "]は扱えません");
+            public ExcelData(XLWorkbook workbook) {
+                Workbook = workbook;
             }
 
-            var data_dic = data.ToDictionaryDictionary();
-            var ids = new HashSet<string>(data_dic.Keys);
-            Console.Error.WriteLine(string.Join("|", ids));
-            var rest_ids = new HashSet<string>(data_dic.Keys);
-            worksheet.Rows().Skip(this.column_row).ForEach(row => {
-                var id = "data" + row.Cell(this.IDColumn).GetValue<string>();
-                Console.Error.WriteLine(id + ids.Contains(id));
-                if (ids.Contains(id)) {
-                    var row_data = data_dic[id];
-                    row_data.ForEach(col_data => {
-                        var cell = row.Cell(this.Columns[col_data.Key]);
-                        Console.Error.WriteLine(col_data.Key + ": " + col_data.Value);
-                        if (!cell.HasFormula) cell.SetValue<string>(col_data.Value != null ? col_data.Value : "");
-                    });
-                    rest_ids.Remove(id);
+            public IEnumerable<string> SheetNames {
+                get { return Workbook.Worksheets.Select(worksheet => worksheet.Name); }
+            }
+
+            public SeedTableBase GetSeedTable(string sheetName, int columnNamesRowIndex = 2, int dataStartRowIndex = 3, IEnumerable<string> ignoreColumnNames = null, string versionColumnName = null) {
+                IXLWorksheet worksheet;
+                try {
+                    worksheet = Workbook.Worksheet(sheetName);
+                } catch (Exception exception) {
+                    throw new SheetNotFoundException($"sheet [{sheetName}] not found", exception);
                 }
-            });
-            /*
-            rows.Where(row => row.RowIndex >= 3).Select(row => {
-                var cols = this.GetCellValuesDictionary(row, use_cols, columns);
-                if (ids.Contains(cols["id"])) {
+                return new SeedTable(worksheet, columnNamesRowIndex, dataStartRowIndex, ignoreColumnNames, versionColumnName);
+            }
 
+            public void Save() => Workbook.Save();
+
+            public void SaveAs(string file) => Workbook.SaveAs(file);
+
+            bool disposed = false;
+
+            ~ExcelData() {
+                this.Dispose(false);
+            }
+
+            public void Dispose() {
+                this.Dispose(true);
+                GC.SuppressFinalize(this);
+            }
+
+            protected virtual void Dispose(bool isDisposing) {
+                if (disposed) return;
+                if (isDisposing) Workbook.Dispose();
+                disposed = true;
+            }
+        }
+
+        class SeedTable : SeedTableBase {
+            public IXLWorksheet Worksheet { get; private set; }
+
+            public List<SeedTableColumn> Columns { get; } = new List<SeedTableColumn>();
+            public int VersionColumnIndex { get; private set; }
+            public int IdColumnIndex { get; private set; }
+
+            public SeedTable(IXLWorksheet worksheet, int columnNamesRowIndex = 2, int dataStartRowIndex = 3, IEnumerable<string> ignoreColumnNames = null, string versionColumnName = null) : base(columnNamesRowIndex, dataStartRowIndex, ignoreColumnNames, versionColumnName) {
+                Worksheet = worksheet;
+
+                GetColumns();
+            }
+
+            void GetColumns() {
+                foreach (var cell in Worksheet.Row(ColumnNamesRowIndex).Cells()) {
+                    var value = cell.GetValue<string>();
+                    if (IgnoreColumnNames.Contains(value)) continue;
+                    if (VersionColumnName == value) {
+                        VersionColumnIndex = cell.Address.ColumnNumber;
+                    } else {
+                        var columnIndex = cell.Address.ColumnNumber;
+                        if ("id" == value) IdColumnIndex = columnIndex;
+                        Columns.Add(new SeedTableColumn(value, columnIndex));
+                    }
                 }
-                return 1;
-            });
-            */
+                CheckColumns();
+            }
+
+            void CheckColumns() {
+                if (IdColumnIndex == 0) Errors.Add(new NoIdColumnException($"id column not found [{SheetName}]"));
+                var columnNames = new HashSet<string>();
+                foreach(var column in Columns) {
+                    var columnName = column.Name;
+                    if (columnNames.Contains(columnName)) Errors.Add(new DuplicateColumnNameException($"Duplicate column name [{columnName}] found in sheet [{SheetName}]"));
+                    columnNames.Add(columnName);
+                }
+            }
+
+            public override string SheetName { get { return Worksheet.Name; } }
+
+            public override void DataToExcel(DataDictionaryList data, bool delete = false) {
+                var indexedData = data.IndexById();
+                var ids = new HashSet<string>(indexedData.Keys);
+                var restIds = new HashSet<string>(indexedData.Keys);
+                Worksheet.Rows().Skip(DataStartRowIndex - 1).ForEach(row => {
+                    var id = row.Cell(IdColumnIndex).GetValue<string>();
+                    if (ids.Contains(id)) {
+                        var rowData = indexedData[id];
+                        Columns.ForEach(column => {
+                            var cell = row.Cell(column.Index);
+                            var value = rowData[column.Name];
+                            if (!cell.HasFormula) cell.SetValue<string>(value != null ? Convert.ToString(value) : "");
+                        });
+                        restIds.Remove(id);
+                    }
+                });
+            }
+
+            public override DataDictionaryList ExcelToData(string requireVersion = "") {
+                var table = Worksheet.Rows().Skip(DataStartRowIndex - 1).Select(row => this.GetRowValuesDictionary(row));
+                return new DataDictionaryList(table);
+            }
+
+            Dictionary<string, object> GetRowValuesDictionary(IXLRow row) => Columns.ToDictionary(column => column.Name, column => (row.Cell(column.Index).Value));
         }
 
-        public DataDictionaryList ExcelToData() {
-            var table = worksheet.Rows().Skip(this.column_row)
-                .Select(row => this.GetRowValuesDictionary(row));
-            return new DataDictionaryList(table);
-        }
-
-        private Dictionary<string, string> GetRowValuesDictionary(IXLRow row) {
-            return this.Columns.ToDictionary(column => column.Key, column => {
-                //Console.WriteLine(row.RangeAddress);
-                //Console.WriteLine(row.Cell(column.Value).FormulaA1);
-                //Console.WriteLine(row.Cell(column.Value).Value);
-                return row.Cell(column.Value).GetValue<string>();
-            });
-            //return this.Columns.ToDictionary(column => column.Key, column => row.Cell(column.Value).GetValue<string>());
+        class SeedTableColumn {
+            public string Name { get; }
+            public int Index { get; }
+            public SeedTableColumn(string name, int index) {
+                Name = name;
+                Index = index;
+            }
         }
     }
 }

@@ -108,9 +108,11 @@
   <ItemGroup>
     <Compile Include="ClosedExcelData.cs" />
     <Compile Include="DataDictionaryList.cs" />
+    <Compile Include="EPPlus.cs" />
     <Compile Include="ExcelData.cs" />
     <Compile Include="Main.cs" />
     <Compile Include="AssemblyInfo.cs" />
+    <Compile Include="SeedTable.cs" />
     <Compile Include="YamlData.cs" />
   </ItemGroup>
   <ItemGroup>
