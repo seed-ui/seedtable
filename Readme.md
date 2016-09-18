@@ -37,6 +37,43 @@ ClosedXMLはその2倍以上程度の時間がかかります。
 - to処理においてsubdivideは考慮されません
 - `-d, --delete`オプションはEPPlusエンジンでのみ動作します
 
+## Excelファイルの形式
+
+以下のような形式を想定しています。
+
+### Excel
+
+シート名`characters`
+
+|   | A  |  B   |      C      |
+|---|----|------|-------------|
+| 1 | ID | 名前 |    説明     |
+| 2 | id | name | description |
+| 3 | 1 | さくら | F.I.R.S.T |
+| 4 | 2 | アルル | ボク |
+| 5 | 3 | さっちゃんさん | 髪が長い |
+
+### YAML
+
+`characters.yml`
+
+```
+data1:
+  id: 1
+  name: さくら
+  description: F.I.R.S.T
+data2:
+  id: 2
+  name: アルル
+  description: ボク
+data3:
+  id: 3
+  name: さっちゃんさん
+  description: 髪が長い
+```
+
+デフォルトではExcel表の2行目がカラム名、3行目以降がデータとして扱われますが、これらはそれぞれ`--column-names-row`、`--data-start-row`オプションで変更可能です。
+
 ## License
 
 このソフトウェアにはApache Licenseのもとで頒布されているソフトウェアOpen-XML-SDKと、LGPLのもとで頒布されているソフトウェアEPPlusが使われています。
