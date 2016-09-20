@@ -143,7 +143,12 @@ namespace SeedTable {
                     Log("      skip", $"seed file [{exception.FileName}] not found");
                     continue;
                 }
-                seedTable.DataToExcel(yamlData.data, options.delete);
+                try {
+                    seedTable.DataToExcel(yamlData.data, options.delete);
+                } catch (IdParseException exception) {
+                    Console.Error.WriteLine($"      ERROR: {exception.Message}");
+                    Environment.Exit(1);
+                }
                 var now = DateTime.Now;
                 DurationLog("      write-time", previousTime, now);
                 previousTime = now;

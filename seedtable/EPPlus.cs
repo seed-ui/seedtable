@@ -121,8 +121,20 @@ namespace SeedTable {
                 }
                 // add
                 var restIdGroups = GetReversedIdGroups(
-                    idIndexes.Select(idIndex => long.Parse(idIndex.Id)).ToList(),
-                    restIds.Select(id => long.Parse(id)).ToList()
+                    idIndexes.Select(idIndex => {
+                        try {
+                            return long.Parse(idIndex.Id);
+                        } catch (FormatException exception) {
+                            throw new IdParseException(idIndex.Id, exception);
+                        }
+                    }).ToList(),
+                    restIds.Select(id => {
+                        try {
+                            return long.Parse(id);
+                        } catch (FormatException exception) {
+                            throw new IdParseException(id, exception);
+                        }
+                    }).ToList()
                 );
                 var doAdd = restIdGroups.Count != 0;
                 List<string> lastRestIdGroup = null;

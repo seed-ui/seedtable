@@ -37,6 +37,10 @@ namespace SeedTable {
         public NoIdColumnException(string message) : base(message) { }
     }
 
+    class IdParseException : InvalidOperationException {
+        public IdParseException(string id, Exception innerException) : base($"cannot parse id [{id}] as integer", innerException) { }
+    }
+
     class SheetNotFoundException : InvalidOperationException {
         public SheetNotFoundException(string message, Exception innerException) : base(message, innerException) { }
     }
