@@ -7,7 +7,7 @@ using System.Runtime.CompilerServices;
 [assembly: AssemblyTitle("seedtable")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("ï¿½ï¿½ï¿½Fï¿½Ş—Çï¿½")]
+[assembly: AssemblyCompany("Œ´F“Ş—Çã")]
 [assembly: AssemblyProduct("")]
 [assembly: AssemblyCopyright("Narazaka")]
 [assembly: AssemblyTrademark("")]
@@ -17,7 +17,7 @@ using System.Runtime.CompilerServices;
 // The form "{Major}.{Minor}.*" will automatically update the build and revision,
 // and "{Major}.{Minor}.{Build}.*" will update just the revision.
 
-[assembly: AssemblyVersion("2.5.*")]
+[assembly: AssemblyVersion("2.4.*")]
 
 // The following attributes are used to specify the signing key for the assembly, 
 // if desired. See the Mono documentation for more information about signing.
