@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.IO;
 using YamlDotNet.RepresentationModel;
@@ -60,7 +61,7 @@ namespace SeedTable {
             var yaml_stream = new YamlStream();
             yaml_stream.Load(stream);
             var root = (YamlMappingNode)yaml_stream.Documents[0].RootNode;
-            var table = root.Children.Select(child => (YamlMappingNode)child.Value).Select(row => row.ToDictionary(pair => ((YamlScalarNode)pair.Key).Value, pair => (object)((YamlScalarNode)pair.Value).Value));
+            var table = root.Children.Select(child => (YamlMappingNode)child.Value).Select(row => row.ToDictionary(pair => ((YamlScalarNode)pair.Key).Value, pair => GetTypedYamlValue(((YamlScalarNode)pair.Value).Value)));
             return new DataDictionaryList(table);
         }
 
@@ -87,6 +88,14 @@ namespace SeedTable {
             var writer = new StringWriter();
             DataToYaml(writer, datatable);
             return writer.ToString();
+        }
+
+        private static object GetTypedYamlValue(string value) {
+            long longValue;
+            if (long.TryParse(value, out longValue)) return longValue;
+            double doubleValue;
+            if (double.TryParse(value, out doubleValue)) return doubleValue;
+            return value;
         }
     }
 }
