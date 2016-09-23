@@ -91,7 +91,7 @@ namespace SeedTable {
         }
 
         private static object GetTypedYamlValue(string value) {
-            if (value == null) return "";
+            if (value == null || value == "null") return "";
             long longValue;
             if (long.TryParse(value, out longValue)) return longValue;
             double doubleValue;
