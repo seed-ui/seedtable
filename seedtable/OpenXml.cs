@@ -228,7 +228,8 @@ namespace SeedTable {
                 var rows = Worksheet.Descendants<Row>();
                 foreach (var row in rows.Where(row => row.RowIndex >= ColumnNamesRowIndex + 1)) {
                     var idCellReference = IdColumnIndex + row.RowIndex.ToString();
-                    var idCell = (Cell)row.First(cell => ((Cell)cell).CellReference.Value == idCellReference);
+                    var idCell = (Cell)row.FirstOrDefault(cell => ((Cell)cell).CellReference.Value == idCellReference);
+                    if (idCell == null) continue;
                     var id = SeedTableCell.ValueString(idCell, SharedStringTable);
                     indexedRows[id] = row;
                     Dictionary<string, object> rowData;
