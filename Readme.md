@@ -16,9 +16,9 @@ Excelは大きな長所と同時に大きな短所をもち、運用上の扱い
 
 ## Requires
 
-.NET Framework 4.0だか4.6だかあたりが必要だと思います。
+.NET Framework 4.0だか4.6だかあたりが必要だと思います。 (Windows)
 
-Monoだと4.4で動きます。
+Monoだと4.4で動きます。(Mac / Linux)
 
 ## Install
 
