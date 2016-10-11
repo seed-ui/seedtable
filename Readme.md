@@ -40,6 +40,9 @@ $ seedtable from -i doc foo.xlsx -o db/seeds
 $ seedtable to -s db/seeds -x doc foo.xlsx -o newdoc
 ```
 
+- 数式セルはxlsx -> yaml変換ではちゃんと計算後の値となります。yaml -> xlsx変換では上書きされず、数式のままとなります。
+- xlsx -> yamlの変換のみならほぼ互換のオプションを持つ[xlsx2seed](https://github.com/Narazaka/xlsx2seed.js)もあります。
+
 ## Engines
 
 seedtableではxlsxファイルを扱うバックエンドとして複数のライブラリを選択できます。
