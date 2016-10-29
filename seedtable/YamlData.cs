@@ -52,7 +52,7 @@ namespace SeedTable {
             var named_directory = Path.Combine(directory, name);
             return new YamlData(
                 YamlData.YamlToData(
-                    string.Join("\n", Directory.EnumerateFiles(named_directory).Select(file => File.ReadAllText(Path.Combine(named_directory, file))).ToArray())
+                    string.Join("\n", Directory.EnumerateFiles(named_directory).Select(file => File.ReadAllText(file)).ToArray())
                     )
                 );
         }
