@@ -58,11 +58,14 @@ seedtableではxlsxファイルを扱うバックエンドとして複数のラ�
 OpenXmlとEPPlusのfrom処理速度はほぼ同じですが、ファイルによって3割程度の速度差がある場合があります。
 ClosedXMLはその2倍以上程度の時間がかかります。
 
+## オプションの注意点
+
+- to処理においてsubdivide指定は考慮されません。指定にかかわらず自動判定して読み取ります。
+- `-d, --delete`オプションはEPPlusエンジンでのみ動作します。
+
 ## 未実装機能
 
-- `-R, --require-version`オプションは動作しません
-- to処理においてsubdivideは考慮されません
-- `-d, --delete`オプションはEPPlusエンジンでのみ動作します
+- `-R, --require-version`オプションは動作しません。
 
 ## Excelファイルの形式
 
