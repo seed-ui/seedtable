@@ -13,8 +13,8 @@ namespace SeedTable {
             this.data = data;
         }
 
-        public void WriteTo(string name, string directory = ".", int pre_cut = 0, int post_cut = 0, string extension = ".yml") {
-            if (pre_cut + post_cut == 0) {
+        public void WriteTo(string name, string directory = ".", bool needSubdivide = false, int pre_cut = 0, int post_cut = 0, string extension = ".yml") {
+            if (!needSubdivide) {
                 WriteToSingle(name, directory, extension);
             } else {
                 WriteToMulti(name, directory, pre_cut, post_cut, extension);

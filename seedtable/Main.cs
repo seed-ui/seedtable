@@ -219,7 +219,7 @@ namespace SeedTable {
                 if (seedTable.Errors.Count != 0) {
                     continue;
                 }
-                new YamlData(seedTable.ExcelToData(options.requireVersion)).WriteTo(sheetName, options.output, subdivide.CutPrefix, subdivide.CutPostfix);
+                new YamlData(seedTable.ExcelToData(options.requireVersion)).WriteTo(sheetName, options.output, subdivide.NeedSubdivide, subdivide.CutPrefix, subdivide.CutPostfix);
                 var now = DateTime.Now;
                 DurationLog("      write-time", previousTime, now);
                 previousTime = now;
