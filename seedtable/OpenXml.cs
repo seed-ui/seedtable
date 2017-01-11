@@ -161,6 +161,7 @@ namespace SeedTable {
                 var columnNameCells = ColumnNamesRow().Cells();
                 foreach(var cell in columnNameCells) {
                     var value = cell.ValueString();
+                    if (value.Length == 0) continue;
                     if (IgnoreColumnNames.Contains(value)) continue;
                     if (VersionColumnName == value) {
                         VersionColumnIndex = cell.Column();
