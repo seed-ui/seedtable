@@ -6,7 +6,9 @@ namespace SeedTable {
         public IEnumerable<Dictionary<string, object>> table { get; private set; }
 
         public DataDictionaryList(IEnumerable<Dictionary<string, object>> table) {
-            this.table = table.Where(rowData => rowData.ContainsKey("id") && rowData["id"] != null && (rowData["id"].ToString()).Length != 0);
+            this.table = table
+                .Where(rowData => rowData.ContainsKey("id") && rowData["id"] != null && (rowData["id"].ToString()).Length != 0)
+                .Select(rowData => rowData.ToDictionary(pair => pair.Key, pair => pair.Value is string && ((string) pair.Value) == "" ? null : pair.Value));
         }
 
         public Dictionary<string, Dictionary<string, object>> ToDictionaryDictionary() {
