@@ -69,7 +69,7 @@ namespace SeedTable {
                         case CellValues.String:
                             return text;
                         case CellValues.Boolean:
-                            return text.Trim() == "0";
+                            return text.Trim() != "0";
                         case CellValues.Date:
                             return DateTime.Parse(text);
                         case CellValues.Error:
