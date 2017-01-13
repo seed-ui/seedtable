@@ -47,6 +47,8 @@ $ seedtable to -s db/seeds -x doc foo.xlsx -o newdoc
 
 ## Usage (seedtable-gui.exe)
 
+![seedtable-gui.exe](seedtable-gui.png)
+
 - seedフォルダ (yaml -> xlsxの変換元、およびxlsx -> yamlの変換先になる)
 - 設定ファイル (seedtable.exeのオプション相当)
 
