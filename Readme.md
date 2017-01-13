@@ -2,6 +2,8 @@
 
 Rails等で扱うseed yaml <-> xlsx を相互変換するツールです。
 
+簡単なGUIもあります。
+
 ## Motivation
 
 xlsxは個人用単体表計算ソフトとしては優秀ですが、複数人でのデータ入力やプログラムでの扱い、バージョン管理などには超不向きです。
@@ -26,7 +28,7 @@ Monoだと4.4で動きます。(Mac / Linux)
 
 Monoの場合は`mono seedtable.exe`等として下さい。
 
-## Usage
+## Usage (seedtable.exe)
 
 ```
 # xlsx -> yaml
@@ -42,6 +44,24 @@ $ seedtable to -s db/seeds -x doc foo.xlsx -o newdoc
 
 - 数式セルはxlsx -> yaml変換ではちゃんと計算後の値となります。yaml -> xlsx変換では上書きされず、数式のままとなります。
 - xlsx -> yamlの変換のみならほぼ互換のオプションを持つ[xlsx2seed](https://github.com/Narazaka/xlsx2seed.js)もあります。
+
+## Usage (seedtable-gui.exe)
+
+- seedフォルダ (yaml -> xlsxの変換元、およびxlsx -> yamlの変換先になる)
+- 設定ファイル (seedtable.exeのオプション相当)
+
+を入力してから、「yml -> xlsx」、「xlsx -> yml」それぞれをダブルクリックするか、xlsxファイルをドラッグ&ドロップして変換できます。
+
+設定ファイルは下記のように、seedtable.exeのオプションのうちinput/output系を除いた長いオプション名をyamlで設定します。
+
+```yaml
+ignore-columns:
+  - dummy
+subdivide:
+  - "foos:0"
+  - "bars:2"
+engine: EPPlus
+```
 
 ## Engines
 
