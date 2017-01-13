@@ -75,12 +75,12 @@
     <ApplicationManifest>Properties\app.manifest</ApplicationManifest>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="ClosedXML, Version=0.80.0.0, Culture=neutral, PublicKeyToken=fd1eb21b62ae805b, processorArchitecture=MSIL">
-      <HintPath>..\packages\ClosedXML.0.80.1\lib\net40-client\ClosedXML.dll</HintPath>
+    <Reference Include="ClosedXML, Version=0.86.0.0, Culture=neutral, PublicKeyToken=fd1eb21b62ae805b, processorArchitecture=MSIL">
+      <HintPath>..\packages\ClosedXML.0.86.0\lib\net40\ClosedXML.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="CommandLine, Version=2.0.275.0, Culture=neutral, PublicKeyToken=de6f01bd326f8c32, processorArchitecture=MSIL">
-      <HintPath>..\packages\CommandLineParser.2.0.275-beta\lib\net40\CommandLine.dll</HintPath>
+      <HintPath>..\packages\CommandLineParser.2.1.1-beta\lib\net40\CommandLine.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="EPPlus, Version=4.1.0.0, Culture=neutral, PublicKeyToken=ea159fdaa78159a1, processorArchitecture=MSIL">
@@ -89,7 +89,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="YamlDotNet, Version=4.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\YamlDotNet.4.0.1-pre285\lib\net35\YamlDotNet.dll</HintPath>
+      <HintPath>..\packages\YamlDotNet.4.0.1-pre309\lib\net35\YamlDotNet.dll</HintPath>
       <Private>True</Private>
     </Reference>
   </ItemGroup>

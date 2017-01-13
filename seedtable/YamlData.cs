@@ -70,7 +70,9 @@ namespace SeedTable {
         }
 
         public static void DataToYaml(TextWriter writer, Dictionary<string, Dictionary<string, object>> datatable) {
-            var serializer = new Serializer(SerializationOptions.EmitDefaults);
+            var builder = new SerializerBuilder();
+            builder.EmitDefaults();
+            var serializer = builder.Build();
             serializer.Serialize(writer, datatable);
         }
 
