@@ -7,7 +7,7 @@ using CommandLine;
 
 namespace SeedTable {
 
-    class CommonOptions {
+    public class CommonOptions {
         public enum Engine {
             OpenXml,
             ClosedXML,
@@ -18,74 +18,87 @@ namespace SeedTable {
         public IEnumerable<string> files { get; set; }
 
         [Option('o', "output", Default = ".", HelpText = "output directory")]
-        public string output { get; set; }
+        public string output { get; set; } = ".";
 
         [Option('S', "subdivide", Separator = ',', HelpText = "subdivide rules")]
-        public IEnumerable<string> subdivide { get; set; }
+        public IEnumerable<string> subdivide { get; set; } = new List<string> { };
 
         [Option('I', "ignore", Separator = ',', HelpText = "ignore sheet names")]
-        public IEnumerable<string> ignore { get; set; }
+        public IEnumerable<string> ignore { get; set; } = new List<string> { };
         
         [Option('O', "only", Separator = ',', HelpText = "only sheet names")]
-        public IEnumerable<string> only { get; set; }
+        public IEnumerable<string> only { get; set; } = new List<string> { };
 
         [Option('R', "require-version", Default = "", HelpText = "require version (with version column)")]
-        public string requireVersion { get; set; }
+        public string requireVersion { get; set; } = "";
 
         [Option('v', "version-column", HelpText = "version column")]
         public string versionColumn { get; set; }
 
         [Option('n', "ignore-columns", Separator = ',', HelpText = "ignore columns")]
-        public IEnumerable<string> ignoreColumns { get; set; }
+        public IEnumerable<string> ignoreColumns { get; set; } = new List<string> { };
 
         [Option("column-names-row", Default = 2, HelpText = "column names row index")]
-        public int columnNamesRow { get; set; }
+        public int columnNamesRow { get; set; } = 2;
 
         [Option("data-start-row", Default = 3, HelpText = "data start row index")]
-        public int dataStartRow { get; set; }
+        public int dataStartRow { get; set; } = 3;
 
         [Option('e', "engine", Default = Engine.OpenXml, HelpText = "parser engine")]
         public virtual Engine engine { get; set; }
     }
 
     [Verb("from", HelpText ="Yaml from Excel")]
-    class FromOptions : CommonOptions {
+    public class FromOptions : CommonOptions {
         [Option('e', "engine", Default = Engine.OpenXml, HelpText = "parser engine")]
-        public override Engine engine { get; set; }
+        public override Engine engine { get; set; } = Engine.OpenXml;
 
         // [Option('d', "stdout", Default = false, HelpText = "output one sheets to stdout")]
         // public bool stdout { get; set; }
 
         [Option('i', "input", Default = ".", HelpText = "input directory")]
-        public string input { get; set; }
+        public string input { get; set; } = ".";
     }
 
     [Verb("to", HelpText = "Yaml to Excel")]
-    class ToOptions : CommonOptions {
+    public class ToOptions : CommonOptions {
         [Option('e', "engine", Default = Engine.EPPlus, HelpText = "parser engine")]
-        public override Engine engine { get; set; }
+        public override Engine engine { get; set; } = Engine.EPPlus;
 
         [Option('s', "seed-input", Default = ".", HelpText = "seed input directory")]
-        public string seedInput { get; set; }
+        public string seedInput { get; set; } = ".";
 
         [Option('x', "xlsx-input", Default = ".", HelpText = "xlsx input directory")]
-        public string xlsxInput { get; set; }
+        public string xlsxInput { get; set; } = ".";
 
         [Option('d', "delete", Default = false, HelpText = "delete enabled")]
-        public bool delete { get; set; }
+        public bool delete { get; set; } = false;
     }
 
     class MainClass {
-        public static void Main (string[] args) {
+        public static void Main(string[] args) {
+            SeedTableInterface.InformationMessageEvent += (message) => Console.Error.WriteLine(message);
             var options = CommandLine.Parser.Default.ParseArguments<FromOptions, ToOptions>(args);
-            options.MapResult(
-                (FromOptions opts) => ExcelToSeed(opts),
-                (ToOptions opts) => SeedToExcel(opts),
-                error => true
-                );
+            try {
+                options.MapResult(
+                    (FromOptions opts) => SeedTableInterface.ExcelToSeed(opts),
+                    (ToOptions opts) => SeedTableInterface.SeedToExcel(opts),
+                    error => true
+                    );
+            } catch (SeedTableInterface.CannotContinueException) {
+                Environment.Exit(1);
+            }
         }
+    }
 
-        static bool SeedToExcel(ToOptions options) {
+    public class SeedTableInterface {
+        public delegate void InformationMessageEventHandler(string message);
+        public static event InformationMessageEventHandler InformationMessageEvent = delegate { };
+        static void WriteInfo(string message) => InformationMessageEvent(message);
+
+        public class CannotContinueException : InvalidOperationException { }
+
+        public static bool SeedToExcel(ToOptions options) {
             Log("engine", options.engine);
             Log("output-directory", options.output);
             var startTime = DateTime.Now;
@@ -146,8 +159,8 @@ namespace SeedTable {
                 try {
                     seedTable.DataToExcel(yamlData.data, options.delete);
                 } catch (IdParseException exception) {
-                    Console.Error.WriteLine($"      ERROR: {exception.Message}");
-                    Environment.Exit(1);
+                    WriteInfo($"      ERROR: {exception.Message}");
+                    throw new CannotContinueException();
                 }
                 var now = DateTime.Now;
                 DurationLog("      write-time", previousTime, now);
@@ -167,7 +180,7 @@ namespace SeedTable {
             return end;
         }
 
-        static bool ExcelToSeed(FromOptions options) {
+        public static bool ExcelToSeed(FromOptions options) {
             Log("engine", options.engine);
             Log("output-directory", options.output);
             var startTime = DateTime.Now;
@@ -233,13 +246,13 @@ namespace SeedTable {
                 var skipExceptions = seedTable.Errors.Where(error => error is NoIdColumnException);
                 if (skipExceptions.Count() != 0) {
                     foreach (var error in skipExceptions) {
-                        Console.Error.WriteLine($"      skip: {error.Message}");
+                        WriteInfo($"      skip: {error.Message}");
                     }
                 } else {
                     foreach(var error in seedTable.Errors) {
-                        Console.Error.WriteLine($"      ERROR: {error.Message}");
+                        WriteInfo($"      ERROR: {error.Message}");
                     }
-                    Environment.Exit(1);
+                    throw new CannotContinueException();
                 }
             }
             return seedTable;
@@ -247,17 +260,17 @@ namespace SeedTable {
 
         static void CheckFileExists(string file) {
             if (!File.Exists(file)) {
-                Console.Error.WriteLine($"file not found [{file}]");
-                Environment.Exit(1);
+                WriteInfo($"file not found [{file}]");
+                throw new CannotContinueException();
             }
         }
 
         static void Log(string prefix, object value = null) {
-            Console.Error.WriteLine($"{prefix}: {value}");
+            WriteInfo($"{prefix}: {value}");
         }
 
         static void DurationLog(string prefix, DateTime start, DateTime end) {
-            Console.Error.WriteLine($"{prefix}: {(end - start).TotalMilliseconds} ms");
+            WriteInfo($"{prefix}: {(end - start).TotalMilliseconds} ms");
         }
 
         class SheetsConfig {
