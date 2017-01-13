@@ -66,7 +66,7 @@ namespace SeedTable {
             void GetColumns() {
                 foreach (var cell in Worksheet.Row(ColumnNamesRowIndex).Cells()) {
                     var value = cell.GetValue<string>();
-                    if (value.Length == 0) continue;
+                    if (value == null || value.Length == 0) continue;
                     if (IgnoreColumnNames.Contains(value)) continue;
                     if (VersionColumnName == value) {
                         VersionColumnIndex = cell.Address.ColumnNumber;
