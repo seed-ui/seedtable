@@ -108,12 +108,8 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\yamlToExcel.emf" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\excelToYaml.emf" />
-  </ItemGroup>
-  <ItemGroup>
+    <None Include="Resources\yamlToExcel.png" />
+    <None Include="Resources\excelToYaml.png" />
     <Content Include="seedtable-gui.ico" />
   </ItemGroup>
   <ItemGroup>
