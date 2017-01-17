@@ -18,11 +18,12 @@ namespace XmSeedtable
     public partial class SeedTableX11 :
         TonNurako.Widgets.LayoutWindow<TonNurako.Widgets.Xm.Form>
     {
+        string[] sourceFileList = null;
+
         public SeedTableX11() {
         }
 
-        public override void ShellCreated()
-        {
+        public override void ShellCreated() {
             Sinatra();
         }
 
@@ -31,9 +32,12 @@ namespace XmSeedtable
         }
 
         private void excelToYamlArea_Click(object sender, TonNurako.Events.PushButtonEventArgs e) {
-
+            ExcelToYaml(sourceFileList);
         }
 
+        private void yamlToExcelArea_Click(object sender, TonNurako.Events.PushButtonEventArgs e) {
+            YamlToExcel(sourceFileList);
+        }
 
         private void seedPathButton_Click(object sender, TonNurako.Events.PushButtonEventArgs e) {
             var d = new FileSelectionDialog();
@@ -63,7 +67,6 @@ namespace XmSeedtable
             d.FileTypeMask = FileTypeMask.Regular;
             d.DialogStyle = DialogStyle.FullApplicationModal;
             d.PathMode = PathMode.Relative;
-
             d.OkEvent += (x,y) => {
                 SettingPath = System.IO.Path.Combine(d.Directory, d.TextString);
                 d.Destroy();
@@ -73,6 +76,35 @@ namespace XmSeedtable
             };
             this.Layout.Children.Add(d);
         }
+
+        private void sourceButton_Click(object sender, TonNurako.Events.PushButtonEventArgs e) {
+            var d = new FileSelectionDialog();
+            d.FileTypeMask = FileTypeMask.Directory;
+            d.DialogStyle = DialogStyle.FullApplicationModal;
+            d.PathMode = PathMode.Relative;
+
+            d.OkEvent += (x,y) => {
+                var path = System.IO.Path.Combine(d.Directory, d.TextString);
+                d.Destroy();
+                sourceFileList = null;
+                fileListBox.DeleteAllItems();
+                sourceTextBox.Value = path;
+                var dpi = (from dir in (new DirectoryInfo(path)).EnumerateFiles()
+                            where dir.Extension == ".xlsx"
+                            select dir.ToString()).ToList();
+                if (0 == dpi.Count) {
+                    ShowMessageBox($"このフォルダーにはExcelのファイルがないよう\n{path}", "エロー");
+                    return;
+                }
+                sourceFileList = dpi.ToArray();
+                fileListBox.AddItems(sourceFileList, 0, false);
+            };
+            d.CancelEvent += (x,y) => {
+                d.Destroy();
+            };
+            this.Layout.Children.Add(d);
+        }
+
 
         private void ShowMessageBox(string message, string title) {
             var d = new ErrorDialog();

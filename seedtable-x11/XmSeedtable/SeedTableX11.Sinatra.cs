@@ -8,6 +8,7 @@ namespace XmSeedtable
     {
         private void Sinatra() {
             mainLayout = this.Layout;
+            mainLayout.Width = 640;
 
             this.RealizedEvent += SeedTableGUI_Load;
 
@@ -66,9 +67,62 @@ namespace XmSeedtable
             settingPathTextBox.LeftAttachment = AttachmentType.Widget;
             settingPathTextBox.LeftWidget = settingPathLabel;
 
+
+            // source
+            var tableLayoutPanel3 = new TonNurako.Widgets.Xm.Form();
+            tableLayoutPanel3.TopAttachment = AttachmentType.Widget;
+            tableLayoutPanel3.TopWidget = tableLayoutPanel2;
+            tableLayoutPanel3.LeftAttachment =
+            tableLayoutPanel3.RightAttachment = AttachmentType.Form;
+            mainLayout.Children.Add(tableLayoutPanel3);
+
+            var sourceGroup = new TonNurako.Widgets.Xm.Frame();
+            sourceGroup.TopAttachment =
+            sourceGroup.LeftAttachment =
+            sourceGroup.RightAttachment =
+            sourceGroup.BottomAttachment = AttachmentType.Form;
+
+            var sourceGroupTitle = new Label();
+            sourceGroupTitle.FrameConstraint.ChildType = FrameChildType.TitleChild;
+            sourceGroupTitle.LabelString = "変換元";
+            sourceGroup.Children.Add(sourceGroupTitle);
+            tableLayoutPanel3.Children.Add(sourceGroup);
+
+            var srcInnner = new Form();
+            sourceGroup.Children.Add(srcInnner);
+
+            var sourceLabel = new TonNurako.Widgets.Xm.Label();
+            sourceLabel.LabelString = "フォルーダー";
+            sourceTextBox = new TonNurako.Widgets.Xm.Text();
+            sourceTextBox.Width = 168;
+
+            var sourceButton = new TonNurako.Widgets.Xm.PushButton();
+            sourceButton.LabelString = "開く...";
+            sourceButton.ActivateEvent += sourceButton_Click;
+            sourceButton.RightAttachment = AttachmentType.Form;
+
+            srcInnner.Children.Add(sourceLabel);
+            srcInnner.Children.Add(sourceButton);
+            srcInnner.Children.Add(sourceTextBox);
+
+            fileListBox = new ScrolledList();
+            fileListBox.Height = 139;
+            fileListBox.TopWidget = sourceTextBox;
+            fileListBox.TopAttachment = AttachmentType.Widget;
+            fileListBox.LeftAttachment =
+            fileListBox.RightAttachment =
+            fileListBox.BottomAttachment = AttachmentType.Form;
+            srcInnner.Children.Add(fileListBox);
+
+            sourceTextBox.RightAttachment = AttachmentType.Widget;
+            sourceTextBox.RightWidget = sourceButton;
+            sourceTextBox.LeftAttachment = AttachmentType.Widget;
+            sourceTextBox.LeftWidget = sourceLabel;
+
+            // ボタム
             var xlay = new TonNurako.Widgets.Xm.Form();
             xlay.TopAttachment = AttachmentType.Widget;
-            xlay.TopWidget = tableLayoutPanel2;
+            xlay.TopWidget = tableLayoutPanel3;
             xlay.LeftAttachment =
             xlay.RightAttachment =
             xlay.BottomAttachment = AttachmentType.Form;
@@ -92,7 +146,6 @@ namespace XmSeedtable
             excelToYamlGroupBox.LeftAttachment = AttachmentType.Widget;
             excelToYamlGroupBox.LeftWidget = yamlToExcelGroupBox;
             excelToYamlGroupBox.TopAttachment = AttachmentType.Form;
-            excelToYamlGroupBox.RightAttachment = AttachmentType.Form;
             excelToYamlGroupBox.BottomAttachment = AttachmentType.Form;
 
             var label2 = new Label();
@@ -108,6 +161,7 @@ namespace XmSeedtable
             yamlToExcelArea.LabelPixmap =
                 Pixmap.FromBuffer(this, global::XmSeedtable.Properties.Resources.yamlToExcel);
             yamlToExcelArea.LabelType = LabelType.Pixmap;
+            yamlToExcelArea.ActivateEvent += yamlToExcelArea_Click;
             yamlToExcelGroupBox.Children.Add(yamlToExcelArea);
 
             excelToYamlArea = new TonNurako.Widgets.Xm.PushButton();
@@ -131,13 +185,13 @@ namespace XmSeedtable
         private TonNurako.Widgets.Xm.Label settingPathLabel;
         private TonNurako.Widgets.Xm.Text settingPathTextBox;
         private TonNurako.Widgets.Xm.PushButton settingPathButton;
-        private TonNurako.Widgets.Xm.FileSelectionDialog seedFolderBrowserDialog;
-        private TonNurako.Widgets.Xm.FileSelectionDialog  settingOpenFileDialog;
-        private TonNurako.Widgets.Xm.FileSelectionDialog  excelFolderBrowserDialog;
         private TonNurako.Widgets.Xm.Frame yamlToExcelGroupBox;
         private TonNurako.Widgets.Xm.PushButton yamlToExcelArea;
         private  TonNurako.Widgets.Xm.Frame excelToYamlGroupBox;
         private TonNurako.Widgets.Xm.PushButton excelToYamlArea;
-        private TonNurako.Widgets.Xm.FileSelectionDialog excelOpenFileDialog;
+
+        private TonNurako.Widgets.Xm.Text sourceTextBox;
+        private TonNurako.Widgets.Xm.ScrolledList fileListBox;
+
     }
 }
