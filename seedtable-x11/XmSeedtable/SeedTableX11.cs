@@ -30,6 +30,11 @@ namespace XmSeedtable
             RestoreFormValues();
         }
 
+        private void excelToYamlArea_Click(object sender, TonNurako.Events.PushButtonEventArgs e) {
+
+        }
+
+
         private void seedPathButton_Click(object sender, TonNurako.Events.PushButtonEventArgs e) {
             var d = new FileSelectionDialog();
             d.FileTypeMask = FileTypeMask.Directory;
@@ -155,8 +160,10 @@ namespace XmSeedtable
                 options.requireVersion = setting.requireVersion;
                 options.delete = setting.delete;
                 d.Destroy();
-                //var dialog = new YamlToExcelDialog(options);
-                //dialog.ShowDialog();
+
+                var dialog = new YamlToExcelDialogX11(options);
+                this.Children.Add(dialog);
+                dialog.Popup(GrabOption.Exclusive);
             };
             this.Layout.Children.Add(d);
         }
@@ -178,8 +185,10 @@ namespace XmSeedtable
             options.subdivide = setting.subdivide;
             options.versionColumn = setting.versionColumn;
             options.requireVersion = setting.requireVersion;
-            //var dialog = new ExcelToYamlDialog(options);
-            //dialog.ShowDialog();
+
+            var dialog = new ExcelToYamlDialogX11(options);
+            this.Children.Add(dialog);
+            dialog.Popup(GrabOption.Exclusive);
         }
 
 
