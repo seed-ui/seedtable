@@ -157,8 +157,10 @@ Xlib、OpenMotif、libxpmに依存します。
 ```
 git submodule init
 git submodule update
+cd seedtable-x11
+nuget restore
 ```
-したのち`seedtable-x11/TonNurako/TonNurakoEx/Config.mp3`を`seedtable-x11/TonNurako/TonNurakoEx/Site.mp3`へコピーして、include先を適切なパスへ書き換えてxbuildを叩いてください。
+等したのち`seedtable-x11/TonNurako/TonNurakoEx/Config.mp3`を`seedtable-x11/TonNurako/TonNurakoEx/Site.mp3`へコピーして、include先を適切なパスへ書き換え、`seedtable-x11`ディレクトリ内でxbuildを叩いてください。
 
 ## License
 
