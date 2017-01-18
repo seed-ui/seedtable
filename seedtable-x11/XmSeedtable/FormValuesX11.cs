@@ -9,12 +9,14 @@ namespace XmSeedtable {
         public string SeedPath { get; set; }
         public string SettingPath { get; set; }
         public string SourcePath { get; set; }
+        public string YamlToExcelTargetFolder { get; set; }
 
         public FormValuesX11() { }
-        public FormValuesX11(string seedPath, string settingPath, string sourcePath) {
+        public FormValuesX11(string seedPath, string settingPath, string sourcePath, string yamlToExcelTargetFolder) {
             SeedPath = seedPath;
             SettingPath = settingPath;
             SourcePath = sourcePath;
+            YamlToExcelTargetFolder = yamlToExcelTargetFolder;
         }
     }
 }
