@@ -157,6 +157,7 @@ Xlib、OpenMotif、libxpmに依存します。
 ```
 git submodule init
 git submodule update
+nuget restore
 cd seedtable-x11
 nuget restore
 ```
