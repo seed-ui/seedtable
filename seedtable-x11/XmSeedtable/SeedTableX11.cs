@@ -59,6 +59,17 @@ namespace XmSeedtable
 
         private void sourceTextBox_TextChanged(object sender, EventArgs e) {
             SaveFormValues();
+            if (!Directory.Exists(SourcePath)) return;
+            fileListBox.DeleteAllItems();
+            var dpi = (from dir in (new DirectoryInfo(SourcePath)).EnumerateFiles()
+                        where dir.Extension == ".xlsx"
+                        select dir.ToString()).ToList();
+            if (0 == dpi.Count) {
+                ShowMessageBox($"このフォルダーにはExcelのファイルがないよう\n{SourcePath}", "エロー");
+                return;
+            }
+            fileListBox.AddItems(
+                (from w in dpi select Path.GetFileName(w)).ToArray(), 0, false);
         }
 
         private void settingPathButton_Click(object sender, TonNurako.Events.PushButtonEventArgs e) {
@@ -85,19 +96,8 @@ namespace XmSeedtable
             d.Directory = SourcePath;
 
             d.OkEvent += (x,y) => {
-                var path = System.IO.Path.Combine(d.Directory, d.TextString);
+                SourcePath = System.IO.Path.Combine(d.Directory, d.TextString);
                 d.Destroy();
-                fileListBox.DeleteAllItems();
-                SourcePath = path;
-                var dpi = (from dir in (new DirectoryInfo(path)).EnumerateFiles()
-                            where dir.Extension == ".xlsx"
-                            select dir.ToString()).ToList();
-                if (0 == dpi.Count) {
-                    ShowMessageBox($"このフォルダーにはExcelのファイルがないよう\n{path}", "エロー");
-                    return;
-                }
-                fileListBox.AddItems(
-                    (from w in dpi select Path.GetFileName(w)).ToArray(), 0, false);
             };
             d.CancelEvent += (x,y) => {
                 d.Destroy();
