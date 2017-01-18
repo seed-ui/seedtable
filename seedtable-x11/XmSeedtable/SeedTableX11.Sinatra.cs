@@ -20,7 +20,7 @@ namespace XmSeedtable
             mainLayout.Children.Add(tableLayoutPanel1);
 
             seedPathLabel = new TonNurako.Widgets.Xm.Label();
-            seedPathLabel.LabelString = "seedファイル";
+            seedPathLabel.LabelString = "seedフォルダ";
             seedPathTextBox = new TonNurako.Widgets.Xm.Text();
             seedPathTextBox.Width = 168;
             seedPathTextBox.ValueChangedEvent += seedPathTextBox_TextChanged;
@@ -95,6 +95,7 @@ namespace XmSeedtable
             sourceLabel.LabelString = "フォルーダー";
             sourceTextBox = new TonNurako.Widgets.Xm.Text();
             sourceTextBox.Width = 168;
+            sourceTextBox.ValueChangedEvent += sourceTextBox_TextChanged;
 
             var sourceButton = new TonNurako.Widgets.Xm.PushButton();
             sourceButton.LabelString = "開く...";
@@ -112,6 +113,7 @@ namespace XmSeedtable
             fileListBox.LeftAttachment =
             fileListBox.RightAttachment =
             fileListBox.BottomAttachment = AttachmentType.Form;
+            fileListBox.SelectionPolicy = TonNurako.Widgets.Xm.SelectionPolicy.Multiple;
             srcInnner.Children.Add(fileListBox);
 
             sourceTextBox.RightAttachment = AttachmentType.Widget;

@@ -8,11 +8,13 @@ namespace XmSeedtable {
     public class FormValuesX11 {
         public string SeedPath { get; set; }
         public string SettingPath { get; set; }
+        public string SourcePath { get; set; }
 
         public FormValuesX11() { }
-        public FormValuesX11(string seedPath, string settingPath) {
+        public FormValuesX11(string seedPath, string settingPath, string sourcePath) {
             SeedPath = seedPath;
             SettingPath = settingPath;
+            SourcePath = sourcePath;
         }
     }
 }
