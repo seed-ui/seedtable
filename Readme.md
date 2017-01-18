@@ -75,6 +75,8 @@ seedtable-gui.exeと同じくseedフォルダと設定ファイルを入力し�
 
 Unix系OSとMac OS X等で`mono XmSeedtable.exe`または`mono --arch=64 XmSeedtable.exe`(Mac OS X等)で動作します。
 
+X Serverが必要ですので、Mac OS XではXQuartz等をインストールしてください。
+
 ## Engines
 
 seedtableではxlsxファイルを扱うバックエンドとして複数のライブラリを選択できます。
