@@ -65,6 +65,16 @@ subdivide:
 engine: EPPlus
 ```
 
+## Usage (XmSeedtable.exe)
+
+![XmSeedtable.exe](seedtable-x11/seedtable-x11.png)
+
+seedtable-gui.exeと同じくseedフォルダと設定ファイルを入力します。
+
+変換するExcelファイルを変換元で指定して「yml -> xlsx」、「xlsx -> yml」それぞれをクリックすると変換できます。
+
+Unix系OSとMac OS X等で`mono XmSeedtable.exe`または`mono --arch=64 XmSeedtable.exe`(Mac OS X等)で動作します。
+
 ## Engines
 
 seedtableではxlsxファイルを扱うバックエンドとして複数のライブラリを選択できます。
@@ -133,6 +143,22 @@ data3:
 [プルリク](https://github.com/seed-ui/seedtable/pulls)もざっくりお待ちしています。
 
 ただし仕事の合間対応なので反応速度ははやいとは限りません。
+
+## Build
+
+### seedtable.exe / seedtable-gui.exe
+
+普通にseedtable.slnを開いてnugetパッケージの復元してからビルドすれば通ると思います。
+
+### XmSeedtable.exe
+
+Xlib、OpenMotif、libxpmに依存します。
+
+```
+git submodule init
+git submodule update
+```
+したのち`seedtable-x11/TonNurako/TonNurakoEx/Config.mp3`を`seedtable-x11/TonNurako/TonNurakoEx/Site.mp3`へコピーして、include先を適切なパスへ書き換えてxbuildを叩いてください。
 
 ## License
 

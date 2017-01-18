@@ -145,6 +145,8 @@ namespace XmSeedtable
             set { sourceTextBox.Value = value; }
         }
 
+        private string YamlToExcelTargetFolder { get; set; }
+
         private ToOptions LoadSetting() {
             if (SettingPath == null || SettingPath.Length == 0) {
                 ShowMessageBox("設定ファイルを指定して下さい", "エラー");
@@ -183,17 +185,19 @@ namespace XmSeedtable
             d.FileTypeMask = FileTypeMask.Directory;
             d.DialogStyle = DialogStyle.FullApplicationModal;
             d.PathMode = PathMode.Relative;
+            d.Directory = YamlToExcelTargetFolder;
             d.CancelEvent += (x,y) => {
                 d.Destroy();
             };
             d.OkEvent += (x,y) => {
-                var targetFolder = System.IO.Path.Combine(d.Directory, d.TextString);
+                YamlToExcelTargetFolder = System.IO.Path.Combine(d.Directory, d.TextString);
+                SaveFormValues();
 
                 var options = new ToOptions();
                 options.files = fileBaseNames;
                 options.seedInput = SeedPath;
                 options.xlsxInput = fileDirName;
-                options.output = targetFolder;
+                options.output = YamlToExcelTargetFolder;
                 options.columnNamesRow = setting.columnNamesRow;
                 options.dataStartRow = setting.dataStartRow;
                 options.engine = setting.engine;
@@ -238,7 +242,7 @@ namespace XmSeedtable
 
 
         private void SaveFormValues() {
-            var yaml = new Serializer().Serialize(new FormValuesX11(SeedPath, SettingPath, SourcePath));
+            var yaml = new Serializer().Serialize(new FormValuesX11(SeedPath, SettingPath, SourcePath, YamlToExcelTargetFolder));
             File.WriteAllText(FormValuesPath, yaml);
         }
 
@@ -249,6 +253,7 @@ namespace XmSeedtable
             SeedPath = formValues.SeedPath;
             SettingPath = formValues.SettingPath;
             SourcePath = formValues.SourcePath;
+            YamlToExcelTargetFolder = formValues.YamlToExcelTargetFolder;
         }
 
         private string FormValuesPath {
