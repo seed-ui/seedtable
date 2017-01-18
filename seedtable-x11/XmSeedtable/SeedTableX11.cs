@@ -13,8 +13,6 @@ namespace XmSeedtable
     public partial class SeedTableX11 :
         TonNurako.Widgets.LayoutWindow<TonNurako.Widgets.Xm.Form>
     {
-        string[] sourceFileList = null;
-
         public SeedTableX11() {
         }
 
@@ -27,11 +25,11 @@ namespace XmSeedtable
         }
 
         private void excelToYamlArea_Click(object sender, TonNurako.Events.PushButtonEventArgs e) {
-            ExcelToYaml(sourceFileList);
+            ExcelToYaml(SourceExcelFileNames());
         }
 
         private void yamlToExcelArea_Click(object sender, TonNurako.Events.PushButtonEventArgs e) {
-            YamlToExcel(sourceFileList);
+            YamlToExcel(SourceExcelFileNames());
         }
 
         private void seedPathButton_Click(object sender, TonNurako.Events.PushButtonEventArgs e) {
@@ -39,6 +37,7 @@ namespace XmSeedtable
             d.FileTypeMask = FileTypeMask.Directory;
             d.DialogStyle = DialogStyle.FullApplicationModal;
             d.PathMode = PathMode.Relative;
+            d.Directory = SeedPath;
 
             d.OkEvent += (x,y) => {
                 SeedPath = System.IO.Path.Combine(d.Directory, d.TextString);
@@ -49,6 +48,7 @@ namespace XmSeedtable
             };
             this.Layout.Children.Add(d);
         }
+
         private void seedPathTextBox_TextChanged(object sender, EventArgs e) {
             SaveFormValues();
         }
@@ -57,11 +57,27 @@ namespace XmSeedtable
             SaveFormValues();
         }
 
+        private void sourceTextBox_TextChanged(object sender, EventArgs e) {
+            SaveFormValues();
+            if (!Directory.Exists(SourcePath)) return;
+            fileListBox.DeleteAllItems();
+            var dpi = (from dir in (new DirectoryInfo(SourcePath)).EnumerateFiles()
+                        where dir.Extension == ".xlsx"
+                        select dir.ToString()).ToList();
+            if (0 == dpi.Count) {
+                ShowMessageBox($"このフォルダーにはExcelのファイルがないよう\n{SourcePath}", "エロー");
+                return;
+            }
+            fileListBox.AddItems(
+                (from w in dpi select Path.GetFileName(w)).ToArray(), 0, false);
+        }
+
         private void settingPathButton_Click(object sender, TonNurako.Events.PushButtonEventArgs e) {
             var d = new FileSelectionDialog();
             d.FileTypeMask = FileTypeMask.Regular;
             d.DialogStyle = DialogStyle.FullApplicationModal;
             d.PathMode = PathMode.Relative;
+            d.Directory = Path.GetDirectoryName(SettingPath);
             d.OkEvent += (x,y) => {
                 SettingPath = System.IO.Path.Combine(d.Directory, d.TextString);
                 d.Destroy();
@@ -77,30 +93,17 @@ namespace XmSeedtable
             d.FileTypeMask = FileTypeMask.Directory;
             d.DialogStyle = DialogStyle.FullApplicationModal;
             d.PathMode = PathMode.Relative;
+            d.Directory = SourcePath;
 
             d.OkEvent += (x,y) => {
-                var path = System.IO.Path.Combine(d.Directory, d.TextString);
+                SourcePath = System.IO.Path.Combine(d.Directory, d.TextString);
                 d.Destroy();
-                sourceFileList = null;
-                fileListBox.DeleteAllItems();
-                sourceTextBox.Value = path;
-                var dpi = (from dir in (new DirectoryInfo(path)).EnumerateFiles()
-                            where dir.Extension == ".xlsx"
-                            select dir.ToString()).ToList();
-                if (0 == dpi.Count) {
-                    ShowMessageBox($"このフォルダーにはExcelのファイルがないよう\n{path}", "エロー");
-                    return;
-                }
-                sourceFileList = dpi.ToArray();
-                fileListBox.AddItems(
-                    (from w in dpi select Path.GetFileName(w)).ToArray(), 0, false);
             };
             d.CancelEvent += (x,y) => {
                 d.Destroy();
             };
             this.Layout.Children.Add(d);
         }
-
 
         private void ShowMessageBox(string message, string title) {
             var d = new ErrorDialog();
@@ -118,6 +121,15 @@ namespace XmSeedtable
             d.Visible = true;
         }
 
+        private string[] SourceExcelFileNames() {
+            if (fileListBox.ItemCount == 0) return null;
+            // 挙動がぁゃιぃので代替手段
+            // var fileNames = fileListBox.SelectedItems.Select(fileName => Path.Combine(SourcePath == null ? "" : SourcePath, fileName)).ToArray();
+            var fileNames = fileListBox.SelectedPositions.Select(index => Path.Combine(SourcePath == null ? "" : SourcePath, fileListBox.Items[index - 1])).ToArray();
+            if (fileNames.Count() == 0) return null;
+            return fileNames;
+        }
+
         private string SeedPath {
             get { return seedPathTextBox.Value; }
             set { seedPathTextBox.Value = value; }
@@ -126,6 +138,11 @@ namespace XmSeedtable
         private string SettingPath {
             get { return settingPathTextBox.Value; }
             set { settingPathTextBox.Value = value; }
+        }
+
+        private string SourcePath {
+            get { return sourceTextBox.Value; }
+            set { sourceTextBox.Value = value; }
         }
 
         private ToOptions LoadSetting() {
@@ -221,7 +238,7 @@ namespace XmSeedtable
 
 
         private void SaveFormValues() {
-            var yaml = new Serializer().Serialize(new FormValuesX11(SeedPath, SettingPath));
+            var yaml = new Serializer().Serialize(new FormValuesX11(SeedPath, SettingPath, SourcePath));
             File.WriteAllText(FormValuesPath, yaml);
         }
 
@@ -231,6 +248,7 @@ namespace XmSeedtable
             var formValues = new Deserializer().Deserialize<FormValuesX11>(yaml);
             SeedPath = formValues.SeedPath;
             SettingPath = formValues.SettingPath;
+            SourcePath = formValues.SourcePath;
         }
 
         private string FormValuesPath {
