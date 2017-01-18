@@ -157,25 +157,31 @@ namespace XmSeedtable
             yamlToExcelGroupBox.BottomAttachment = AttachmentType.Form;
             yamlToExcelGroupBox.TopAttachment = AttachmentType.Form;
 
+            yamlToExcelPixmap = Pixmap.FromBuffer(this, global::XmSeedtable.Properties.Resources.yamlToExcel);
+            this.ToolkitResources.RetainCustomObject(yamlToExcelPixmap);
+
             yamlToExcelArea = new TonNurako.Widgets.Xm.PushButton();
-            yamlToExcelArea.LabelPixmap =
-                Pixmap.FromBuffer(this, global::XmSeedtable.Properties.Resources.yamlToExcel);
             yamlToExcelArea.LabelType = LabelType.Pixmap;
+            yamlToExcelArea.LabelPixmap = yamlToExcelPixmap;
+
             yamlToExcelArea.ActivateEvent += yamlToExcelArea_Click;
             yamlToExcelGroupBox.Children.Add(yamlToExcelArea);
 
+            excelToYamlPixmap = Pixmap.FromBuffer(this, global::XmSeedtable.Properties.Resources.excelToYaml);
+            this.ToolkitResources.RetainCustomObject(excelToYamlPixmap);
+
             excelToYamlArea = new TonNurako.Widgets.Xm.PushButton();
-            excelToYamlArea.LabelPixmap =
-                Pixmap.FromBuffer(this, global::XmSeedtable.Properties.Resources.excelToYaml);
             excelToYamlArea.LabelType = LabelType.Pixmap;
+            excelToYamlArea.LabelPixmap = excelToYamlPixmap;
+
             excelToYamlArea.ActivateEvent += excelToYamlArea_Click;
 
             excelToYamlGroupBox.Children.Add(excelToYamlArea);
-            ///yamlToExcelArea.LabelPixmap =
-            ///    TonNurako.GC.XImage.FromBitmap(this, );
-
-
         }
+
+        private Pixmap yamlToExcelPixmap;
+        private Pixmap excelToYamlPixmap;
+
         private TonNurako.Widgets.Xm.Form mainLayout;
         private TonNurako.Widgets.Xm.Form tableLayoutPanel2;
         private TonNurako.Widgets.Xm.Form tableLayoutPanel1;

@@ -1,19 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TonNurako.Data;
-using TonNurako.Widgets;
-using TonNurako.Widgets.Xm;
-using SeedTable;
-
-namespace XmSeedtable
+﻿namespace XmSeedtable
 {
     class Program
     {
         static void Main(string[] args) {
-            System.Diagnostics.Debug.Listeners.Add(new System.Diagnostics.TextWriterTraceListener(Console.Out));
+            //System.Diagnostics.Debug.Listeners.Add(new System.Diagnostics.TextWriterTraceListener(Console.Out));
             var app = new TonNurako.ApplicationContext();
             app.Name = "SeedTable";
             app.FallbackResource.Add("*fontList", "-misc-fixed-medium-r-normal--14-*-*-*-*-*-*-*:");

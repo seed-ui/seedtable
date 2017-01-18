@@ -1,10 +1,5 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Text.RegularExpressions;
-using TonNurako.Data;
 using TonNurako.Widgets;
 using TonNurako.Widgets.Xm;
 using YamlDotNet.Serialization;
@@ -97,7 +92,8 @@ namespace XmSeedtable
                     return;
                 }
                 sourceFileList = dpi.ToArray();
-                fileListBox.AddItems(sourceFileList, 0, false);
+                fileListBox.AddItems(
+                    (from w in dpi select Path.GetFileName(w)).ToArray(), 0, false);
             };
             d.CancelEvent += (x,y) => {
                 d.Destroy();
@@ -194,7 +190,7 @@ namespace XmSeedtable
                 d.Destroy();
 
                 var dialog = new YamlToExcelDialogX11(options);
-                this.Children.Add(dialog);
+                this.Layout.Children.Add(dialog);
                 dialog.Popup(GrabOption.Exclusive);
             };
             this.Layout.Children.Add(d);
@@ -219,7 +215,7 @@ namespace XmSeedtable
             options.requireVersion = setting.requireVersion;
 
             var dialog = new ExcelToYamlDialogX11(options);
-            this.Children.Add(dialog);
+            this.Layout.Children.Add(dialog);
             dialog.Popup(GrabOption.Exclusive);
         }
 

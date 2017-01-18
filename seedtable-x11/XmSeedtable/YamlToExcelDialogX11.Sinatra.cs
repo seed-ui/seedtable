@@ -1,11 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Text.RegularExpressions;
-using TonNurako.Data;
-using TonNurako.Widgets;
 using TonNurako.Widgets.Xm;
 
 namespace XmSeedtable
@@ -18,17 +10,30 @@ namespace XmSeedtable
             form.Height = 320;
             this.Children.Add(form);
 
-            var text = new ScrolledText();
-            text.Rows = 50;
-            form.Children.Add(text);
+            var sc = new ScrolledWindow();
+            form.Children.Add(sc);
 
-            var ok = new PushButton();
-            ok.TopAttachment = AttachmentType.Widget;
-            ok.TopWidget = text;
-            ok.ActivateEvent += (z,p) => {
+            textBox = new Text();
+            textBox.EditMode = EditMode.Multi;
+
+            textBox.TopAttachment = AttachmentType.Form;
+            textBox.LeftAttachment = AttachmentType.Form;
+            textBox.RightAttachment = AttachmentType.Form;
+            sc.Children.Add(textBox);
+
+            okButton = new PushButton();
+            okButton.LabelString = "閉じる";
+            okButton.BottomAttachment = AttachmentType.Form;
+            okButton.LeftAttachment = AttachmentType.Form;
+            okButton.RightAttachment = AttachmentType.Form;
+            okButton.ActivateEvent += (z,p) => {
                 this.Destroy();
             };
-            form.Children.Add(ok);
+            form.Children.Add(okButton);
+            sc.BottomAttachment = AttachmentType.Widget;
+            sc.BottomWidget = okButton;
         }
+        private TonNurako.Widgets.Xm.PushButton okButton;
+        private TonNurako.Widgets.Xm.Text textBox;
     }
 }
