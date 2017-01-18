@@ -1,0 +1,13 @@
+{
+  "scripts": {
+    "build": "gulp build",
+    "watch": "gulp watch"
+  },
+  "dependencies": {
+    "gulp": "^3.9.0",
+    "gulp-msbuild": "^0.4.0",
+    "gulp-shell": "^0.5.2",
+    "run-sequence": "^1.2.2",
+    "minimist": "^1.2.0"
+  }
+}
