@@ -1,8 +1,14 @@
 language: csharp
+os:
+  - linux
+  - osx
 matrix:
   include:
     - solution: seedtable.sln
     - solution: seedtable-x11/XmSeedtable.sln
       install:
-        - sudo apt-get -qq update
-        - sudo apt-get -qq install libmotif-dev libxpm-dev libxmu-dev libxt-dev
+        - if [ "$TRAVIS_OS_NAME" = "linux" ] ; then sudo apt-get -qq update ; fi
+        - if [ "$TRAVIS_OS_NAME" = "linux" ] ; then sudo apt-get -qq install libmotif-dev libxpm-dev libxmu-dev libxt-dev ; fi
+        - if [ "$TRAVIS_OS_NAME" = "osx" ] ; then brew update ; fi
+        - if [ "$TRAVIS_OS_NAME" = "osx" ] ; then brew install openmotif ; fi
+        - if [ "$TRAVIS_OS_NAME" = "osx" ] ; then cat seedtable-x11/TonNurako/TonNurakoEx/Config.mp3 | sed 's/\/usr\/dt\//\/usr\/local\//g' | sed 's/\/usr\/X11R6\//\/usr\/X11\//g' > seedtable-x11/TonNurako/TonNurakoEx/Site.mp3 ; fi
