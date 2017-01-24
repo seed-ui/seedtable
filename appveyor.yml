@@ -10,3 +10,6 @@ before_build:
   - nuget restore
 build:
   project: seedtable.sln
+artifacts:
+  - path: seedtable-gui/bin/Release
+    name: seedtable
