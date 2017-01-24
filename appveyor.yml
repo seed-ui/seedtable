@@ -6,5 +6,7 @@ platform:
   - Any CPU
 configuration:
   - Release
+before_build:
+  - nuget restore
 build:
   project: seedtable.sln
