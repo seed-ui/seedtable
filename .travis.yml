@@ -18,3 +18,14 @@ matrix:
         - cat seedtable-x11/TonNurako/TonNurakoEx/Config.mp3 | sed 's/\/usr\/dt\//\/usr\/local\//g' | sed 's/\/usr\/X11R6\//\/usr\/X11\//g' > seedtable-x11/TonNurako/TonNurakoEx/Site.mp3
         - nuget restore seedtable.sln
         - nuget restore seedtable-x11/XmSeedtable.sln
+after_success:
+  - cp -R seedtable-x11/XmSeedtable/bin/Release XmSeedtable
+  - zip -r -9 XmSeedtable-${TRAVIS_OS_NAME}.zip XmSeedtable
+deploy:
+  provider: releases
+  api_key:
+    secure: EhcrhFPVqt0hiRqHDex0HsQrII04LXPTMIOykzVY65Kx0JBPzqE6zjDhKyKNal9BiU7ssUvQuk2MGSJUPkusb1QZitOFb/b8niXIEG0OgakqLYekr+OIctYWh9adqdzN2M91dhTbZgAFPF0n+6YNb041J4PbJodb2v9SFMCwoJrzskYCH0LzGr0Y71J9b3/qUR6W30QaGvBX3BJPR1jz36Jh44SShYwnRUwCMvsDPQxEaw/ERfM0Ug/IgQmuUFwf34yvRyyBPQHeyLykLWIZx2Egw27hQq6IqSL6tjKm8O12q6R9u8M3nMJew1+DCt18SKK065MDHKIITMctF324xlMq8DzmMmkZZOhi83Tgc/n44cL4MO4OmpNUMGczgPfLCoUof+COXpDcTT22q+6pC1I0QIb0WTDaAyD0afynhUMiJD+Zc1x80ick5Bj/SVK377QQPFG+P6it4P9Rrs/NePFZhrvOolN1+5sKiXGpyzJC/ndSXn1RlJdFhqmWBEMsVF+QUtOE+5WrTqm5FQHydBl6B6pT3KNoxWLsipbH2SLCjdRRxS00lOYUEfTEN0EN1aSX9k0BX6OAx2cxHhNYmfgMaDAcIE1bHzCfAPw0W3oqtEVJA2fAVPyxK3BiND6kp4xVfd6sYaaTWpTigGVsu8kDb25c14yHhC0PQ6Nmcfg=
+  file: XmSeedtable-${TRAVIS_OS_NAME}.zip
+  skip_cleanup: true
+  on:
+    tags: true
