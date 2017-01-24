@@ -1,0 +1,10 @@
+version: "{build}"
+branches:
+  except:
+    - gh-pages
+platform:
+  - Any CPU
+configuration:
+  - Release
+build:
+  project: seedtable.sln
