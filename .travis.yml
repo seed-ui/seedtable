@@ -1,0 +1,8 @@
+language: csharp
+matrix:
+  include:
+    - solution: seedtable.sln
+    - solution: seedtable-x11/XmSeedtable.sln
+      install:
+        - sudo apt-get -qq update
+        - sudo apt-get -qq install libmotif-dev libxpm-dev libxmu-dev libxt-dev
