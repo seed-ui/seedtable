@@ -33,6 +33,8 @@ namespace SeedTable {
 
             public void SaveAs(string file) => Document.SaveAs(new FileInfo(file));
 
+            public void Calculate() => Document.Workbook.Calculate();
+
             bool disposed = false;
 
             ~ExcelData() {

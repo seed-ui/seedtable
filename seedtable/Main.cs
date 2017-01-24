@@ -166,6 +166,8 @@ namespace SeedTable {
                 DurationLog("      write-time", previousTime, now);
                 previousTime = now;
             }
+            // 数式を再計算して結果をキャッシュする
+            if (excelData is EPPlus.ExcelData) ((EPPlus.ExcelData)excelData).Calculate();
             if (options.output.Length == 0) {
                 excelData.Save();
                 Log("  write-path", "overwrite");
