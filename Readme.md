@@ -172,4 +172,4 @@ nuget restore
 
 このソフトウェアにはApache Licenseのもとで頒布されているソフトウェアOpen-XML-SDKと、LGPLのもとで頒布されているソフトウェアEPPlus、TonNurakoが使われています。
 
-このソフトウェアは[MIT License](https://narazaka.net/license/MIT?2016)のもとでリリースされています。
+このソフトウェアは[MIT License](https://narazaka.net/license/MIT?2017)のもとでリリースされています。
