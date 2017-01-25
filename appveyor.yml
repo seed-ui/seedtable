@@ -14,7 +14,7 @@ artifacts:
   - path: seedtable-gui/bin/Release
     name: seedtable
 deploy:
-  provider: Github Releases
+  provider: GitHub
   auth_token:
     secure: sf2zcb1xd8VNZCqJF/VYLFGjDphmkBFXrjoFoviFndPkIJ6zj/LPPzG1c63yowsC
   draft: false
