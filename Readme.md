@@ -4,6 +4,9 @@ Rails等で扱うseed yaml <-> xlsx を相互変換するツールです。
 
 簡単なGUIもあります。
 
+[![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/github/seed-ui/seedtable?svg=true)](https://ci.appveyor.com/project/Narazaka/seedtable)
+[![Travis Build Status](https://travis-ci.org/seed-ui/seedtable.svg)](https://travis-ci.org/seed-ui/seedtable)
+
 ## Motivation
 
 xlsxは個人用単体表計算ソフトとしては優秀ですが、複数人でのデータ入力やプログラムでの扱い、バージョン管理などには超不向きです。
@@ -75,7 +78,7 @@ seedtable-gui.exeと同じくseedフォルダと設定ファイルを入力し�
 
 Unix系OSとMac OS X等で`mono XmSeedtable.exe`または`mono --arch=64 XmSeedtable.exe`(Mac OS X等)で動作します。
 
-X Serverが必要ですので、Mac OS XではXQuartz等をインストールしてください。
+X Serverが必要ですので、Mac OS XではXQuartz 2.7.8をインストールしてください(2.7.9以降では動作しません)。
 
 ## Engines
 
@@ -154,7 +157,7 @@ data3:
 
 ### XmSeedtable.exe
 
-Xlib、OpenMotif、libxpmに依存します。
+Xlib、OpenMotif、libxpm等に依存します。詳細は[.travis.yml](.travis.yml)などを参照ください。
 
 ```
 git submodule init
