@@ -1,0 +1,24 @@
+version: "{build}"
+branches:
+  except:
+    - gh-pages
+platform:
+  - Any CPU
+configuration:
+  - Release
+before_build:
+  - nuget restore
+build:
+  project: seedtable.sln
+artifacts:
+  - path: seedtable-gui/bin/Release
+    name: seedtable
+deploy:
+  provider: Github
+  auth_token:
+    secure: sf2zcb1xd8VNZCqJF/VYLFGjDphmkBFXrjoFoviFndPkIJ6zj/LPPzG1c63yowsC
+  draft: false
+  prerelease: false
+  artifact: seedtable-gui/bin/seedtable.zip
+  on:
+    appveyor_repo_tag: true
