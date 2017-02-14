@@ -208,6 +208,7 @@ namespace XmSeedtable
                 options.versionColumn = setting.versionColumn;
                 options.requireVersion = setting.requireVersion;
                 options.delete = setting.delete;
+                options.calcFormulas = setting.calcFormulas;
                 d.Destroy();
 
                 var dialog = new YamlToExcelDialogX11(options);

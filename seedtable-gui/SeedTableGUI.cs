@@ -104,6 +104,7 @@ namespace seedtable_gui {
             options.versionColumn = setting.versionColumn;
             options.requireVersion = setting.requireVersion;
             options.delete = setting.delete;
+            options.calcFormulas = setting.calcFormulas;
             var dialog = new YamlToExcelDialog(options);
             dialog.ShowDialog();
         }

@@ -73,6 +73,9 @@ namespace SeedTable {
 
         [Option('d', "delete", Default = false, HelpText = "delete enabled")]
         public bool delete { get; set; } = false;
+
+        [Option('c', "calc-formulas", Default = false, HelpText = "calculate all formulas and store results to cache fields")]
+        public bool calcFormulas { get; set; } = false;
     }
 
     class MainClass {
@@ -167,7 +170,7 @@ namespace SeedTable {
                 previousTime = now;
             }
             // 数式を再計算して結果をキャッシュする
-            if (excelData is EPPlus.ExcelData) ((EPPlus.ExcelData)excelData).Calculate();
+            if (options.calcFormulas && excelData is EPPlus.ExcelData) ((EPPlus.ExcelData)excelData).Calculate();
             if (options.output.Length == 0) {
                 excelData.Save();
                 Log("  write-path", "overwrite");
