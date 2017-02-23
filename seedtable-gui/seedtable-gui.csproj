@@ -59,6 +59,7 @@
     <Compile Include="ExcelToYamlDialog.Designer.cs">
       <DependentUpon>ExcelToYamlDialog.cs</DependentUpon>
     </Compile>
+    <Compile Include="PersonalFormValues.cs" />
     <Compile Include="FormValues.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

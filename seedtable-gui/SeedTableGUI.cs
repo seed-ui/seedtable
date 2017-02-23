@@ -26,6 +26,7 @@ namespace seedtable_gui {
 
         private void SeedTableGUI_Load(object sender, EventArgs e) {
             RestoreFormValues();
+            RestorePersonalFormValues();
         }
 
         private void seedPathButton_Click(object sender, EventArgs e) {
@@ -220,7 +221,7 @@ namespace seedtable_gui {
             get { return _DataExcelsDirectoryPath; }
             set {
                 _DataExcelsDirectoryPath = value;
-                SaveFormValues();
+                SavePersonalFormValues();
             }
         }
         private string _DataExcelsDirectoryPath;
@@ -229,7 +230,7 @@ namespace seedtable_gui {
             get { return _TemplateExcelsDirectoryPath; }
             set {
                 _TemplateExcelsDirectoryPath = value;
-                SaveFormValues();
+                SavePersonalFormValues();
             }
         }
         private string _TemplateExcelsDirectoryPath;
@@ -256,7 +257,7 @@ namespace seedtable_gui {
         }
 
         private void SaveFormValues() {
-            var yaml = new Serializer().Serialize(new FormValues(SeedPath, SettingPath, DataExcelsDirectoryPath, TemplateExcelsDirectoryPath));
+            var yaml = new Serializer().Serialize(new FormValues(SeedPath, SettingPath));
             File.WriteAllText(FormValuesPath, yaml);
         }
 
@@ -266,13 +267,29 @@ namespace seedtable_gui {
             var formValues = new Deserializer().Deserialize<FormValues>(yaml);
             SeedPath = formValues.SeedPath;
             SettingPath = formValues.SettingPath;
-            DataExcelsDirectoryPath = formValues.DataExcelsDirectoryPath;
-            TemplateExcelsDirectoryPath = formValues.TemplateExcelsDirectoryPath;
+        }
+
+        private void SavePersonalFormValues() {
+            var yaml = new Serializer().Serialize(new PersonalFormValues(DataExcelsDirectoryPath, TemplateExcelsDirectoryPath));
+            File.WriteAllText(PersonalFormValuesPath, yaml);
+        }
+
+        private void RestorePersonalFormValues() {
+            if (!File.Exists(PersonalFormValuesPath)) return;
+            var yaml = File.ReadAllText(PersonalFormValuesPath);
+            var personalFormValues = new Deserializer().Deserialize<PersonalFormValues>(yaml);
+            DataExcelsDirectoryPath = personalFormValues.DataExcelsDirectoryPath;
+            TemplateExcelsDirectoryPath = personalFormValues.TemplateExcelsDirectoryPath;
         }
 
         private string FormValuesPath {
             get { return Path.Combine(Application.StartupPath, FormValuesFile); }
         }
         private const string FormValuesFile = "settings.yml";
+
+        private string PersonalFormValuesPath {
+            get { return Path.Combine(Application.StartupPath, PersonalFormValuesFile); }
+        }
+        private const string PersonalFormValuesFile = "personal_settings.yml";
     }
 }
