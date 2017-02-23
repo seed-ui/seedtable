@@ -29,15 +29,36 @@ namespace seedtable_gui {
         }
 
         private void seedPathButton_Click(object sender, EventArgs e) {
+            seedFolderBrowserDialog.SelectedPath = SeedPath;
             if (seedFolderBrowserDialog.ShowDialog() == DialogResult.OK) {
                 SeedPath = seedFolderBrowserDialog.SelectedPath;
             }
         }
 
         private void settingPathButton_Click(object sender, EventArgs e) {
+            settingOpenFileDialog.FileName = Path.GetFileName(SettingPath);
+            settingOpenFileDialog.InitialDirectory = Path.GetDirectoryName(SettingPath);
             if (settingOpenFileDialog.ShowDialog() == DialogResult.OK) {
                 SettingPath = settingOpenFileDialog.FileName;
             }
+        }
+
+        private void seedPathTextBox_DragEnter(object sender, DragEventArgs e) {
+            DragEnterBase(e);
+        }
+
+        private void settingPathTextBox_DragEnter(object sender, DragEventArgs e) {
+            DragEnterBase(e);
+        }
+
+        private void seedPathTextBox_DragDrop(object sender, DragEventArgs e) {
+            var directory = GetDropedDirectory(e);
+            if (directory != null) SeedPath = directory;
+        }
+
+        private void settingPathTextBox_DragDrop(object sender, DragEventArgs e) {
+            var file = GetDropedFile(e);
+            if (file != null) SettingPath = file;
         }
 
         private void seedPathTextBox_TextChanged(object sender, EventArgs e) {
@@ -65,11 +86,11 @@ namespace seedtable_gui {
         }
 
         private void yamlToExcelArea_DoubleClick(object sender, EventArgs e) {
-            YamlToExcel(GetExcelsFromDialog());
+            YamlToExcel(GetTemplateExcelsFromDialog());
         }
 
         private void excelToYamlArea_DoubleClick(object sender, EventArgs e) {
-            ExcelToYaml(GetExcelsFromDialog());
+            ExcelToYaml(GetDataExcelsFromDialog());
         }
 
         private void YamlToExcel(string[] fileNames) {
@@ -83,9 +104,9 @@ namespace seedtable_gui {
             }
             var setting = LoadSetting();
             if (setting == null) return;
-            string targetFolder;
-            if (excelFolderBrowserDialog.ShowDialog() == DialogResult.OK) {
-                targetFolder = excelFolderBrowserDialog.SelectedPath;
+            dataExcelFolderBrowserDialog.SelectedPath = DataExcelsDirectoryPath;
+            if (dataExcelFolderBrowserDialog.ShowDialog() == DialogResult.OK) {
+                DataExcelsDirectoryPath = dataExcelFolderBrowserDialog.SelectedPath;
             } else {
                 return;
             }
@@ -93,7 +114,7 @@ namespace seedtable_gui {
             options.files = fileBaseNames;
             options.seedInput = SeedPath;
             options.xlsxInput = fileDirName;
-            options.output = targetFolder;
+            options.output = DataExcelsDirectoryPath;
             options.columnNamesRow = setting.columnNamesRow;
             options.dataStartRow = setting.dataStartRow;
             options.engine = setting.engine;
@@ -147,10 +168,40 @@ namespace seedtable_gui {
             return fileNames;
         }
 
-        private string[] GetExcelsFromDialog() {
+        private string GetDropedFile(DragEventArgs e) {
+            var fileNames = (string[]) e.Data.GetData(DataFormats.FileDrop, false);
+            if (fileNames.Count() != 1 || !File.Exists(fileNames.First())) {
+                MessageBox.Show("1ファイルだけを指定して下さい", "エラー");
+                return null;
+            }
+            return fileNames.First();
+        }
+
+        private string GetDropedDirectory(DragEventArgs e) {
+            var fileNames = (string[]) e.Data.GetData(DataFormats.FileDrop, false);
+            if (fileNames.Count() != 1 || !Directory.Exists(fileNames.First())) {
+                MessageBox.Show("1フォルダだけを指定して下さい", "エラー");
+                return null;
+            }
+            return fileNames.First();
+        }
+
+        private string[] GetDataExcelsFromDialog() {
             string[] fileNames = null;
-            if (excelOpenFileDialog.ShowDialog() == DialogResult.OK) {
-                fileNames = excelOpenFileDialog.FileNames;
+            dataExcelOpenFileDialog.InitialDirectory = DataExcelsDirectoryPath;
+            if (dataExcelOpenFileDialog.ShowDialog() == DialogResult.OK) {
+                fileNames = dataExcelOpenFileDialog.FileNames;
+                if (fileNames.Count() > 0) DataExcelsDirectoryPath = Path.GetDirectoryName(fileNames.First());
+            }
+            return fileNames;
+        }
+
+        private string[] GetTemplateExcelsFromDialog() {
+            string[] fileNames = null;
+            templateExcelOpenFileDialog.InitialDirectory = TemplateExcelsDirectoryPath;
+            if (templateExcelOpenFileDialog.ShowDialog() == DialogResult.OK) {
+                fileNames = templateExcelOpenFileDialog.FileNames;
+                if (fileNames.Count() > 0) TemplateExcelsDirectoryPath = Path.GetDirectoryName(fileNames.First());
             }
             return fileNames;
         }
@@ -164,6 +215,24 @@ namespace seedtable_gui {
             get { return settingPathTextBox.Text; }
             set { settingPathTextBox.Text = value; }
         }
+
+        private string DataExcelsDirectoryPath {
+            get { return _DataExcelsDirectoryPath; }
+            set {
+                _DataExcelsDirectoryPath = value;
+                SaveFormValues();
+            }
+        }
+        private string _DataExcelsDirectoryPath;
+
+        private string TemplateExcelsDirectoryPath {
+            get { return _TemplateExcelsDirectoryPath; }
+            set {
+                _TemplateExcelsDirectoryPath = value;
+                SaveFormValues();
+            }
+        }
+        private string _TemplateExcelsDirectoryPath;
 
         private ToOptions LoadSetting() {
             if (SettingPath == null || SettingPath.Length == 0) {
@@ -187,7 +256,7 @@ namespace seedtable_gui {
         }
 
         private void SaveFormValues() {
-            var yaml = new Serializer().Serialize(new FormValues(SeedPath, SettingPath));
+            var yaml = new Serializer().Serialize(new FormValues(SeedPath, SettingPath, DataExcelsDirectoryPath, TemplateExcelsDirectoryPath));
             File.WriteAllText(FormValuesPath, yaml);
         }
 
@@ -197,6 +266,8 @@ namespace seedtable_gui {
             var formValues = new Deserializer().Deserialize<FormValues>(yaml);
             SeedPath = formValues.SeedPath;
             SettingPath = formValues.SettingPath;
+            DataExcelsDirectoryPath = formValues.DataExcelsDirectoryPath;
+            TemplateExcelsDirectoryPath = formValues.TemplateExcelsDirectoryPath;
         }
 
         private string FormValuesPath {
