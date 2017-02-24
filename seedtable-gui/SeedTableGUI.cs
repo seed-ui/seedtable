@@ -70,6 +70,14 @@ namespace seedtable_gui {
             SaveFormValues();
         }
 
+        private void settingButton_Click(object sender, EventArgs e) {
+            var setting = LoadSetting(false) ?? new ToOptions();
+            var settingReadOnly = SettingReadOnly();
+            var dialog = new SettingDialog(setting, !settingReadOnly);
+            dialog.ShowDialog();
+            if (!settingReadOnly) SaveSetting(setting);
+        }
+
         private void yamlToExcelArea_DragEnter(object sender, DragEventArgs e) {
             DragEnterBase(e);
         }
@@ -217,6 +225,8 @@ namespace seedtable_gui {
             set { settingPathTextBox.Text = value; }
         }
 
+        private const string DefaultSettingFile = "options.yml";
+
         private string DataExcelsDirectoryPath {
             get { return _DataExcelsDirectoryPath; }
             set {
@@ -235,13 +245,13 @@ namespace seedtable_gui {
         }
         private string _TemplateExcelsDirectoryPath;
 
-        private ToOptions LoadSetting() {
+        private ToOptions LoadSetting(bool showAlert = true) {
             if (SettingPath == null || SettingPath.Length == 0) {
-                MessageBox.Show("設定ファイルを指定して下さい", "エラー");
+                if (showAlert) MessageBox.Show("設定ファイルを指定して下さい", "エラー");
                 return null;
             }
             if (!File.Exists(SettingPath)) {
-                MessageBox.Show("指定された設定ファイルがありません", "エラー");
+                if (showAlert) MessageBox.Show("指定された設定ファイルがありません", "エラー");
                 return null;
             }
             var yaml = File.ReadAllText(SettingPath);
@@ -249,11 +259,24 @@ namespace seedtable_gui {
             builder.WithNamingConvention(new HyphenatedNamingConvention());
             var deserializer = builder.Build();
             var options = deserializer.Deserialize<ToOptions>(yaml);
-            if (options == null) {
-                MessageBox.Show("設定ファイルが空です", "エラー");
-                return null;
-            }
-            return options;
+            return options ?? new ToOptions();
+        }
+
+        private void SaveSetting(ToOptions options) {
+            // 使わないパス情報は空にして出力しないようにする
+            options.output = null;
+            options.seedInput = null;
+            options.xlsxInput = null;
+            var builder = new SerializerBuilder();
+            builder.WithNamingConvention(new HyphenatedNamingConvention());
+            var serializer = builder.Build();
+            var yaml = serializer.Serialize(options);
+            if (SettingPath == null || SettingPath.Length == 0) SettingPath = Path.Combine(Application.StartupPath, DefaultSettingFile);
+            File.WriteAllText(SettingPath, yaml);
+        }
+
+        private bool SettingReadOnly() {
+            return File.Exists(SettingReadOnlyPath);
         }
 
         private void SaveFormValues() {
@@ -291,5 +314,10 @@ namespace seedtable_gui {
             get { return Path.Combine(Application.StartupPath, PersonalFormValuesFile); }
         }
         private const string PersonalFormValuesFile = "personal_settings.yml";
+
+        private string SettingReadOnlyPath {
+            get { return Path.Combine(Application.StartupPath, SettingReadOnlyFile); }
+        }
+        private const string SettingReadOnlyFile = "options.readonly";
     }
 }
