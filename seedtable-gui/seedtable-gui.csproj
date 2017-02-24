@@ -69,6 +69,12 @@
     <Compile Include="SeedTableGUI.Designer.cs">
       <DependentUpon>SeedTableGUI.cs</DependentUpon>
     </Compile>
+    <Compile Include="SettingDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="SettingDialog.Designer.cs">
+      <DependentUpon>SettingDialog.cs</DependentUpon>
+    </Compile>
     <Compile Include="YamlToExcelDialog.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -90,6 +96,9 @@
     </Compile>
     <EmbeddedResource Include="SeedTableGUI.resx">
       <DependentUpon>SeedTableGUI.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SettingDialog.resx">
+      <DependentUpon>SettingDialog.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="YamlToExcelDialog.resx">
       <DependentUpon>YamlToExcelDialog.cs</DependentUpon>
