@@ -53,11 +53,11 @@ $ seedtable to -s db/seeds -x doc foo.xlsx -o newdoc
 ![seedtable-gui.exe](seedtable-gui.png)
 
 - seedフォルダ (yaml -> xlsxの変換元、およびxlsx -> yamlの変換先になる)
-- 設定ファイル (seedtable.exeのオプション相当)
+- 設定 (seedtable.exeのオプション相当 GUIで編集できます)
 
 を入力してから、「yml -> xlsx」、「xlsx -> yml」それぞれをダブルクリックするか、xlsxファイルをドラッグ&ドロップして変換できます。
 
-設定ファイルは下記のように、seedtable.exeのオプションのうちinput/output系を除いた長いオプション名をyamlで設定します。
+設定ファイルは下記のように、seedtable.exeのオプションのうちinput/output系を除いた長いオプション名をyamlで設定するものです。
 
 ```yaml
 ignore-columns:
@@ -67,6 +67,8 @@ subdivide:
   - "bars:2"
 engine: EPPlus
 ```
+
+この設定をGUIで編集させたくないという場合は、`seedtable-gui.exe`と同じフォルダに`options.readonly`というファイル(中身は空で大丈夫)をおいて下さい。
 
 ## Usage (XmSeedtable.exe)
 
