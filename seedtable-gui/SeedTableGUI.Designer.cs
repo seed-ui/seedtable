@@ -34,7 +34,6 @@
             this.seedPathLabel = new System.Windows.Forms.Label();
             this.seedPathTextBox = new System.Windows.Forms.TextBox();
             this.seedPathButton = new System.Windows.Forms.Button();
-            this.settingPathLabel = new System.Windows.Forms.Label();
             this.settingPathTextBox = new System.Windows.Forms.TextBox();
             this.settingPathButton = new System.Windows.Forms.Button();
             this.seedFolderBrowserDialog = new System.Windows.Forms.FolderBrowserDialog();
@@ -42,6 +41,7 @@
             this.dataExcelFolderBrowserDialog = new System.Windows.Forms.FolderBrowserDialog();
             this.dataExcelOpenFileDialog = new System.Windows.Forms.OpenFileDialog();
             this.templateExcelOpenFileDialog = new System.Windows.Forms.OpenFileDialog();
+            this.settingButton = new System.Windows.Forms.Button();
             this.mainLayout.SuspendLayout();
             this.tableLayoutPanel2.SuspendLayout();
             this.yamlToExcelGroupBox.SuspendLayout();
@@ -142,9 +142,9 @@
             this.tableLayoutPanel1.Controls.Add(this.seedPathLabel, 0, 0);
             this.tableLayoutPanel1.Controls.Add(this.seedPathTextBox, 1, 0);
             this.tableLayoutPanel1.Controls.Add(this.seedPathButton, 2, 0);
-            this.tableLayoutPanel1.Controls.Add(this.settingPathLabel, 0, 1);
             this.tableLayoutPanel1.Controls.Add(this.settingPathTextBox, 1, 1);
             this.tableLayoutPanel1.Controls.Add(this.settingPathButton, 2, 1);
+            this.tableLayoutPanel1.Controls.Add(this.settingButton, 0, 1);
             this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel1.Location = new System.Drawing.Point(3, 3);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
@@ -186,16 +186,6 @@
             this.seedPathButton.Text = "開く";
             this.seedPathButton.UseVisualStyleBackColor = true;
             this.seedPathButton.Click += new System.EventHandler(this.seedPathButton_Click);
-            // 
-            // settingPathLabel
-            // 
-            this.settingPathLabel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.settingPathLabel.AutoSize = true;
-            this.settingPathLabel.Location = new System.Drawing.Point(3, 43);
-            this.settingPathLabel.Name = "settingPathLabel";
-            this.settingPathLabel.Size = new System.Drawing.Size(52, 24);
-            this.settingPathLabel.TabIndex = 3;
-            this.settingPathLabel.Text = "設定ファイル";
             // 
             // settingPathTextBox
             // 
@@ -247,6 +237,17 @@
             this.templateExcelOpenFileDialog.Multiselect = true;
             this.templateExcelOpenFileDialog.ReadOnlyChecked = true;
             // 
+            // settingButton
+            // 
+            this.settingButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.settingButton.Location = new System.Drawing.Point(3, 44);
+            this.settingButton.Name = "settingButton";
+            this.settingButton.Size = new System.Drawing.Size(52, 23);
+            this.settingButton.TabIndex = 6;
+            this.settingButton.Text = "設定";
+            this.settingButton.UseVisualStyleBackColor = true;
+            this.settingButton.Click += new System.EventHandler(this.settingButton_Click);
+            // 
             // SeedTableGUI
             // 
             this.AllowDrop = true;
@@ -279,7 +280,6 @@
         private System.Windows.Forms.Label seedPathLabel;
         private System.Windows.Forms.TextBox seedPathTextBox;
         private System.Windows.Forms.Button seedPathButton;
-        private System.Windows.Forms.Label settingPathLabel;
         private System.Windows.Forms.TextBox settingPathTextBox;
         private System.Windows.Forms.Button settingPathButton;
         private System.Windows.Forms.FolderBrowserDialog seedFolderBrowserDialog;
@@ -291,5 +291,6 @@
         private System.Windows.Forms.PictureBox excelToYamlArea;
         private System.Windows.Forms.OpenFileDialog dataExcelOpenFileDialog;
         private System.Windows.Forms.OpenFileDialog templateExcelOpenFileDialog;
+        private System.Windows.Forms.Button settingButton;
     }
 }

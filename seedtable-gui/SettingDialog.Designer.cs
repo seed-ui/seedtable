@@ -23,9 +23,11 @@
         /// the contents of this method with the code editor.
         /// </summary>
         private void InitializeComponent() {
+            this.components = new System.ComponentModel.Container();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.mainTableLayoutPanel = new System.Windows.Forms.TableLayoutPanel();
             this.engineComboBox = new System.Windows.Forms.ComboBox();
+            this.toOptionsBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.deleteCheckBox = new System.Windows.Forms.CheckBox();
             this.dataStartRowNumericUpDown = new System.Windows.Forms.NumericUpDown();
             this.columnNamesRowNumericUpDown = new System.Windows.Forms.NumericUpDown();
@@ -34,16 +36,17 @@
             this.dataStartRowLabel = new System.Windows.Forms.Label();
             this.calcFormulasCheckBox = new System.Windows.Forms.CheckBox();
             this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
+            this.ignoreColumnsTextBox = new System.Windows.Forms.TextBox();
+            this.ignoreTextBox = new System.Windows.Forms.TextBox();
+            this.onlyTextBox = new System.Windows.Forms.TextBox();
             this.subdivideLabel = new System.Windows.Forms.Label();
             this.onlyLabel = new System.Windows.Forms.Label();
             this.ignoreLabel = new System.Windows.Forms.Label();
             this.ignoreColumnsLabel = new System.Windows.Forms.Label();
             this.subdivideTextBox = new System.Windows.Forms.TextBox();
-            this.onlyTextBox = new System.Windows.Forms.TextBox();
-            this.ignoreTextBox = new System.Windows.Forms.TextBox();
-            this.ignoreColumnsTextBox = new System.Windows.Forms.TextBox();
             this.tableLayoutPanel1.SuspendLayout();
             this.mainTableLayoutPanel.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.toOptionsBindingSource)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataStartRowNumericUpDown)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.columnNamesRowNumericUpDown)).BeginInit();
             this.tableLayoutPanel2.SuspendLayout();
@@ -66,8 +69,7 @@
             // 
             // mainTableLayoutPanel
             // 
-            this.mainTableLayoutPanel.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
+            this.mainTableLayoutPanel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.mainTableLayoutPanel.ColumnCount = 2;
             this.mainTableLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
@@ -96,12 +98,17 @@
             this.engineComboBox.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.engineComboBox.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.toOptionsBindingSource, "engine", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.engineComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.engineComboBox.FormattingEnabled = true;
             this.engineComboBox.Location = new System.Drawing.Point(135, 3);
             this.engineComboBox.Name = "engineComboBox";
             this.engineComboBox.Size = new System.Drawing.Size(126, 20);
             this.engineComboBox.TabIndex = 1;
+            // 
+            // toOptionsBindingSource
+            // 
+            this.toOptionsBindingSource.DataSource = typeof(SeedTable.ToOptions);
             // 
             // deleteCheckBox
             // 
@@ -110,6 +117,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.deleteCheckBox.AutoSize = true;
             this.mainTableLayoutPanel.SetColumnSpan(this.deleteCheckBox, 2);
+            this.deleteCheckBox.DataBindings.Add(new System.Windows.Forms.Binding("Checked", this.toOptionsBindingSource, "delete", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.deleteCheckBox.Location = new System.Drawing.Point(3, 108);
             this.deleteCheckBox.Name = "deleteCheckBox";
             this.deleteCheckBox.Size = new System.Drawing.Size(258, 29);
@@ -119,6 +127,7 @@
             // 
             // dataStartRowNumericUpDown
             // 
+            this.dataStartRowNumericUpDown.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.toOptionsBindingSource, "dataStartRow", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.dataStartRowNumericUpDown.Location = new System.Drawing.Point(135, 73);
             this.dataStartRowNumericUpDown.Name = "dataStartRowNumericUpDown";
             this.dataStartRowNumericUpDown.Size = new System.Drawing.Size(38, 19);
@@ -126,6 +135,7 @@
             // 
             // columnNamesRowNumericUpDown
             // 
+            this.columnNamesRowNumericUpDown.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.toOptionsBindingSource, "columnNamesRow", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.columnNamesRowNumericUpDown.Location = new System.Drawing.Point(135, 38);
             this.columnNamesRowNumericUpDown.Name = "columnNamesRowNumericUpDown";
             this.columnNamesRowNumericUpDown.Size = new System.Drawing.Size(37, 19);
@@ -171,6 +181,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.calcFormulasCheckBox.AutoSize = true;
             this.mainTableLayoutPanel.SetColumnSpan(this.calcFormulasCheckBox, 2);
+            this.calcFormulasCheckBox.DataBindings.Add(new System.Windows.Forms.Binding("Checked", this.toOptionsBindingSource, "calcFormulas", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.calcFormulasCheckBox.Location = new System.Drawing.Point(3, 143);
             this.calcFormulasCheckBox.Name = "calcFormulasCheckBox";
             this.calcFormulasCheckBox.Size = new System.Drawing.Size(258, 29);
@@ -203,6 +214,42 @@
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanel2.Size = new System.Drawing.Size(408, 175);
             this.tableLayoutPanel2.TabIndex = 9;
+            // 
+            // ignoreColumnsTextBox
+            // 
+            this.ignoreColumnsTextBox.AcceptsReturn = true;
+            this.ignoreColumnsTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.ignoreColumnsTextBox.Location = new System.Drawing.Point(309, 28);
+            this.ignoreColumnsTextBox.Multiline = true;
+            this.ignoreColumnsTextBox.Name = "ignoreColumnsTextBox";
+            this.ignoreColumnsTextBox.Size = new System.Drawing.Size(96, 144);
+            this.ignoreColumnsTextBox.TabIndex = 7;
+            // 
+            // ignoreTextBox
+            // 
+            this.ignoreTextBox.AcceptsReturn = true;
+            this.ignoreTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.ignoreTextBox.Location = new System.Drawing.Point(207, 28);
+            this.ignoreTextBox.Multiline = true;
+            this.ignoreTextBox.Name = "ignoreTextBox";
+            this.ignoreTextBox.Size = new System.Drawing.Size(96, 144);
+            this.ignoreTextBox.TabIndex = 6;
+            // 
+            // onlyTextBox
+            // 
+            this.onlyTextBox.AcceptsReturn = true;
+            this.onlyTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.onlyTextBox.Location = new System.Drawing.Point(105, 28);
+            this.onlyTextBox.Multiline = true;
+            this.onlyTextBox.Name = "onlyTextBox";
+            this.onlyTextBox.Size = new System.Drawing.Size(96, 144);
+            this.onlyTextBox.TabIndex = 5;
             // 
             // subdivideLabel
             // 
@@ -252,42 +299,6 @@
             this.subdivideTextBox.Size = new System.Drawing.Size(96, 144);
             this.subdivideTextBox.TabIndex = 4;
             // 
-            // onlyTextBox
-            // 
-            this.onlyTextBox.AcceptsReturn = true;
-            this.onlyTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.onlyTextBox.Location = new System.Drawing.Point(105, 28);
-            this.onlyTextBox.Multiline = true;
-            this.onlyTextBox.Name = "onlyTextBox";
-            this.onlyTextBox.Size = new System.Drawing.Size(96, 144);
-            this.onlyTextBox.TabIndex = 5;
-            // 
-            // ignoreTextBox
-            // 
-            this.ignoreTextBox.AcceptsReturn = true;
-            this.ignoreTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.ignoreTextBox.Location = new System.Drawing.Point(207, 28);
-            this.ignoreTextBox.Multiline = true;
-            this.ignoreTextBox.Name = "ignoreTextBox";
-            this.ignoreTextBox.Size = new System.Drawing.Size(96, 144);
-            this.ignoreTextBox.TabIndex = 6;
-            // 
-            // ignoreColumnsTextBox
-            // 
-            this.ignoreColumnsTextBox.AcceptsReturn = true;
-            this.ignoreColumnsTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.ignoreColumnsTextBox.Location = new System.Drawing.Point(309, 28);
-            this.ignoreColumnsTextBox.Multiline = true;
-            this.ignoreColumnsTextBox.Name = "ignoreColumnsTextBox";
-            this.ignoreColumnsTextBox.Size = new System.Drawing.Size(96, 144);
-            this.ignoreColumnsTextBox.TabIndex = 7;
-            // 
             // SettingDialog
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -299,6 +310,7 @@
             this.tableLayoutPanel1.ResumeLayout(false);
             this.mainTableLayoutPanel.ResumeLayout(false);
             this.mainTableLayoutPanel.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.toOptionsBindingSource)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataStartRowNumericUpDown)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.columnNamesRowNumericUpDown)).EndInit();
             this.tableLayoutPanel2.ResumeLayout(false);
@@ -328,5 +340,6 @@
         private System.Windows.Forms.Label ignoreLabel;
         private System.Windows.Forms.Label ignoreColumnsLabel;
         private System.Windows.Forms.TextBox subdivideTextBox;
+        private System.Windows.Forms.BindingSource toOptionsBindingSource;
     }
 }
