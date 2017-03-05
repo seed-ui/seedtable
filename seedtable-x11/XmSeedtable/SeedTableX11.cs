@@ -168,6 +168,12 @@ namespace XmSeedtable
             return options;
         }
 
+        private void settingButton_Click(object sender, EventArgs e) {
+            var dialog = new SettingDialogX11(null);
+            this.Layout.Children.Add(dialog);
+            dialog.Popup(GrabOption.Exclusive);
+        }
+
         private void YamlToExcel(string[] fileNames) {
             if (fileNames == null) return;
             var fileBaseNames = fileNames.Select(fileName => Path.GetFileName(fileName));
