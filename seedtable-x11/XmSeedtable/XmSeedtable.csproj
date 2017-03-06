@@ -56,6 +56,8 @@
     <Compile Include="ExcelToYamlDialogX11.Sinatra.cs" />
     <Compile Include="YamlToExcelDialogX11.cs" />
     <Compile Include="YamlToExcelDialogX11.Sinatra.cs" />
+    <Compile Include="SettingDialogX11.cs" />
+    <Compile Include="SettingDialogX11.Sinatra.cs" />
 
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Resources.Designer.cs">

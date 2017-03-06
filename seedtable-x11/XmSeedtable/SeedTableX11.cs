@@ -147,7 +147,7 @@ namespace XmSeedtable
 
         private string YamlToExcelTargetFolder { get; set; }
 
-        private ToOptions LoadSetting() {
+        internal ToOptions LoadSetting() {
             if (SettingPath == null || SettingPath.Length == 0) {
                 ShowMessageBox("設定ファイルを指定して下さい", "エラー");
                 return null;
@@ -166,6 +166,50 @@ namespace XmSeedtable
                 return null;
             }
             return options;
+        }
+        private const string DefaultSettingFile = "options.yml";
+
+        internal void SaveSetting(ToOptions options) {
+            // 使わないパス情報は空にして出力しないようにする
+            options.output = null;
+            options.seedInput = null;
+            options.xlsxInput = null;
+            var builder = new SerializerBuilder();
+            builder.WithNamingConvention(new HyphenatedNamingConvention());
+            var serializer = builder.Build();
+            var yaml = serializer.Serialize(options);
+            if (SettingPath == null || SettingPath.Length == 0) {
+                // TODO: もう少しエレガントな方法は無いものか
+                SettingPath =
+                    Path.Combine(Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location), DefaultSettingFile);
+            }
+            File.WriteAllText(SettingPath, yaml);
+        }
+
+        public class SettingHandler {
+            SeedTableX11 x11;
+            public SettingHandler(SeedTableX11 x) {
+                x11 = x;
+            }
+            public void Save(ToOptions opt) {
+                x11.SaveSetting(opt);
+            }
+        }
+
+        private bool SettingReadOnly() {
+            return File.Exists(SettingReadOnlyPath);
+        }
+
+        private void settingButton_Click(object sender, EventArgs e) {
+            var setting = LoadSetting();
+            if (setting == null) {
+                 setting = new ToOptions();
+            }
+            var settingReadOnly = SettingReadOnly();
+
+            var dialog = new SettingDialogX11(setting, !settingReadOnly, new SettingHandler(this));
+            this.Layout.Children.Add(dialog);
+            dialog.Popup(GrabOption.Exclusive);
         }
 
         private void YamlToExcel(string[] fileNames) {
@@ -261,5 +305,14 @@ namespace XmSeedtable
             get { return Path.Combine(Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location), FormValuesFile); }
         }
         private const string FormValuesFile = "settings.yml";
+        private string PersonalFormValuesPath {
+            get { return Path.Combine(Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location), PersonalFormValuesFile); }
+        }
+        private const string PersonalFormValuesFile = "personal_settings.yml";
+
+        private string SettingReadOnlyPath {
+            get { return Path.Combine(Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location), SettingReadOnlyFile); }
+        }
+        private const string SettingReadOnlyFile = "options.readonly";
     }
 }
