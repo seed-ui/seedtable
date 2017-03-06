@@ -15,6 +15,7 @@ namespace XmSeedtable
         public SettingDialogX11(ToOptions options) : base() {
             Options = options;
             this.AllowAutoManage = false;
+            this.AllowShellResize = true;
             this.Title = "Setty";
             //this.DeleteResponse = DeleteResponse.DoNothing;
             this.CreatePopupChildEvent += (x,y) => {
