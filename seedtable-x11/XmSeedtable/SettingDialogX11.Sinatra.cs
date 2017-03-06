@@ -23,80 +23,106 @@ namespace XmSeedtable
             }
         }
 
+
         private Widget WgtEngine(Widget rc) {
-            var cb = new SimpleOptionMenu();
+            engineComboBox = new SimpleOptionMenu();
             List<string> engine = new List<string>();
+            int i = 0;
+            int v = 0;
             foreach(SeedTable.CommonOptions.Engine e in  Enum.GetValues(typeof(SeedTable.CommonOptions.Engine))) {
                 engine.Add(e.ToString());
+                if (Options.engine == e) {
+                    v = i;
+                }
+                i++;
             }
-            cb.ButtonCount = engine.Count;
-            cb.Buttons = engine.ToArray();
-            return cb;
+            engineComboBox.ButtonSet = v;
+            engineComboBox.ButtonCount = engine.Count;
+            engineComboBox.Buttons = engine.ToArray();
+            return engineComboBox;
         }
+
 
         private Widget WgtColumn(Widget rc) {
-            var cb = new SimpleSpinBox();
-            cb.SpinBoxChildType = SpinBoxChildType.Numeric;
-            cb.MinimumValue = 2;
-            cb.Columns = 4;
+            columnNamesRowNumericUpDown = new SimpleSpinBox();
+            columnNamesRowNumericUpDown.SpinBoxChildType = SpinBoxChildType.Numeric;
+            columnNamesRowNumericUpDown.MinimumValue = 0;
+            columnNamesRowNumericUpDown.MaximumValue = 999;
+            columnNamesRowNumericUpDown.Columns = 4;
+            columnNamesRowNumericUpDown.Position = Options.columnNamesRow;
 
-            return cb;
+            columnNamesRowNumericUpDown.ValueChangedEvent += (x,y) => {
+                Options.columnNamesRow = columnNamesRowNumericUpDown.Position;
+            };
+            return columnNamesRowNumericUpDown;
         }
+
 
         private Widget WgtDataRow(Widget rc) {
-            var cb = new SimpleSpinBox();
-            cb.SpinBoxChildType = SpinBoxChildType.Numeric;
-            cb.MinimumValue = 3;
-            cb.Columns = 4;
-            return cb;
+            dataStartRowNumericUpDown = new SimpleSpinBox();
+            dataStartRowNumericUpDown.SpinBoxChildType = SpinBoxChildType.Numeric;
+            dataStartRowNumericUpDown.MinimumValue = 0;
+            dataStartRowNumericUpDown.MaximumValue = 999;
+            dataStartRowNumericUpDown.Columns = 4;
+            dataStartRowNumericUpDown.Position = Options.dataStartRow;
+
+            dataStartRowNumericUpDown.ValueChangedEvent += (x,y) => {
+                Options.dataStartRow = dataStartRowNumericUpDown.Position;
+            };
+
+            return dataStartRowNumericUpDown;
         }
 
-        private Widget WgtText(Widget rc) {
-            var cb = new Text();
-            cb.EditMode = EditMode.Multi;
-            return cb;
+        private Widget WgtText(Widget rc, out Text rb, IEnumerable<string> val) {
+            rb = new Text();
+            rb.EditMode = EditMode.Multi;
+            rb.Rows = 10;
+            rb.Columns = 10;
+            StringBuilder b = new StringBuilder();
+            foreach(var s in val) {
+                b.Append(s).Append("\n");
+            }
+            rb.Value = b.ToString().TrimEnd();
+
+            return rb;
         }
 
         private void Sinatra() {
             var form = new Form();
-            form.Width = 640;
-            form.Height = 320;
-            //form.ResizePolicy = ResizePolicy.Grow;
-            form.MarginHeight = 10;
-            form.MarginWidth = 10;
+            form.Width = 700;
+            form.Height = 600;
+            form.MarginHeight = 2;
+            form.MarginWidth = 2;
             this.Children.Add(form);
 
             var cs = new LeftControls[] {
                 new LeftControls( "エンジン\n(--engine)", WgtEngine),
                 new LeftControls( "カラム名行\n(--column-names-row)", WgtColumn),
                 new LeftControls( "データ開始行\n(--data-start-row)", WgtDataRow),
-                /*new LeftControls( "yml→xlsx変換時に行削除を行う\r\n(--delete)",
-                    (X) => {
-                        var k = new ToggleButtonGadget();
-                        k.LabelString = "";
-                        return k;
-                    }),
-                new LeftControls( "yml→xlsx変換時に数式キャッシュを再計算する\r\n(--calc-formulas)",
-                    (X) => {
-                        var k = new ToggleButtonGadget();
-                        k.LabelString = "";
-                        return k;
-                    }),*/
             };
+
 
             var vb6 = new Delegaty[] {
                     (X) => {
                         var msc = new SimpleCheckBox();
-                        var k = new ToggleButtonGadget();
-                        k.LabelString = "yml→xlsx変換時に行削除を行う\n(--delete)";
-                        msc.Children.Add(k);
+                        deleteCheckBox = new ToggleButtonGadget();
+                        deleteCheckBox.LabelString = "yml→xlsx変換時に行削除を行う\n(--delete)";
+                        deleteCheckBox.Set = Options.delete ? ToggleButtonState.Set : ToggleButtonState.Unset;
+                        deleteCheckBox.ValueChangedEvent += (x,y) => {
+                            Options.delete = deleteCheckBox.Set == ToggleButtonState.Set;
+                        };
+                        msc.Children.Add(deleteCheckBox);
                         return msc;
                     },
                     (X) => {
                         var msc = new SimpleCheckBox();
-                        var k = new ToggleButtonGadget();
-                        k.LabelString = "yml→xlsx変換時に数式キャッシュを再計算する\n(--calc-formulas)";
-                        msc.Children.Add(k);
+                        calcFormulasCheckBox = new ToggleButtonGadget();
+                        calcFormulasCheckBox.LabelString = "yml→xlsx変換時に数式キャッシュを再計算する\n(--calc-formulas)";
+                        calcFormulasCheckBox.Set = Options.calcFormulas ? ToggleButtonState.Set : ToggleButtonState.Unset;
+                        calcFormulasCheckBox.ValueChangedEvent += (x,y) => {
+                            Options.calcFormulas = deleteCheckBox.Set == ToggleButtonState.Set;
+                        };
+                        msc.Children.Add(calcFormulasCheckBox);
                         return msc;
                     }
             };
@@ -118,6 +144,7 @@ namespace XmSeedtable
                     rc.Children.Add(x);
                 }
             }
+            rc.TopAttachment = AttachmentType.Form;
             rc.LeftAttachment = AttachmentType.Form;
 
             var rd = new RowColumn();
@@ -132,21 +159,22 @@ namespace XmSeedtable
             }
             rd.TopAttachment = AttachmentType.Widget;
             rd.TopWidget = rc;
-            //rd.BottomAttachment = AttachmentType.Form;
-
 
             var vb5 = new LeftControls[] {
-                new LeftControls( "yml分割設定\n--subdivide", WgtText),
-                new LeftControls( "このシートのみ変換\n--only", WgtText),
-                new LeftControls( "このシートを無視\n--ignore", WgtText),
-                new LeftControls( "このカラム名を無視\n--ignore-columns", WgtText),
+                new LeftControls( "yml分割設定\n--subdivide", (x) =>{
+                        return WgtText(x, out subdivideTextBox, Options.subdivide);
+                    }),
+                new LeftControls( "このシートのみ変換\n--only", (x) =>{
+                        return WgtText(x, out onlyTextBox, Options.only);
+                    }),
+                new LeftControls( "このシートを無視\n--ignore", (x) =>{
+                        return WgtText(x, out ignoreTextBox, Options.ignore);
+                    }),
+                new LeftControls( "このカラム名を無視\n--ignore-columns", (x) =>{
+                        return WgtText(x, out ignoreColumnsTextBox, Options.ignoreColumns);
+                    }),
             };
             var re = new Form();
-            //re.BorderWidth = 2;
-            //re.NumColumns = vb5.Length+1;
-            //re.Orientation = Orientation.Horizontal;
-            //re.IsAligned = true;
-            //re.EntryAlignment = Alignment.End;
             re.FractionBase = vb5.Length;
             form.Children.Add(re);
 
@@ -163,7 +191,6 @@ namespace XmSeedtable
                 frx.RightPosition = i+1;
                 frx.TopAttachment =
                 frx.BottomAttachment = AttachmentType.Form;
-                //frx.BorderWidth = 2;
 
                 var k = new Label();
                 k.LabelString = c.Label;
@@ -179,21 +206,60 @@ namespace XmSeedtable
                 t.BottomAttachment = AttachmentType.Form;
             }
 
+            var buttonBase = new RowColumn();
+            buttonBase.TopAttachment = AttachmentType.Form;
+            buttonBase.RightAttachment = AttachmentType.Form;
+            buttonBase.Orientation = Orientation.Horizontal;
+            form.Children.Add(buttonBase);
+
+
             okButton = new PushButton();
-            okButton.LabelString = "閉じる";
-            okButton.TopAttachment = AttachmentType.Form;
-            okButton.RightAttachment = AttachmentType.Form;
+            okButton.LabelString = "保存";
             okButton.ShowAsDefault = true;
+            okButton.Alignment = Alignment.Center;
 
             okButton.ActivateEvent += (z,p) => {
+                SaveOptions();
                 this.Destroy();
             };
-            form.Children.Add(okButton);
+            buttonBase.Children.Add(okButton);
 
-            //sc.BottomAttachment = AttachmentType.Widget;
-            //sc.BottomWidget = okButton;
+            discardButton = new PushButton();
+            discardButton.TopAttachment = AttachmentType.Widget;
+            discardButton.TopWidget = okButton;
+            discardButton.RightAttachment = AttachmentType.Form;
+            discardButton.LabelString = "取消";
+            discardButton.Alignment = Alignment.Center;
+            discardButton.ActivateEvent += (x,y) => {
+                this.Destroy();
+            };
+            buttonBase.Children.Add(discardButton);
+
+            // 読み取り専用
+            if (!Changable) {
+                deleteCheckBox.Sensitive              =
+                calcFormulasCheckBox.Sensitive        =
+                ignoreColumnsTextBox.Sensitive        =
+                ignoreTextBox.Sensitive               =
+                onlyTextBox.Sensitive                 =
+                subdivideTextBox.Sensitive            =
+                dataStartRowNumericUpDown.Sensitive   =
+                engineComboBox.Sensitive              =
+                okButton.Sensitive                    =
+                columnNamesRowNumericUpDown.Sensitive = false;
+            }
         }
+        ToggleButtonGadget deleteCheckBox;
+        ToggleButtonGadget calcFormulasCheckBox;
+        Text ignoreColumnsTextBox;
+        Text ignoreTextBox;
+        Text onlyTextBox;
+        Text subdivideTextBox;
+        SimpleSpinBox dataStartRowNumericUpDown;
+        SimpleOptionMenu engineComboBox;
+        SimpleSpinBox columnNamesRowNumericUpDown;
         private TonNurako.Widgets.Xm.PushButton okButton;
-        private TonNurako.Widgets.Xm.Text textBox;
+        private TonNurako.Widgets.Xm.PushButton discardButton;
+
     }
 }

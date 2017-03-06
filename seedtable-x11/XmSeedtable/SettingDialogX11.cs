@@ -3,6 +3,7 @@ using TonNurako.Widgets.Xm;
 
 using SeedTable;
 using System.Threading.Tasks;
+using System.Collections.Generic;
 
 namespace XmSeedtable
 {
@@ -11,48 +12,36 @@ namespace XmSeedtable
     {
 
         ToOptions Options { get; }
+        SeedTableX11.SettingHandler XHandler {get;}
+
+        bool Changable = false;
         public bool Status {get; private set;} = false;
-        public SettingDialogX11(ToOptions options) : base() {
+        public SettingDialogX11(ToOptions options,bool changeable, SeedTableX11.SettingHandler handler) : base() {
+            this.Width = 700;
+            this.Height = 600;
             Options = options;
+            XHandler = handler;
+            Changable = changeable;
             this.AllowAutoManage = false;
             this.AllowShellResize = true;
-            this.Title = "Setty";
-            //this.DeleteResponse = DeleteResponse.DoNothing;
+            this.Title = "Settings";
             this.CreatePopupChildEvent += (x,y) => {
                 Sinatra();
             };
-            this.PopdownEvent += (x,y) => {
-                Console.WriteLine("destroy");
+            this.PopdownEvent += (x,p) => {
                 this.Destroy();
             };
-
         }
 
-        public void delegaty(FromOptions e) {
-            this.AppContext.Invoke(()=>{
-                okButton.Sensitive = false;
-            });
-            SeedTableInterface.InformationMessageEventHandler handler =
-                (string message) => {
-                    Console.WriteLine(message);
-                    this.AppContext.Invoke(()=>{
-                        textBox.Insert(message + "\n", textBox.CursorPosition);
-                    });
-                };
-            SeedTableInterface.InformationMessageEvent += handler;
-            try {
-                SeedTableInterface.ExcelToSeed(e);
-                Status = true;
-            } catch (SeedTableInterface.CannotContinueException) {
-                Status = false;
+        void SaveOptions() {
+            if(!Changable) {
+                return;
             }
-            finally {
-                this.AppContext.Invoke(()=>{
-                    okButton.Sensitive = true;
-                });
-                SeedTableInterface.InformationMessageEvent -= handler;
-            }
-
+            Options.subdivide = subdivideTextBox.Value.Split('\n');
+            Options.ignoreColumns = ignoreColumnsTextBox.Value.Split('\n');
+            Options.ignore = ignoreTextBox.Value.Split('\n');
+            Options.only = onlyTextBox.Value.Split('\n');
+            XHandler.Save(Options);
         }
     }
 }
