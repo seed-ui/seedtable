@@ -26,7 +26,7 @@ namespace XmSeedtable
 
         private Widget WgtEngine(Widget rc) {
             engineComboBox = new SimpleOptionMenu();
-            List<string> engine = new List<string>();
+            var engine = new List<string>();
             int i = 0;
             int v = 0;
             foreach(SeedTable.CommonOptions.Engine e in  Enum.GetValues(typeof(SeedTable.CommonOptions.Engine))) {
@@ -39,6 +39,9 @@ namespace XmSeedtable
             engineComboBox.ButtonSet = v;
             engineComboBox.ButtonCount = engine.Count;
             engineComboBox.Buttons = engine.ToArray();
+            engineComboBox.SimpleEvent += (x,y) => {
+                Options.engine = (SeedTable.CommonOptions.Engine)y.SelectedIndex;
+            };
             return engineComboBox;
         }
 
