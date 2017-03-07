@@ -37,8 +37,10 @@ namespace seedtable_gui {
         }
 
         private void settingPathButton_Click(object sender, EventArgs e) {
-            settingOpenFileDialog.FileName = Path.GetFileName(SettingPath);
-            settingOpenFileDialog.InitialDirectory = Path.GetDirectoryName(SettingPath);
+            if (SettingPath != null && SettingPath.Length > 0) {
+                settingOpenFileDialog.FileName = Path.GetFileName(SettingPath);
+                settingOpenFileDialog.InitialDirectory = Path.GetDirectoryName(SettingPath);
+            }
             if (settingOpenFileDialog.ShowDialog() == DialogResult.OK) {
                 SettingPath = settingOpenFileDialog.FileName;
             }

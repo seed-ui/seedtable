@@ -70,7 +70,7 @@ namespace XmSeedtable
             d.FileTypeMask = FileTypeMask.Regular;
             d.DialogStyle = DialogStyle.FullApplicationModal;
             d.PathMode = PathMode.Relative;
-            d.Directory = Path.GetDirectoryName(SettingPath);
+            if (SettingPath != null && SettingPath.Length > 0) d.Directory = Path.GetDirectoryName(SettingPath);
             d.OkEvent += (x,y) => {
                 SettingPath = System.IO.Path.Combine(d.Directory, d.TextString);
                 d.Destroy();
