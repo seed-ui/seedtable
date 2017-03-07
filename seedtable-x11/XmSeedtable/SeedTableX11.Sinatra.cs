@@ -1,5 +1,4 @@
 using TonNurako.GC;
-using TonNurako.Widgets;
 using TonNurako.Widgets.Xm;
 
 namespace XmSeedtable
@@ -47,8 +46,9 @@ namespace XmSeedtable
             tableLayoutPanel2.RightAttachment = AttachmentType.Form;
             mainLayout.Children.Add(tableLayoutPanel2);
 
-            settingPathLabel = new TonNurako.Widgets.Xm.Label();
-            settingPathLabel.LabelString = "設定ファイル";
+            settingPathLabel = new TonNurako.Widgets.Xm.PushButton();
+            settingPathLabel.LabelString = "設定 ...   ";
+            settingPathLabel.ActivateEvent += settingButton_Click;
             settingPathTextBox = new TonNurako.Widgets.Xm.Text();
             settingPathTextBox.Width = 168;
             settingPathTextBox.ValueChangedEvent += settingPathTextBox_TextChanged;
@@ -190,7 +190,7 @@ namespace XmSeedtable
         private TonNurako.Widgets.Xm.Label seedPathLabel;
         private TonNurako.Widgets.Xm.Text seedPathTextBox;
         private TonNurako.Widgets.Xm.PushButton seedPathButton;
-        private TonNurako.Widgets.Xm.Label settingPathLabel;
+        private TonNurako.Widgets.Xm.PushButton settingPathLabel;
         private TonNurako.Widgets.Xm.Text settingPathTextBox;
         private TonNurako.Widgets.Xm.PushButton settingPathButton;
         private TonNurako.Widgets.Xm.Frame yamlToExcelGroupBox;
