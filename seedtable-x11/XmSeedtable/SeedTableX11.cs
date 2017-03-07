@@ -292,7 +292,7 @@ namespace XmSeedtable
         }
 
         private void settingButton_Click(object sender, EventArgs e) {
-            var setting = LoadSetting();
+            var setting = LoadSetting(false);
             if (setting == null) {
                  setting = new ToOptions();
             }
