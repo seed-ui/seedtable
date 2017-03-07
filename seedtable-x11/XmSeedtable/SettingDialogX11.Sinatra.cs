@@ -1,11 +1,6 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
 using System.Text;
-using System.Text.RegularExpressions;
-using TonNurako.Data;
-using TonNurako.Widgets;
 using TonNurako.Widgets.Xm;
 
 namespace XmSeedtable
@@ -92,8 +87,6 @@ namespace XmSeedtable
 
         private void Sinatra() {
             var form = new Form();
-            form.Width = 700;
-            form.Height = 600;
             form.MarginHeight = 2;
             form.MarginWidth = 2;
             this.Children.Add(form);
@@ -103,7 +96,6 @@ namespace XmSeedtable
                 new LeftControls( "カラム名行\n(--column-names-row)", WgtColumn),
                 new LeftControls( "データ開始行\n(--data-start-row)", WgtDataRow),
             };
-
 
             var vb6 = new Delegaty[] {
                     (X) => {
@@ -129,7 +121,6 @@ namespace XmSeedtable
                         return msc;
                     }
             };
-
 
             var rc = new RowColumn();
             rc.Packing = Packing.Column;
@@ -261,8 +252,8 @@ namespace XmSeedtable
         SimpleSpinBox dataStartRowNumericUpDown;
         SimpleOptionMenu engineComboBox;
         SimpleSpinBox columnNamesRowNumericUpDown;
-        private TonNurako.Widgets.Xm.PushButton okButton;
-        private TonNurako.Widgets.Xm.PushButton discardButton;
+        TonNurako.Widgets.Xm.PushButton okButton;
+        TonNurako.Widgets.Xm.PushButton discardButton;
 
     }
 }

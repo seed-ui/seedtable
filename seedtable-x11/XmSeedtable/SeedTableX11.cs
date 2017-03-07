@@ -22,14 +22,7 @@ namespace XmSeedtable
 
         private void SeedTableGUI_Load(object sender, EventArgs e) {
             RestoreFormValues();
-        }
-
-        private void excelToYamlArea_Click(object sender, TonNurako.Events.PushButtonEventArgs e) {
-            ExcelToYaml(SourceExcelFileNames());
-        }
-
-        private void yamlToExcelArea_Click(object sender, TonNurako.Events.PushButtonEventArgs e) {
-            YamlToExcel(SourceExcelFileNames());
+            RestorePersonalFormValues();
         }
 
         private void seedPathButton_Click(object sender, TonNurako.Events.PushButtonEventArgs e) {
@@ -104,114 +97,13 @@ namespace XmSeedtable
             };
             this.Layout.Children.Add(d);
         }
-
-        private void ShowMessageBox(string message, string title) {
-            var d = new ErrorDialog();
-            d.DialogTitle = title;
-            d.DialogStyle = DialogStyle.ApplicationModal;
-            d.MessageString = message;
-            d.OkLabelString = "わかった";
-
-            d.WidgetCreatedEvent += (x, y) => {
-                d.Items.Cancel.Visible = false;
-                d.Items.Help.Visible = false;
-            };
-
-            this.Layout.Children.Add(d);
-            d.Visible = true;
+        private void excelToYamlArea_Click(object sender, TonNurako.Events.PushButtonEventArgs e) {
+            ExcelToYaml(SourceExcelFileNames());
         }
 
-        private string[] SourceExcelFileNames() {
-            if (fileListBox.ItemCount == 0) return null;
-            // 挙動がぁゃιぃので代替手段
-            // var fileNames = fileListBox.SelectedItems.Select(fileName => Path.Combine(SourcePath == null ? "" : SourcePath, fileName)).ToArray();
-            var fileNames = fileListBox.SelectedPositions.Select(index => Path.Combine(SourcePath == null ? "" : SourcePath, fileListBox.Items[index - 1])).ToArray();
-            if (fileNames.Count() == 0) return null;
-            return fileNames;
+        private void yamlToExcelArea_Click(object sender, TonNurako.Events.PushButtonEventArgs e) {
+            YamlToExcel(SourceExcelFileNames());
         }
-
-        private string SeedPath {
-            get { return seedPathTextBox.Value; }
-            set { seedPathTextBox.Value = value; }
-        }
-
-        private string SettingPath {
-            get { return settingPathTextBox.Value; }
-            set { settingPathTextBox.Value = value; }
-        }
-
-        private string SourcePath {
-            get { return sourceTextBox.Value; }
-            set { sourceTextBox.Value = value; }
-        }
-
-        private string YamlToExcelTargetFolder { get; set; }
-
-        internal ToOptions LoadSetting() {
-            if (SettingPath == null || SettingPath.Length == 0) {
-                ShowMessageBox("設定ファイルを指定して下さい", "エラー");
-                return null;
-            }
-            if (!File.Exists(SettingPath)) {
-                ShowMessageBox("指定された設定ファイルがありません", "エラー");
-                return null;
-            }
-            var yaml = File.ReadAllText(SettingPath);
-            var builder = new DeserializerBuilder();
-            builder.WithNamingConvention(new HyphenatedNamingConvention());
-            var deserializer = builder.Build();
-            var options = deserializer.Deserialize<ToOptions>(yaml);
-            if (options == null) {
-                ShowMessageBox("設定ファイルが空です", "エラー");
-                return null;
-            }
-            return options;
-        }
-        private const string DefaultSettingFile = "options.yml";
-
-        internal void SaveSetting(ToOptions options) {
-            // 使わないパス情報は空にして出力しないようにする
-            options.output = null;
-            options.seedInput = null;
-            options.xlsxInput = null;
-            var builder = new SerializerBuilder();
-            builder.WithNamingConvention(new HyphenatedNamingConvention());
-            var serializer = builder.Build();
-            var yaml = serializer.Serialize(options);
-            if (SettingPath == null || SettingPath.Length == 0) {
-                // TODO: もう少しエレガントな方法は無いものか
-                SettingPath =
-                    Path.Combine(Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location), DefaultSettingFile);
-            }
-            File.WriteAllText(SettingPath, yaml);
-        }
-
-        public class SettingHandler {
-            SeedTableX11 x11;
-            public SettingHandler(SeedTableX11 x) {
-                x11 = x;
-            }
-            public void Save(ToOptions opt) {
-                x11.SaveSetting(opt);
-            }
-        }
-
-        private bool SettingReadOnly() {
-            return File.Exists(SettingReadOnlyPath);
-        }
-
-        private void settingButton_Click(object sender, EventArgs e) {
-            var setting = LoadSetting();
-            if (setting == null) {
-                 setting = new ToOptions();
-            }
-            var settingReadOnly = SettingReadOnly();
-
-            var dialog = new SettingDialogX11(setting, !settingReadOnly, new SettingHandler(this));
-            this.Layout.Children.Add(dialog);
-            dialog.Popup(GrabOption.Exclusive);
-        }
-
         private void YamlToExcel(string[] fileNames) {
             if (fileNames == null) return;
             var fileBaseNames = fileNames.Select(fileName => Path.GetFileName(fileName));
@@ -285,6 +177,131 @@ namespace XmSeedtable
             dialog.Popup(GrabOption.Exclusive);
         }
 
+        private void ShowMessageBox(string message, string title) {
+            var d = new ErrorDialog();
+            d.DialogTitle = title;
+            d.DialogStyle = DialogStyle.ApplicationModal;
+            d.MessageString = message;
+            d.OkLabelString = "わかった";
+
+            d.WidgetCreatedEvent += (x, y) => {
+                d.Items.Cancel.Visible = false;
+                d.Items.Help.Visible = false;
+            };
+
+            this.Layout.Children.Add(d);
+            d.Visible = true;
+        }
+
+        private string[] SourceExcelFileNames() {
+            if (fileListBox.ItemCount == 0) return null;
+            // 挙動がぁゃιぃので代替手段
+            // var fileNames = fileListBox.SelectedItems.Select(fileName => Path.Combine(SourcePath == null ? "" : SourcePath, fileName)).ToArray();
+            var fileNames = fileListBox.SelectedPositions.Select(index => Path.Combine(SourcePath == null ? "" : SourcePath, fileListBox.Items[index - 1])).ToArray();
+            if (fileNames.Count() == 0) return null;
+            return fileNames;
+        }
+
+        private string SeedPath {
+            get { return seedPathTextBox.Value; }
+            set { seedPathTextBox.Value = value; }
+        }
+
+        private string SettingPath {
+            get { return settingPathTextBox.Value; }
+            set { settingPathTextBox.Value = value; }
+        }
+
+        private string SourcePath {
+            get { return sourceTextBox.Value; }
+            set { sourceTextBox.Value = value; }
+        }
+
+        private string DataExcelsDirectoryPath {
+            get { return _DataExcelsDirectoryPath; }
+            set {
+                _DataExcelsDirectoryPath = value;
+                SavePersonalFormValues();
+            }
+        }
+        private string _DataExcelsDirectoryPath;
+
+        private string TemplateExcelsDirectoryPath {
+            get { return _TemplateExcelsDirectoryPath; }
+            set {
+                _TemplateExcelsDirectoryPath = value;
+                SavePersonalFormValues();
+            }
+        }
+        private string _TemplateExcelsDirectoryPath;
+
+        private string YamlToExcelTargetFolder { get; set; }
+
+        internal ToOptions LoadSetting(bool showAlert = true) {
+            if (SettingPath == null || SettingPath.Length == 0) {
+                if (showAlert) ShowMessageBox("設定ファイルを指定して下さい", "エラー");
+                return null;
+            }
+            if (!File.Exists(SettingPath)) {
+                if (showAlert) ShowMessageBox("指定された設定ファイルがありません", "エラー");
+                return null;
+            }
+            var yaml = File.ReadAllText(SettingPath);
+            var builder = new DeserializerBuilder();
+            builder.WithNamingConvention(new HyphenatedNamingConvention());
+            var deserializer = builder.Build();
+            var options = deserializer.Deserialize<ToOptions>(yaml);
+            if (options == null) {
+               if (showAlert)  ShowMessageBox("設定ファイルが空です", "エラー");
+                return null;
+            }
+            return options;
+        }
+
+        private const string DefaultSettingFile = "options.yml";
+
+        internal void SaveSetting(ToOptions options) {
+            // 使わないパス情報は空にして出力しないようにする
+            options.output = null;
+            options.seedInput = null;
+            options.xlsxInput = null;
+            var builder = new SerializerBuilder();
+            builder.WithNamingConvention(new HyphenatedNamingConvention());
+            var serializer = builder.Build();
+            var yaml = serializer.Serialize(options);
+            if (SettingPath == null || SettingPath.Length == 0) {
+                // TODO: もう少しエレガントな方法は無いものか
+                SettingPath =
+                    Path.Combine(Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location), DefaultSettingFile);
+            }
+            File.WriteAllText(SettingPath, yaml);
+        }
+
+        public class SettingHandler {
+            SeedTableX11 x11;
+            public SettingHandler(SeedTableX11 x) {
+                x11 = x;
+            }
+            public void Save(ToOptions opt) {
+                x11.SaveSetting(opt);
+            }
+        }
+
+        private bool SettingReadOnly() {
+            return File.Exists(SettingReadOnlyPath);
+        }
+
+        private void settingButton_Click(object sender, EventArgs e) {
+            var setting = LoadSetting();
+            if (setting == null) {
+                 setting = new ToOptions();
+            }
+            var settingReadOnly = SettingReadOnly();
+
+            var dialog = new SettingDialogX11(setting, !settingReadOnly, new SettingHandler(this));
+            this.Layout.Children.Add(dialog);
+            dialog.Popup(GrabOption.Exclusive);
+        }
 
         private void SaveFormValues() {
             var yaml = new Serializer().Serialize(new FormValuesX11(SeedPath, SettingPath, SourcePath, YamlToExcelTargetFolder));
@@ -301,6 +318,18 @@ namespace XmSeedtable
             YamlToExcelTargetFolder = formValues.YamlToExcelTargetFolder;
         }
 
+        private void SavePersonalFormValues() {
+            var yaml = new Serializer().Serialize(new PersonalFormValuesX11(DataExcelsDirectoryPath, TemplateExcelsDirectoryPath));
+            File.WriteAllText(PersonalFormValuesPath, yaml);
+        }
+
+        private void RestorePersonalFormValues() {
+            if (!File.Exists(PersonalFormValuesPath)) return;
+            var yaml = File.ReadAllText(PersonalFormValuesPath);
+            var personalFormValues = new Deserializer().Deserialize<PersonalFormValuesX11>(yaml);
+            DataExcelsDirectoryPath = personalFormValues.DataExcelsDirectoryPath;
+            TemplateExcelsDirectoryPath = personalFormValues.TemplateExcelsDirectoryPath;
+        }
         private string FormValuesPath {
             get { return Path.Combine(Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location), FormValuesFile); }
         }

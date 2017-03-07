@@ -1,5 +1,4 @@
 using TonNurako.GC;
-using TonNurako.Widgets;
 using TonNurako.Widgets.Xm;
 
 namespace XmSeedtable

@@ -51,6 +51,7 @@
     <Compile Include="Program.cs" />
     <Compile Include="SeedTableX11.cs" />
     <Compile Include="SeedTableX11.Sinatra.cs" />
+    <Compile Include="PersonalFormValuesX11.cs" />
     <Compile Include="FormValuesX11.cs" />
     <Compile Include="ExcelToYamlDialogX11.cs" />
     <Compile Include="ExcelToYamlDialogX11.Sinatra.cs" />
