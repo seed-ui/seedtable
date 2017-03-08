@@ -13,25 +13,25 @@ namespace SeedTable {
             this.data = data;
         }
 
-        public void WriteTo(string name, string directory = ".", bool needSubdivide = false, int pre_cut = 0, int post_cut = 0, string extension = ".yml") {
+        public void WriteTo(string name, string directory = ".", bool needSubdivide = false, int pre_cut = 0, int post_cut = 0, string extension = ".yml", IEnumerable<string> yamlColumnNames = null) {
             if (!needSubdivide) {
-                WriteToSingle(name, directory, extension);
+                WriteToSingle(name, directory, extension, yamlColumnNames);
             } else {
-                WriteToMulti(name, directory, pre_cut, post_cut, extension);
+                WriteToMulti(name, directory, pre_cut, post_cut, extension, yamlColumnNames);
             }
         }
 
-        public void WriteToSingle(string name, string directory = ".", string extension = ".yml") {
+        public void WriteToSingle(string name, string directory = ".", string extension = ".yml", IEnumerable<string> yamlColumnNames = null) {
             if (!Directory.Exists(directory)) Directory.CreateDirectory(directory);
-            File.WriteAllText(Path.Combine(directory, name + extension), YamlData.DataToYaml(data));
+            File.WriteAllText(Path.Combine(directory, name + extension), YamlData.DataToYaml(data, yamlColumnNames));
         }
 
-        public void WriteToMulti(string name, string directory = ".", int pre_cut = 0, int post_cut = 0, string extension = ".yml") {
+        public void WriteToMulti(string name, string directory = ".", int pre_cut = 0, int post_cut = 0, string extension = ".yml", IEnumerable<string> yamlColumnNames = null) {
             var named_directory = Path.Combine(directory, name);
             if (!Directory.Exists(directory)) Directory.CreateDirectory(directory);
             if (!Directory.Exists(named_directory)) Directory.CreateDirectory(named_directory);
             foreach (var part in data.ToSeparatedDictionaryDictionary(pre_cut, post_cut)) {
-                File.WriteAllText(Path.Combine(named_directory, part.Key + extension), YamlData.DataToYaml(part.Value));
+                File.WriteAllText(Path.Combine(named_directory, part.Key + extension), YamlData.DataToYaml(part.Value, yamlColumnNames));
             }
         }
 
@@ -61,7 +61,12 @@ namespace SeedTable {
             var yaml_stream = new YamlStream();
             yaml_stream.Load(stream);
             var root = (YamlMappingNode)yaml_stream.Documents[0].RootNode;
-            var table = root.Children.Select(child => (YamlMappingNode)child.Value).Select(row => row.ToDictionary(pair => ((YamlScalarNode)pair.Key).Value, pair => GetTypedYamlValue(((YamlScalarNode)pair.Value).Value)));
+            var table = root.Children
+                .Select(child => (YamlMappingNode)child.Value)
+                .Select(row => row.ToDictionary(
+                    pair => ((YamlScalarNode)pair.Key).Value,
+                    pair => pair.Value is YamlScalarNode ? GetTypedYamlValue(((YamlScalarNode)pair.Value).Value) : ((YamlNode)pair.Value).ToString()
+                ));
             return new DataDictionaryList(table);
         }
 
@@ -69,26 +74,27 @@ namespace SeedTable {
             return YamlToData(new StringReader(yaml));
         }
 
-        public static void DataToYaml(TextWriter writer, Dictionary<string, Dictionary<string, object>> datatable) {
+        public static void DataToYaml(TextWriter writer, Dictionary<string, Dictionary<string, object>> datatable, IEnumerable<string> yamlColumnNames = null) {
             var builder = new SerializerBuilder();
             builder.EmitDefaults();
             var serializer = builder.Build();
-            serializer.Serialize(writer, datatable);
+            var tree = yamlColumnNames == null ? datatable : ConvertDataTableWithYamlColumns(datatable, yamlColumnNames);
+            serializer.Serialize(writer, tree);
         }
 
-        public static void DataToYaml(TextWriter writer, DataDictionaryList datatable) {
-            DataToYaml(writer, datatable.ToDictionaryDictionary());
+        public static void DataToYaml(TextWriter writer, DataDictionaryList datatable, IEnumerable<string> yamlColumnNames = null) {
+            DataToYaml(writer, datatable.ToDictionaryDictionary(), yamlColumnNames);
         }
 
-        public static string DataToYaml(Dictionary<string, Dictionary<string, object>> datatable) {
+        public static string DataToYaml(Dictionary<string, Dictionary<string, object>> datatable, IEnumerable<string> yamlColumnNames = null) {
             var writer = new StringWriter();
-            DataToYaml(writer, datatable);
+            DataToYaml(writer, datatable, yamlColumnNames);
             return writer.ToString();
         }
 
-        public static string DataToYaml(DataDictionaryList datatable) {
+        public static string DataToYaml(DataDictionaryList datatable, IEnumerable<string> yamlColumnNames = null) {
             var writer = new StringWriter();
-            DataToYaml(writer, datatable);
+            DataToYaml(writer, datatable, yamlColumnNames);
             return writer.ToString();
         }
 
@@ -99,6 +105,26 @@ namespace SeedTable {
             double doubleValue;
             if (double.TryParse(value, out doubleValue)) return doubleValue;
             return value;
+        }
+
+        private static object ConvertDataTableWithYamlColumns(Dictionary<string, Dictionary<string, object>> datatable, IEnumerable<string> yamlColumnNames = null) {
+            var builder = new DeserializerBuilder();
+            var deserializer = builder.Build();
+            return datatable.ToDictionary(
+                pair => pair.Key,
+                pair => pair.Value.ToDictionary(
+                    _pair => _pair.Key,
+                    _pair => {
+                        if (_pair.Value == null) {
+                            return null;
+                        } else if (yamlColumnNames.Contains(_pair.Key)) {
+                            return deserializer.Deserialize(new StringReader(_pair.Value.ToString()));
+                        } else {
+                            return _pair.Value;
+                        }
+                    }
+                )
+            );
         }
     }
 }

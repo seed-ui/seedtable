@@ -24,6 +24,7 @@ namespace seedtable_gui {
             onlyTextBox.DataBindings.Add("Text", toOptionsStringListDataSource, "only", true, DataSourceUpdateMode.OnPropertyChanged);
             ignoreTextBox.DataBindings.Add("Text", toOptionsStringListDataSource, "ignore", true, DataSourceUpdateMode.OnPropertyChanged);
             ignoreColumnsTextBox.DataBindings.Add("Text", toOptionsStringListDataSource, "ignoreColumns", true, DataSourceUpdateMode.OnPropertyChanged);
+            yamlColumnsTextBox.DataBindings.Add("Text", toOptionsStringListDataSource, "yamlColumns", true, DataSourceUpdateMode.OnPropertyChanged);
 
             engineComboBox.DataSource = Enum.GetValues(typeof(ToOptions.Engine));
             toOptionsBindingSource.DataSource = options;
@@ -59,6 +60,12 @@ namespace seedtable_gui {
         public IEnumerable<string> ignoreColumns {
             get { return Options.ignoreColumns; }
             set { Options.ignoreColumns = value; }
+        }
+
+        [TypeConverter(typeof(StringListToMultiLineStringConverter))]
+        public IEnumerable<string> yamlColumns {
+            get { return Options.yamlColumns; }
+            set { Options.yamlColumns = value; }
         }
     }
 
