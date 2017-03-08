@@ -167,6 +167,9 @@ namespace XmSeedtable
                 new LeftControls( "このカラム名を無視\n--ignore-columns", (x) =>{
                         return WgtText(x, out ignoreColumnsTextBox, Options.ignoreColumns);
                     }),
+                new LeftControls( "YAMLにするカラム\n--yaml-columns", (x) =>{
+                        return WgtText(x, out yamlColumnsTextBox, Options.yamlColumns);
+                    }),
             };
             var re = new Form();
             re.FractionBase = vb5.Length;
@@ -233,6 +236,7 @@ namespace XmSeedtable
             if (!Changable) {
                 deleteCheckBox.Sensitive              =
                 calcFormulasCheckBox.Sensitive        =
+                yamlColumnsTextBox.Sensitive          =
                 ignoreColumnsTextBox.Sensitive        =
                 ignoreTextBox.Sensitive               =
                 onlyTextBox.Sensitive                 =
@@ -245,6 +249,7 @@ namespace XmSeedtable
         }
         ToggleButtonGadget deleteCheckBox;
         ToggleButtonGadget calcFormulasCheckBox;
+        Text yamlColumnsTextBox;
         Text ignoreColumnsTextBox;
         Text ignoreTextBox;
         Text onlyTextBox;

@@ -34,6 +34,7 @@ namespace XmSeedtable
             }
             Options.subdivide = subdivideTextBox.Value.Split('\n');
             Options.ignoreColumns = ignoreColumnsTextBox.Value.Split('\n');
+            Options.yamlColumns = yamlColumnsTextBox.Value.Split('\n');
             Options.ignore = ignoreTextBox.Value.Split('\n');
             Options.only = onlyTextBox.Value.Split('\n');
             XHandler.Save(Options);

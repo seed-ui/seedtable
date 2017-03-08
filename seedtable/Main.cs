@@ -35,6 +35,9 @@ namespace SeedTable {
         [Option('v', "version-column", HelpText = "version column")]
         public string versionColumn { get; set; }
 
+        [Option('y', "yaml-columns", Separator = ',', HelpText = "yaml columns")]
+        public IEnumerable<string> yamlColumns { get; set; } = new List<string> { };
+
         [Option('n', "ignore-columns", Separator = ',', HelpText = "ignore columns")]
         public IEnumerable<string> ignoreColumns { get; set; } = new List<string> { };
 
@@ -237,7 +240,7 @@ namespace SeedTable {
                 if (seedTable.Errors.Count != 0) {
                     continue;
                 }
-                new YamlData(seedTable.ExcelToData(options.requireVersion)).WriteTo(sheetName, options.output, subdivide.NeedSubdivide, subdivide.CutPrefix, subdivide.CutPostfix);
+                new YamlData(seedTable.ExcelToData(options.requireVersion)).WriteTo(sheetName, options.output, subdivide.NeedSubdivide, subdivide.CutPrefix, subdivide.CutPostfix, yamlColumnNames: options.yamlColumns);
                 var now = DateTime.Now;
                 DurationLog("      write-time", previousTime, now);
                 previousTime = now;
