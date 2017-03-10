@@ -58,7 +58,7 @@ namespace SeedTable {
             var named_directory = Path.Combine(directory, name);
             return new YamlData(
                 YamlData.YamlToData(
-                    string.Join("\n", Directory.EnumerateFiles(named_directory).Select(file => File.ReadAllText(file)).ToArray())
+                    string.Join("\n", Directory.EnumerateFiles(named_directory, $"*{extension}").Select(file => File.ReadAllText(file)).ToArray())
                     )
                 );
         }
@@ -67,11 +67,12 @@ namespace SeedTable {
             var yaml_stream = new YamlStream();
             yaml_stream.Load(stream);
             var root = (YamlMappingNode)yaml_stream.Documents[0].RootNode;
+            var jsonSerializer = new SerializerBuilder().JsonCompatible().Build();
             var table = root.Children
                 .Select(child => (YamlMappingNode)child.Value)
                 .Select(row => row.ToDictionary(
                     pair => ((YamlScalarNode)pair.Key).Value,
-                    pair => pair.Value is YamlScalarNode ? GetTypedYamlValue(((YamlScalarNode)pair.Value).Value) : ((YamlNode)pair.Value).ToString()
+                    pair => pair.Value is YamlScalarNode ? GetTypedYamlValue(((YamlScalarNode)pair.Value).Value) : jsonSerializer.Serialize(pair.Value)
                 ));
             return new DataDictionaryList(table);
         }
