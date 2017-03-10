@@ -159,6 +159,7 @@ namespace seedtable_gui {
             options.subdivide = setting.subdivide;
             options.versionColumn = setting.versionColumn;
             options.requireVersion = setting.requireVersion;
+            options.delete = setting.delete;
             var dialog = new ExcelToYamlDialog(options);
             dialog.ShowDialog();
         }

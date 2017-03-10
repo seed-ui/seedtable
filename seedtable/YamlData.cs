@@ -13,11 +13,11 @@ namespace SeedTable {
             this.data = data;
         }
 
-        public void WriteTo(string name, string directory = ".", bool needSubdivide = false, int pre_cut = 0, int post_cut = 0, string extension = ".yml", IEnumerable<string> yamlColumnNames = null) {
+        public void WriteTo(string name, string directory = ".", bool needSubdivide = false, int pre_cut = 0, int post_cut = 0, string extension = ".yml", IEnumerable<string> yamlColumnNames = null, bool deletePrevious = false) {
             if (!needSubdivide) {
                 WriteToSingle(name, directory, extension, yamlColumnNames);
             } else {
-                WriteToMulti(name, directory, pre_cut, post_cut, extension, yamlColumnNames);
+                WriteToMulti(name, directory, pre_cut, post_cut, extension, yamlColumnNames, deletePrevious);
             }
         }
 
@@ -26,10 +26,16 @@ namespace SeedTable {
             File.WriteAllText(Path.Combine(directory, name + extension), YamlData.DataToYaml(data, yamlColumnNames));
         }
 
-        public void WriteToMulti(string name, string directory = ".", int pre_cut = 0, int post_cut = 0, string extension = ".yml", IEnumerable<string> yamlColumnNames = null) {
+        public void WriteToMulti(string name, string directory = ".", int pre_cut = 0, int post_cut = 0, string extension = ".yml", IEnumerable<string> yamlColumnNames = null, bool deletePrevious = false) {
             var named_directory = Path.Combine(directory, name);
             if (!Directory.Exists(directory)) Directory.CreateDirectory(directory);
-            if (!Directory.Exists(named_directory)) Directory.CreateDirectory(named_directory);
+            if (!Directory.Exists(named_directory)) {
+                Directory.CreateDirectory(named_directory);
+            } else if (deletePrevious) {
+                foreach (var file in Directory.EnumerateFiles(named_directory, $"*{extension}")) {
+                    File.Delete(file);
+                }
+            }
             foreach (var part in data.ToSeparatedDictionaryDictionary(pre_cut, post_cut)) {
                 File.WriteAllText(Path.Combine(named_directory, part.Key + extension), YamlData.DataToYaml(part.Value, yamlColumnNames));
             }

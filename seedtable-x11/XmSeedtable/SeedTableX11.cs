@@ -172,6 +172,7 @@ namespace XmSeedtable
             options.subdivide = setting.subdivide;
             options.versionColumn = setting.versionColumn;
             options.requireVersion = setting.requireVersion;
+            options.delete = setting.delete;
 
             var dialog = new ExcelToYamlDialogX11(options);
             this.Layout.Children.Add(dialog);

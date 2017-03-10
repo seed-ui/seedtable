@@ -49,6 +49,9 @@ namespace SeedTable {
 
         [Option('e', "engine", Default = Engine.OpenXml, HelpText = "parser engine")]
         public virtual Engine engine { get; set; }
+
+        [Option('d', "delete", Default = false, HelpText = "delete data which is not exists in source")]
+        public bool delete { get; set; } = false;
     }
 
     [Verb("from", HelpText ="Yaml from Excel")]
@@ -73,9 +76,6 @@ namespace SeedTable {
 
         [Option('x', "xlsx-input", Default = ".", HelpText = "xlsx input directory")]
         public string xlsxInput { get; set; } = ".";
-
-        [Option('d', "delete", Default = false, HelpText = "delete enabled")]
-        public bool delete { get; set; } = false;
 
         [Option('c', "calc-formulas", Default = false, HelpText = "calculate all formulas and store results to cache fields")]
         public bool calcFormulas { get; set; } = false;
@@ -240,7 +240,15 @@ namespace SeedTable {
                 if (seedTable.Errors.Count != 0) {
                     continue;
                 }
-                new YamlData(seedTable.ExcelToData(options.requireVersion)).WriteTo(sheetName, options.output, subdivide.NeedSubdivide, subdivide.CutPrefix, subdivide.CutPostfix, yamlColumnNames: options.yamlColumns);
+                new YamlData(seedTable.ExcelToData(options.requireVersion)).WriteTo(
+                    sheetName,
+                    options.output,
+                    subdivide.NeedSubdivide,
+                    subdivide.CutPrefix,
+                    subdivide.CutPostfix,
+                    yamlColumnNames: options.yamlColumns,
+                    deletePrevious: options.delete
+                );
                 var now = DateTime.Now;
                 DurationLog("      write-time", previousTime, now);
                 previousTime = now;

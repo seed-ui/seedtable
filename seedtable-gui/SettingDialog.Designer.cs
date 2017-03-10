@@ -124,7 +124,7 @@
             this.deleteCheckBox.Name = "deleteCheckBox";
             this.deleteCheckBox.Size = new System.Drawing.Size(258, 29);
             this.deleteCheckBox.TabIndex = 7;
-            this.deleteCheckBox.Text = "yml→xlsx変換時に行削除を行う\r\n(--delete)";
+            this.deleteCheckBox.Text = "変換元にないデータを削除する\r\n(--delete)";
             this.deleteCheckBox.UseVisualStyleBackColor = true;
             // 
             // dataStartRowNumericUpDown

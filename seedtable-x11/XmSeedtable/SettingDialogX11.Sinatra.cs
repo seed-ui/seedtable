@@ -101,7 +101,7 @@ namespace XmSeedtable
                     (X) => {
                         var msc = new SimpleCheckBox();
                         deleteCheckBox = new ToggleButtonGadget();
-                        deleteCheckBox.LabelString = "yml→xlsx変換時に行削除を行う\n(--delete)";
+                        deleteCheckBox.LabelString = "変換元にないデータを削除する\n(--delete)";
                         deleteCheckBox.Set = Options.delete ? ToggleButtonState.Set : ToggleButtonState.Unset;
                         deleteCheckBox.ValueChangedEvent += (x,y) => {
                             Options.delete = deleteCheckBox.Set == ToggleButtonState.Set;
