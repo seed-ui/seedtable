@@ -164,6 +164,9 @@ namespace XmSeedtable
                 new LeftControls( "このシートを無視\n--ignore", (x) =>{
                         return WgtText(x, out ignoreTextBox, Options.ignore);
                     }),
+                new LeftControls( "yamlシート名対応\n--mapping", (x) =>{
+                        return WgtText(x, out mappingTextBox, Options.mapping);
+                    }),
                 new LeftControls( "このカラム名を無視\n--ignore-columns", (x) =>{
                         return WgtText(x, out ignoreColumnsTextBox, Options.ignoreColumns);
                     }),
@@ -251,6 +254,7 @@ namespace XmSeedtable
         ToggleButtonGadget calcFormulasCheckBox;
         Text yamlColumnsTextBox;
         Text ignoreColumnsTextBox;
+        Text mappingTextBox;
         Text ignoreTextBox;
         Text onlyTextBox;
         Text subdivideTextBox;

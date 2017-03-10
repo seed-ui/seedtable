@@ -20,7 +20,7 @@ namespace SeedTable {
         [Option('o', "output", Default = ".", HelpText = "output directory")]
         public string output { get; set; } = ".";
 
-        [Option('S', "subdivide", Separator = ',', HelpText = "subdivide rules")]
+        [Option('S', "subdivide", Separator = ',', HelpText = "subdivide rules : [(pre cut):]sheet-name[:(post cut)]")]
         public IEnumerable<string> subdivide { get; set; } = new List<string> { };
 
         [Option('I', "ignore", Separator = ',', HelpText = "ignore sheet names")]
@@ -28,6 +28,9 @@ namespace SeedTable {
         
         [Option('O', "only", Separator = ',', HelpText = "only sheet names")]
         public IEnumerable<string> only { get; set; } = new List<string> { };
+        
+        [Option('M', "mapping", Separator = ',', HelpText = "sheet names mapping : (seed table name):(excel sheet name)")]
+        public IEnumerable<string> mapping { get; set; } = new List<string> { };
 
         [Option('R', "require-version", Default = "", HelpText = "require version (with version column)")]
         public string requireVersion { get; set; } = "";
@@ -144,9 +147,14 @@ namespace SeedTable {
 
         static DateTime SeedToExcelCore(IExcelData excelData, string file, ToOptions options, DateTime startTime, DateTime previousTime) {
             Log("  sheets");
-            var sheetsConfig = new SheetsConfig(options.only, options.ignore);
+            var sheetsConfig = new SheetsConfig(options.only, options.ignore, null, options.mapping);
             foreach (var sheetName in excelData.SheetNames) {
-                Log($"    {sheetName}");
+                var yamlTableName = sheetsConfig.YamlTableName(sheetName);
+                if (yamlTableName == sheetName) {
+                    Log($"    {yamlTableName}");
+                } else {
+                    Log($"    {yamlTableName} -> {sheetName}");
+                }
                 if (!sheetsConfig.IsUseSheet(sheetName)) {
                     Log("      ignore", "skip");
                     continue;
@@ -157,7 +165,7 @@ namespace SeedTable {
                 }
                 YamlData yamlData = null;
                 try {
-                    yamlData = YamlData.ReadFrom(sheetName, options.seedInput);
+                    yamlData = YamlData.ReadFrom(yamlTableName, options.seedInput);
                 } catch (FileNotFoundException exception) {
                     Log("      skip", $"seed file [{exception.FileName}] not found");
                     continue;
@@ -228,20 +236,25 @@ namespace SeedTable {
 
         static DateTime ExcelToSeedCore(IExcelData excelData, FromOptions options, DateTime startTime, DateTime previousTime) {
             Log("  sheets");
-            var sheetsConfig = new SheetsConfig(options.only, options.ignore, options.subdivide);
+            var sheetsConfig = new SheetsConfig(options.only, options.ignore, options.subdivide, options.mapping);
             foreach (var sheetName in excelData.SheetNames) {
-                Log($"    {sheetName}");
+                var yamlTableName = sheetsConfig.YamlTableName(sheetName);
+                if (yamlTableName == sheetName) {
+                    Log($"    {yamlTableName}");
+                } else {
+                    Log($"    {yamlTableName} <- {sheetName}");
+                }
                 if (!sheetsConfig.IsUseSheet(sheetName)) {
                     Log("      ignore", "skip");
                     continue;
                 }
-                var subdivide = sheetsConfig.subdivide(sheetName);
+                var subdivide = sheetsConfig.subdivide(yamlTableName);
                 var seedTable = GetSeedTable(excelData, sheetName, options);
                 if (seedTable.Errors.Count != 0) {
                     continue;
                 }
                 new YamlData(seedTable.ExcelToData(options.requireVersion)).WriteTo(
-                    sheetName,
+                    yamlTableName,
                     options.output,
                     subdivide.NeedSubdivide,
                     subdivide.CutPrefix,
@@ -290,7 +303,7 @@ namespace SeedTable {
         }
 
         class SheetsConfig {
-            public SheetsConfig(IEnumerable<string> only, IEnumerable<string> ignore, IEnumerable<string> subdivide = null) {
+            public SheetsConfig(IEnumerable<string> only, IEnumerable<string> ignore, IEnumerable<string> subdivide = null, IEnumerable<string> mapping = null) {
                 var subdivideSheetNameWithSubdivides = subdivide == null ? new SheetNameWithSubdivide[] { } : subdivide.Select((sheetName) => SheetNameWithSubdivide.FromMixed(sheetName));
                 var onlySheetNameWithSubdivides = only.Select((sheetName) => SheetNameWithSubdivide.FromMixed(sheetName));
                 foreach(var sheetNameWithSubdivide in onlySheetNameWithSubdivides.Concat(subdivideSheetNameWithSubdivides)) {
@@ -298,11 +311,15 @@ namespace SeedTable {
                 }
                 onlySheetNames = new HashSet<string>(onlySheetNameWithSubdivides.Select((sheetNameWithSubdivide) => sheetNameWithSubdivide.ToString()));
                 ignoreSheetNames = new HashSet<string>(ignore.Select((sheetName) => SheetNameWithSubdivide.FromMixed(sheetName).ToString()));
+                yamlToExcelMapping = mapping.Select(map => map.Split(':')).ToDictionary(map => map[0], map => map[1]);
+                excelToYamlMapping = yamlToExcelMapping.ToDictionary(map => map.Value, map => map.Key);
             }
 
             Dictionary<string, SheetNameWithSubdivide> subdivideRules = new Dictionary<string, SheetNameWithSubdivide>();
             HashSet<string> onlySheetNames;
             HashSet<string> ignoreSheetNames;
+            Dictionary<string, string> yamlToExcelMapping;
+            Dictionary<string, string> excelToYamlMapping;
 
             public bool IsUseSheet(string sheetName) {
                 if (ignoreSheetNames.Contains(sheetName)) return false;
@@ -312,6 +329,24 @@ namespace SeedTable {
 
             public SheetNameWithSubdivide subdivide(string sheetName) {
                 return subdivideRules.ContainsKey(sheetName) ? subdivideRules[sheetName] : new SheetNameWithSubdivide(sheetName);
+            }
+
+            public string ExcelSheetName(string yamlTableName) {
+                string excelSheetName;
+                if (yamlToExcelMapping.TryGetValue(yamlTableName, out excelSheetName)) {
+                    return excelSheetName;
+                } else {
+                    return yamlTableName;
+                }
+            }
+
+            public string YamlTableName(string excelSheetName) {
+                string yamlTableName;
+                if (excelToYamlMapping.TryGetValue(excelSheetName, out yamlTableName)) {
+                    return yamlTableName;
+                } else {
+                    return excelSheetName;
+                }
             }
         }
 

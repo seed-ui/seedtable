@@ -133,6 +133,7 @@ namespace seedtable_gui {
             options.ignore = setting.ignore;
             options.only = setting.only;
             options.subdivide = setting.subdivide;
+            options.mapping = setting.mapping;
             options.versionColumn = setting.versionColumn;
             options.requireVersion = setting.requireVersion;
             options.delete = setting.delete;
@@ -157,6 +158,7 @@ namespace seedtable_gui {
             options.ignore = setting.ignore;
             options.only = setting.only;
             options.subdivide = setting.subdivide;
+            options.mapping = setting.mapping;
             options.versionColumn = setting.versionColumn;
             options.requireVersion = setting.requireVersion;
             options.delete = setting.delete;
