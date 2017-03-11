@@ -304,31 +304,29 @@ namespace SeedTable {
 
         class SheetsConfig {
             public SheetsConfig(IEnumerable<string> only, IEnumerable<string> ignore, IEnumerable<string> subdivide = null, IEnumerable<string> mapping = null) {
-                var subdivideSheetNameWithSubdivides = subdivide == null ? new SheetNameWithSubdivide[] { } : subdivide.Select((sheetName) => SheetNameWithSubdivide.FromMixed(sheetName));
-                var onlySheetNameWithSubdivides = only.Select((sheetName) => SheetNameWithSubdivide.FromMixed(sheetName));
-                foreach(var sheetNameWithSubdivide in onlySheetNameWithSubdivides.Concat(subdivideSheetNameWithSubdivides)) {
-                    subdivideRules[sheetNameWithSubdivide.ToString()] = sheetNameWithSubdivide;
-                }
-                onlySheetNames = new HashSet<string>(onlySheetNameWithSubdivides.Select((sheetNameWithSubdivide) => sheetNameWithSubdivide.ToString()));
-                ignoreSheetNames = new HashSet<string>(ignore.Select((sheetName) => SheetNameWithSubdivide.FromMixed(sheetName).ToString()));
+                var subdivideSheetNames = SheetNameWithSubdivides.FromMixed(subdivide);
+                OnlySheetNames = SheetNameWithSubdivides.FromMixed(only);
+                IgnoreSheetNames = SheetNameWithSubdivides.FromMixed(ignore);
+                SubdivideRules = new SheetNameWithSubdivides(subdivideSheetNames.Concat(OnlySheetNames));
                 yamlToExcelMapping = mapping.Select(map => map.Split(':')).ToDictionary(map => map[0], map => map[1]);
                 excelToYamlMapping = yamlToExcelMapping.ToDictionary(map => map.Value, map => map.Key);
             }
 
-            Dictionary<string, SheetNameWithSubdivide> subdivideRules = new Dictionary<string, SheetNameWithSubdivide>();
-            HashSet<string> onlySheetNames;
-            HashSet<string> ignoreSheetNames;
+            SheetNameWithSubdivides SubdivideRules;
+            SheetNameWithSubdivides IgnoreSheetNames;
+            SheetNameWithSubdivides OnlySheetNames;
             Dictionary<string, string> yamlToExcelMapping;
             Dictionary<string, string> excelToYamlMapping;
 
             public bool IsUseSheet(string sheetName) {
-                if (ignoreSheetNames.Contains(sheetName)) return false;
-                if (onlySheetNames.Count != 0 && !onlySheetNames.Contains(sheetName)) return false;
+                if (IgnoreSheetNames.Contains(sheetName)) return true;
+                if (OnlySheetNames.Count != 0 && !OnlySheetNames.Contains(sheetName)) return false;
                 return true;
             }
 
             public SheetNameWithSubdivide subdivide(string sheetName) {
-                return subdivideRules.ContainsKey(sheetName) ? subdivideRules[sheetName] : new SheetNameWithSubdivide(sheetName);
+                var subdivideRule = SubdivideRules.Find(sheetName);
+                return subdivideRule ?? new SheetNameWithSubdivide(sheetName);
             }
 
             public string ExcelSheetName(string yamlTableName) {
@@ -350,34 +348,90 @@ namespace SeedTable {
             }
         }
 
+        class SheetNameWithSubdivides : List<SheetNameWithSubdivide> {
+            public static SheetNameWithSubdivides FromMixed(IEnumerable<string> mixedSheetNames = null) {
+                return mixedSheetNames == null ?
+                    new SheetNameWithSubdivides() :
+                    new SheetNameWithSubdivides(
+                        mixedSheetNames.Select(mixedSheetName => SheetNameWithSubdivide.FromMixed(mixedSheetName))
+                    );
+            }
+
+            public SheetNameWithSubdivides() : base() { }
+
+            public SheetNameWithSubdivides(IEnumerable<SheetNameWithSubdivide> sheetNameWithSubdivides) : base(
+                sheetNameWithSubdivides.Where(
+                    sheetNameWithSubdivide => sheetNameWithSubdivide.MatchType == SheetNameWithSubdivide.SheetNameMatchType.Exact
+                ).Concat(
+                    sheetNameWithSubdivides.Where(
+                        sheetNameWithSubdivide => sheetNameWithSubdivide.MatchType == SheetNameWithSubdivide.SheetNameMatchType.Wildcard
+                    )
+                ).Concat(
+                    sheetNameWithSubdivides.Where(
+                        sheetNameWithSubdivide => sheetNameWithSubdivide.MatchType == SheetNameWithSubdivide.SheetNameMatchType.All
+                    ).Take(1)
+                )
+            ) { }
+
+            public SheetNameWithSubdivide Find(string sheetName) {
+                return Find(sheetNameWithSubdivide => sheetNameWithSubdivide.IsMatch(sheetName));
+            }
+
+            public bool Contains(string sheetName) {
+                return Find(sheetName) != null;
+            }
+        }
+
         class SheetNameWithSubdivide {
-            public SheetNameWithSubdivide(string sheetName, bool needSubdivide = false, int cutPrefix = 0, int cutPostfix = 0) {
-                this.SheetName = sheetName;
-                this.NeedSubdivide = needSubdivide;
-                this.CutPrefix = cutPrefix;
-                this.CutPostfix = cutPostfix;
+            public static SheetNameWithSubdivide FromMixed(string mixedSheetName) {
+                var result = Regex.Match(mixedSheetName, @"^(?:(\d+):)?(.+?)(?::(\d+))?$");
+                if (!result.Success) throw new Exception($"{mixedSheetName} is wrong sheet name and subdivide rule definition");
+                var cutPrefixStr = result.Groups[1].Value;
+                var sheetName = result.Groups[2].Value;
+                var cutPostfixStr = result.Groups[3].Value;
+                var needSubdivide = cutPrefixStr.Length != 0 || cutPostfixStr.Length != 0;
+                var cutPrefix = cutPrefixStr.Length == 0 ? 0 : Convert.ToInt32(cutPrefixStr);
+                var cutPostfix = cutPostfixStr.Length == 0 ? 0 : Convert.ToInt32(cutPostfixStr);
+                return new SheetNameWithSubdivide(sheetName, needSubdivide, cutPrefix, cutPostfix);
             }
 
             public string SheetName { get; }
             public bool NeedSubdivide { get; }
             public int CutPrefix { get; }
             public int CutPostfix { get; }
+            public SheetNameMatchType MatchType { get; }
+            private Regex SheetNameMatcher { get; }
 
-            public override string ToString() => this.SheetName;
+            public SheetNameWithSubdivide(string sheetName, bool needSubdivide = false, int cutPrefix = 0, int cutPostfix = 0) {
+                SheetName = sheetName;
+                NeedSubdivide = needSubdivide;
+                CutPrefix = cutPrefix;
+                CutPostfix = cutPostfix;
+                if (SheetName == "*") {
+                    MatchType = SheetNameMatchType.All;
+                } else if (SheetName.Contains("*") || SheetName.Contains("?")) {
+                    SheetNameMatcher = new Regex("^" + Regex.Escape(sheetName).Replace(@"\*", ".*").Replace(@"\?", ".") + "$");
+                    MatchType = SheetNameMatchType.Wildcard;
+                } else {
+                    MatchType = SheetNameMatchType.Exact;
+                }
+            }
 
-            public static SheetNameWithSubdivide FromMixed(string sheetNameMixed) {
-                var result = Regex.Match(sheetNameMixed, @"^(?:(\d+):)?(.+?)(?::(\d+))?$");
-                if (!result.Success) throw new Exception($"{sheetNameMixed} is wrong sheet name and subdivide rule definition");
-                var cutPrefix = result.Groups[1].Value;
-                var sheetName = result.Groups[2].Value;
-                var cutPostfix = result.Groups[3].Value;
-                var needSubdivide = cutPrefix.Length != 0 || cutPostfix.Length != 0;
-                return new SheetNameWithSubdivide(
-                    sheetName,
-                    needSubdivide,
-                    cutPrefix.Length == 0 ? 0 : Convert.ToInt32(cutPrefix),
-                    cutPostfix.Length == 0 ? 0 :Convert.ToInt32(cutPostfix)
-                    );
+            public bool IsMatch(string sheetName) {
+                switch (MatchType) {
+                    case SheetNameMatchType.Exact:
+                        return sheetName == SheetName;
+                    case SheetNameMatchType.Wildcard:
+                        return SheetNameMatcher.IsMatch(sheetName);
+                    default:
+                        return true;
+                }
+            }
+
+            public enum SheetNameMatchType {
+                All = 0,
+                Wildcard,
+                Exact,
             }
         }
     }
