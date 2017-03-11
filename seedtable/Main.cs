@@ -366,11 +366,11 @@ namespace SeedTable {
                     sheetNameWithSubdivides.Where(
                         sheetNameWithSubdivide => sheetNameWithSubdivide.MatchType == SheetNameWithSubdivide.SheetNameMatchType.Wildcard
                     )
-                ).Concat(new List<SheetNameWithSubdivide> {
-                    sheetNameWithSubdivides.FirstOrDefault(
+                ).Concat(
+                    sheetNameWithSubdivides.Where(
                         sheetNameWithSubdivide => sheetNameWithSubdivide.MatchType == SheetNameWithSubdivide.SheetNameMatchType.All
-                    )
-                })
+                    ).Take(1)
+                )
             ) { }
 
             public SheetNameWithSubdivide Find(string sheetName) {
