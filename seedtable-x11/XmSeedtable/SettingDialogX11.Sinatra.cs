@@ -125,7 +125,7 @@ namespace XmSeedtable
                     (X) => {
                         var msc = new SimpleCheckBox();
                         calcFormulasCheckBox = new ToggleButtonGadget();
-                        calcFormulasCheckBox.LabelString = "yml→xlsx変換時に数式キャッシュを再計算する\n(--calc-formulas)";
+                        calcFormulasCheckBox.LabelString = "yml→xlsx変換時に数式キャッシュを再計算\n(--calc-formulas)";
                         calcFormulasCheckBox.Set = Options.calcFormulas ? ToggleButtonState.Set : ToggleButtonState.Unset;
                         calcFormulasCheckBox.ValueChangedEvent += (x,y) => {
                             Options.calcFormulas = deleteCheckBox.Set == ToggleButtonState.Set;
@@ -171,19 +171,19 @@ namespace XmSeedtable
                 new LeftControls( "yml分割設定\n--subdivide", (x) =>{
                         return WgtText(x, out subdivideTextBox, Options.subdivide);
                     }),
-                new LeftControls( "このシートのみ変換\n--only", (x) =>{
+                new LeftControls( "このテーブルのみ変換\n--only", (x) =>{
                         return WgtText(x, out onlyTextBox, Options.only);
                     }),
-                new LeftControls( "このシートを無視\n--ignore", (x) =>{
+                new LeftControls( "このテーブルを無視\n--ignore", (x) =>{
                         return WgtText(x, out ignoreTextBox, Options.ignore);
                     }),
-                new LeftControls( "yamlシート名対応\n--mapping", (x) =>{
+                new LeftControls( "ymlとシート名の対応\n--mapping", (x) =>{
                         return WgtText(x, out mappingTextBox, Options.mapping);
                     }),
                 new LeftControls( "このカラム名を無視\n--ignore-columns", (x) =>{
                         return WgtText(x, out ignoreColumnsTextBox, Options.ignoreColumns);
                     }),
-                new LeftControls( "YAMLにするカラム\n--yaml-columns", (x) =>{
+                new LeftControls( "YAML扱いするカラム\n--yaml-columns", (x) =>{
                         return WgtText(x, out yamlColumnsTextBox, Options.yamlColumns);
                     }),
             };
