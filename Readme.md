@@ -2,7 +2,7 @@
 
 Rails等で扱うseed yaml <-> xlsx を相互変換するツールです。
 
-簡単なGUIもあります。
+コマンドライン版とGUI版があります。
 
 [![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/github/seed-ui/seedtable?svg=true)](https://ci.appveyor.com/project/Narazaka/seedtable)
 [![Travis Build Status](https://travis-ci.org/seed-ui/seedtable.svg)](https://travis-ci.org/seed-ui/seedtable)
@@ -10,7 +10,7 @@ Rails等で扱うseed yaml <-> xlsx を相互変換するツールです。
 ## Motivation
 
 xlsxは個人用単体表計算ソフトとしては優秀ですが、複数人でのデータ入力やプログラムでの扱い、バージョン管理などには超不向きです。
-にもかかわらず、これをRailsアプリケーション等ののデータ入力ツールとして使うことがしばしば選択肢に上がるようです。
+にもかかわらず、これをRailsアプリケーション等のデータ入力ツールとして使うことがしばしば選択肢に上がるようです。
 Excelをマスターデータとしたら最後、その不向きな部分の辛さが待っています。
 
 それに対してこのseedtableは、yamlとxlsxの相互変換をすることで、Excelを利用しつつyamlをマスターデータとする運用の道を開きます。
@@ -18,6 +18,16 @@ Excelをマスターデータとしたら最後、その不向きな部分の辛
 
 Excelは大きな長所と同時に大きな短所をもち、運用上の扱い方が難しいツールです。
 このツールが、そのようなExcelの長所だけを引き出すより良いデータ運用の一助になれば幸いです。
+
+## Features
+
+- データベース等のIDつき二次元データを表すyamlをExcelで編集する為の変換ツールです。
+- xlsx -> yaml と yaml -> xlsx の相互変換が可能です。
+- 数式セルはxlsx -> yaml変換では計算後の値となります。yaml -> xlsx変換では数式のまま保持されます。
+- 行追加がある場合は書式や数式を周辺のものから自動でコピーしますので、入力Excelの1行目に必要な設定を記述しておけばデータの増加にも簡単に対応できます (EPPlusエンジン)。
+- 入出力するyamlファイルのIDによる分割に対応しています。
+- xlsx -> yamlの変換のみなら似たオプションを持つ[xlsx2seed](https://github.com/Narazaka/xlsx2seed.js)もあります。
+  .NET/Monoランタイムをインストールするのが難しい場合などにご利用下さい。
 
 ## Requires
 
@@ -27,11 +37,15 @@ Monoだと4.4で動きます。(Mac / Linux)
 
 ## Install
 
-[Releases](https://github.com/seed-ui/seedtable/releases)にあるzipをおとしてきてコマンドラインで叩いて下さい。
+[Releases](https://github.com/seed-ui/seedtable/releases)にあるzipをダウンロードして適当な場所に配置して下さい。
 
-Monoの場合は`mono seedtable.exe`等として下さい。
+- seedtable.zip、XmSeedtable-linux.zip、XmSeedtable-mac.zipのいずれも、全環境で動作するseedtable.exeを含みます。
+- seedtable.zipはWindowsで動作するseedtable-gui.exeを含みます（Linux, Macでは設定ダイアログとUIの文字化け以外は正常動作します）。
+- XmSeedtable-{linux,mac}.zipはそれぞれLinuxとMacで動作するXmSeedtable.exeを含みます。
 
 ## Usage (seedtable.exe)
+
+Monoの場合は`mono seedtable.exe`等として下さい。
 
 ```
 # xlsx -> yaml
@@ -45,8 +59,7 @@ $ seedtable from -i doc foo.xlsx -o db/seeds
 $ seedtable to -s db/seeds -x doc foo.xlsx -o newdoc
 ```
 
-- 数式セルはxlsx -> yaml変換ではちゃんと計算後の値となります。yaml -> xlsx変換では上書きされず、数式のままとなります。
-- xlsx -> yamlの変換のみならほぼ互換のオプションを持つ[xlsx2seed](https://github.com/Narazaka/xlsx2seed.js)もあります。
+オプションの詳細は後のOptionsの節を参照下さい。
 
 ## Usage (seedtable-gui.exe)
 
@@ -70,6 +83,8 @@ engine: EPPlus
 
 この設定をGUIで編集させたくないという場合は、`seedtable-gui.exe`と同じフォルダに`options.readonly`というファイル(中身は空で大丈夫)をおいて下さい。
 
+設定の詳細は後のOptionsの節を参照下さい。
+
 ## Usage (XmSeedtable.exe)
 
 ![XmSeedtable.exe](seedtable-x11/seedtable-x11.png)
@@ -82,11 +97,17 @@ Unix系OSとMac OS X等で`mono XmSeedtable.exe`または`mono --arch=64 XmSeedt
 
 X Serverが必要ですので、Mac OS XではXQuartz 2.7.8をインストールしてください(2.7.9以降では動作しません)。
 
-## Engines
+## Options
+
+コマンドラインオプションと対応するGUIでの設定名です。
+
+### 共通
+
+#### --engine エンジン
+
+Excel変換エンジンの設定です。
 
 seedtableではxlsxファイルを扱うバックエンドとして複数のライブラリを選択できます。
-
-`-e`オプションに指定してください。
 
 | ライブラリ | from (xlsx -> yaml) | to (yaml -> xlsx) |
 |---|---|---|
@@ -97,14 +118,172 @@ seedtableではxlsxファイルを扱うバックエンドとして複数のラ�
 OpenXmlとEPPlusのfrom処理速度はほぼ同じですが、ファイルによって3割程度の速度差がある場合があります。
 ClosedXMLはその2倍以上程度の時間がかかります。
 
-## オプションの注意点
+xlsx -> yaml (from) 時はOpenXml(デフォルト)かEPPlusがおすすめです。
 
-- to処理においてsubdivide指定は考慮されません。指定にかかわらず自動判定して読み取ります。
-- `-d, --delete`オプションはEPPlusエンジンでのみ動作します。
+yaml -> xlsx (to) 時はEPPlus(デフォルト)がおすすめです。
 
-## 未実装機能
+#### --subdivide yml分割設定
 
-- `-R, --require-version`オプションは動作しません。
+xlsx -> yaml (from) 変換で出力するseedファイルをID単位ごとに分割できます。
+
+分割しておくと、複数人で同時に別のIDのデータを編集してコミットする等の場合に、コンフリクトがおこりにくくなります。
+
+`(前削除桁数:)seedテーブル名(:後削除桁数)`の形式で指定します。（複数指定はコマンドラインでは`,`区切り・GUIでは改行区切り）
+
+ID数値の桁を上の方から前削除桁数分、下の方から後削除桁数分削ったものがファイル名として使われます。
+
+例:
+
+| 指定 | 存在するID | 作られるファイルと含まれるID |
+|------|------------|------------------|
+| table:2 | 101, 111, 201, 202, 1001, 1002 | data1(101, 111), data2(201, 202), data10(1001, 1002) |
+| 2:table | 10100, 20100, 10200, 20200, 101, 102 | data100(10100, 20100), data200(10200, 20200), data1(101), data2(102) |
+| 1:table:1 | 111, 211, 112, 212, 121, 221 | data1(111, 211, 112, 212), data2(121, 221) |
+| table:0 | 1, 2, 3, 10, 11, 12 | data1(1), data2(2), data3(3), data10(10), data11(11), data12(12) |
+
+テーブル名はワイルドカードで指定できます。
+
+重複する指定がある場合は、通常のテーブル名→ワイルドカードを使ったテーブル名→`*`の優先順位でマッチします。
+
+yaml -> xlsx (to) 変換においてこの指定は考慮されません。指定にかかわらず自動判定して読み取ります。
+
+#### --only このテーブルのみ変換
+
+指定テーブルのみ変換します。
+
+上記のsubdivideの設定を同時に記述できます。
+
+#### --ignore このテーブルを無視
+
+指定テーブルを無視します。
+
+onlyに指定があってもこちらに該当すれば無視されます。
+
+テーブル名はワイルドカードで指定できます。
+
+重複する指定がある場合は、通常のテーブル名→ワイルドカードを使ったテーブル名→`*`の優先順位でマッチします。
+
+#### --mapping ymlとシート名の対応
+
+ymlファイル名とxlsxのシート名が同一でない場合の対応を指定します。
+
+`(ymlファイル名):(xlsxシート名)`の形式で指定します。（複数指定はコマンドラインでは`,`区切り・GUIでは改行区切り）
+
+この指定がある場合、--subdivide、--only、--ignoreはxlsxシート名ではなくymlファイル名側での指定となりますのでご注意下さい。
+
+xlsxのシート名31文字上限に引っかかった場合などにご利用下さい。
+
+#### --yaml-columns YAML扱いするカラム
+
+指定のカラム値をYAMLとして取り扱います。
+
+例えばdata_yamlカラムを--yaml-columnsに指定すると下記のような変換が行われます。
+
+xlsx:
+
+| id | data_yaml |
+|----|-----------|
+|  1 |  [ 1, 2 ] |
+
+yaml:
+
+```yaml
+data1:
+  id: 1
+  data_yaml:
+    - 1
+    - 2
+```
+
+yaml -> xlsx (to) 処理においてこの指定は考慮されません。指定にかかわらず自動判定して読み取ります。
+
+#### --ignore-columns このカラム名を無視
+
+指定されたカラム名を無視して入出力します。
+
+例えば関連テーブル情報カラムをymlには出したくない時などに使えます。
+
+例: `--ignore-columns dummy`を指定してdummyカラムに参照情報を出す
+
+|   |  A |    B   |     C     |   D   |
+|---|----|--------|-----------|-------|
+| 1 | ID |   Foo  | Fooのname | value |
+| 2 | id | foo_id |   dummy   | value |
+| 3 | 101 | 1 | =VLOOKUP(B3, foos!$A$1:$B$2, 2) | 1 |
+| 4 | 102 | 1 | =VLOOKUP(B4, foos!$A$1:$B$2, 2) | 2 |
+| 5 | 201 | 2 | =VLOOKUP(B5, foos!$A$1:$B$2, 2) | 1 |
+| 6 | 202 | 2 | =VLOOKUP(B6, foos!$A$1:$B$2, 2) | 2 |
+
+ここに指定が無くても、xlsxシート上に無いカラムは無視されます。
+
+#### --column-names-row カラム名行
+
+yamlのカラム名と対応するxlsxシート行番号です。デフォルトは2です。
+
+#### --data-start-row データ開始行
+
+データが開始するxlsxシート行番号です。デフォルトは3です。
+
+#### --delete 変換元にないデータを削除する
+
+##### xlsx -> yaml (from) 変換時
+
+subdivide設定がある場合、分割された`*.yml`ファイルを一旦全部消してから新たに出力します。
+
+##### yaml -> xlsx (to) 変換時
+
+seedとして読み込んだymlにないIDの行をxlsxシート上から削除します（EPPlusエンジンでのみ動作します）。
+
+#### --seed-extension seedファイルの拡張子
+
+この拡張子でyamlを入出力します。
+
+#### --require-version
+
+未実装です。
+
+#### --version-column
+
+未実装です。
+
+### xlsx -> yaml 変換時 (from)
+
+#### --input
+
+xlsx入力ディレクトリ
+
+#### --output
+
+yml出力ディレクトリ
+
+### yaml -> xlsx 変換時 (to)
+
+#### --seed-input
+
+yml入力ディレクトリ
+
+#### --xlsx-input
+
+xlsx入力ディレクトリ
+
+#### --output
+
+xlsx出力ディレクトリ
+
+#### --calc-formulas yml→xlsx変換時に数式キャッシュを再計算する
+
+Excelは数式セルの計算結果値をファイルに書き込んでいて、本ソフトも含めて多くのプログラムはセルの値としてその結果値を使っています。
+
+それと同じように数式セルの値を再計算して即値として書き込んでから出力xlsxを保存します。
+
+データ量が多いと処理時間が著しく長くなります。
+
+本ソフトの一般的なユースケースであろう「ymlをxlsxに変換してExcelで編集して再びymlに書き戻す」場合には、
+Excelは数式結果値がなくとも再計算してくれますし、保存時点で上記処理が走るので、このオプションを有効にしなくても問題ありません。
+
+しかし本ソフトで出力したxlsxファイルを何らかの理由で直接Excel以外のソフトで扱いたいという場合には、このオプションを有効にしないと数式入りxlsxについて正しく動かないケースがあります。
+
+ただ、一般的にxlsxファイルを扱うよりソースのymlファイルを扱った方がなにかと便利でしょうし、処理時間の問題もあるのでこのオプションを使うケースをそもそもおすすめしません。
 
 ## Excelファイルの形式
 
