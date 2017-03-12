@@ -72,7 +72,7 @@ namespace XmSeedtable
         }
 
         private Widget WgtSeedExtension(Widget rc) {
-            seedExtensionTextBox = new TextField();
+            seedExtensionTextBox = new Text();
             seedExtensionTextBox.Columns = 5;
             seedExtensionTextBox.Value = Options.seedExtension;
 
@@ -274,7 +274,7 @@ namespace XmSeedtable
         SimpleSpinBox dataStartRowNumericUpDown;
         SimpleOptionMenu engineComboBox;
         SimpleSpinBox columnNamesRowNumericUpDown;
-        TextField seedExtensionTextBox;
+        Text seedExtensionTextBox;
         TonNurako.Widgets.Xm.PushButton okButton;
         TonNurako.Widgets.Xm.PushButton discardButton;
 
