@@ -97,6 +97,43 @@ Unix系OSとMac OS X等で`mono XmSeedtable.exe`または`mono --arch=64 XmSeedt
 
 X Serverが必要ですので、Mac OS XではXQuartz 2.7.8をインストールしてください(2.7.9以降では動作しません)。
 
+## Excelファイルの形式
+
+以下のような形式を想定しています。
+
+### Excel
+
+シート名`characters`
+
+|   | A  |  B   |      C      |
+|---|----|------|-------------|
+| 1 | ID | 名前 |    説明     |
+| 2 | id | name | description |
+| 3 | 1 | さくら | F.I.R.S.T |
+| 4 | 2 | アルル | ボク |
+| 5 | 3 | さっちゃんさん | 髪が長い |
+
+### YAML
+
+`characters.yml`
+
+```
+data1:
+  id: 1
+  name: さくら
+  description: F.I.R.S.T
+data2:
+  id: 2
+  name: アルル
+  description: ボク
+data3:
+  id: 3
+  name: さっちゃんさん
+  description: 髪が長い
+```
+
+デフォルトではExcel表の2行目がカラム名、3行目以降がデータとして扱われますが、これらはそれぞれ`--column-names-row`、`--data-start-row`オプションで変更可能です。
+
 ## Options
 
 コマンドラインオプションと対応するGUIでの設定名です。
@@ -285,42 +322,11 @@ Excelは数式結果値がなくとも再計算してくれますし、保存時
 
 ただ、一般的にxlsxファイルを扱うよりソースのymlファイルを扱った方がなにかと便利でしょうし、処理時間の問題もあるのでこのオプションを使うケースをそもそもおすすめしません。
 
-## Excelファイルの形式
+## Tips
 
-以下のような形式を想定しています。
+### セル範囲指定の制限
 
-### Excel
-
-シート名`characters`
-
-|   | A  |  B   |      C      |
-|---|----|------|-------------|
-| 1 | ID | 名前 |    説明     |
-| 2 | id | name | description |
-| 3 | 1 | さくら | F.I.R.S.T |
-| 4 | 2 | アルル | ボク |
-| 5 | 3 | さっちゃんさん | 髪が長い |
-
-### YAML
-
-`characters.yml`
-
-```
-data1:
-  id: 1
-  name: さくら
-  description: F.I.R.S.T
-data2:
-  id: 2
-  name: アルル
-  description: ボク
-data3:
-  id: 3
-  name: さっちゃんさん
-  description: 髪が長い
-```
-
-デフォルトではExcel表の2行目がカラム名、3行目以降がデータとして扱われますが、これらはそれぞれ`--column-names-row`、`--data-start-row`オプションで変更可能です。
+EPPlusで`A:A`等行指定のないセル範囲指定は正しく変換できません。実用範囲で`A1:A10000`等として下さい。
 
 ## Contribute
 
