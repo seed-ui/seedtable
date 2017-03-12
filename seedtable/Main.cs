@@ -55,6 +55,9 @@ namespace SeedTable {
 
         [Option('d', "delete", Default = false, HelpText = "delete data which is not exists in source")]
         public bool delete { get; set; } = false;
+
+        [Option("seed-extension", Default = ".yml", HelpText = "seed file extension")]
+        public virtual string seedExtension { get; set; }
     }
 
     [Verb("from", HelpText ="Yaml from Excel")]
@@ -165,7 +168,7 @@ namespace SeedTable {
                 }
                 YamlData yamlData = null;
                 try {
-                    yamlData = YamlData.ReadFrom(yamlTableName, options.seedInput);
+                    yamlData = YamlData.ReadFrom(yamlTableName, options.seedInput, options.seedExtension);
                 } catch (FileNotFoundException exception) {
                     Log("      skip", $"seed file [{exception.FileName}] not found");
                     continue;
@@ -259,6 +262,7 @@ namespace SeedTable {
                     subdivide.NeedSubdivide,
                     subdivide.CutPrefix,
                     subdivide.CutPostfix,
+                    options.seedExtension,
                     yamlColumnNames: options.yamlColumns,
                     deletePrevious: options.delete
                 );
