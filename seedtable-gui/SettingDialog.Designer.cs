@@ -26,17 +26,17 @@
             this.components = new System.ComponentModel.Container();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.mainTableLayoutPanel = new System.Windows.Forms.TableLayoutPanel();
-            this.seedExtensionLabel = new System.Windows.Forms.Label();
             this.engineComboBox = new System.Windows.Forms.ComboBox();
             this.toOptionsBindingSource = new System.Windows.Forms.BindingSource(this.components);
-            this.deleteCheckBox = new System.Windows.Forms.CheckBox();
             this.dataStartRowNumericUpDown = new System.Windows.Forms.NumericUpDown();
             this.columnNamesRowNumericUpDown = new System.Windows.Forms.NumericUpDown();
             this.engineLabel = new System.Windows.Forms.Label();
             this.columnNamesRowLabel = new System.Windows.Forms.Label();
             this.dataStartRowLabel = new System.Windows.Forms.Label();
-            this.calcFormulasCheckBox = new System.Windows.Forms.CheckBox();
             this.seedExtensionTextBox = new System.Windows.Forms.TextBox();
+            this.seedExtensionLabel = new System.Windows.Forms.Label();
+            this.deleteCheckBox = new System.Windows.Forms.CheckBox();
+            this.calcFormulasCheckBox = new System.Windows.Forms.CheckBox();
             this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
             this.ignoreTextBox = new System.Windows.Forms.TextBox();
             this.onlyTextBox = new System.Windows.Forms.TextBox();
@@ -104,17 +104,6 @@
             this.mainTableLayoutPanel.Size = new System.Drawing.Size(264, 211);
             this.mainTableLayoutPanel.TabIndex = 1;
             // 
-            // seedExtensionLabel
-            // 
-            this.seedExtensionLabel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.seedExtensionLabel.AutoSize = true;
-            this.seedExtensionLabel.Location = new System.Drawing.Point(20, 105);
-            this.seedExtensionLabel.Name = "seedExtensionLabel";
-            this.seedExtensionLabel.Size = new System.Drawing.Size(109, 24);
-            this.seedExtensionLabel.TabIndex = 9;
-            this.seedExtensionLabel.Text = "seedファイルの拡張子(--seed-extension)";
-            this.seedExtensionLabel.TextAlign = System.Drawing.ContentAlignment.TopRight;
-            // 
             // engineComboBox
             // 
             this.engineComboBox.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
@@ -131,21 +120,6 @@
             // toOptionsBindingSource
             // 
             this.toOptionsBindingSource.DataSource = typeof(SeedTable.ToOptions);
-            // 
-            // deleteCheckBox
-            // 
-            this.deleteCheckBox.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.deleteCheckBox.AutoSize = true;
-            this.mainTableLayoutPanel.SetColumnSpan(this.deleteCheckBox, 2);
-            this.deleteCheckBox.DataBindings.Add(new System.Windows.Forms.Binding("Checked", this.toOptionsBindingSource, "delete", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
-            this.deleteCheckBox.Location = new System.Drawing.Point(3, 143);
-            this.deleteCheckBox.Name = "deleteCheckBox";
-            this.deleteCheckBox.Size = new System.Drawing.Size(258, 29);
-            this.deleteCheckBox.TabIndex = 7;
-            this.deleteCheckBox.Text = "変換元にないデータを削除する\r\n(--delete)";
-            this.deleteCheckBox.UseVisualStyleBackColor = true;
             // 
             // dataStartRowNumericUpDown
             // 
@@ -196,6 +170,43 @@
             this.dataStartRowLabel.Text = "データ開始行\r\n(--data-start-row)";
             this.dataStartRowLabel.TextAlign = System.Drawing.ContentAlignment.TopRight;
             // 
+            // seedExtensionTextBox
+            // 
+            this.seedExtensionTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.seedExtensionTextBox.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.toOptionsBindingSource, "seedExtension", true));
+            this.seedExtensionTextBox.Location = new System.Drawing.Point(135, 108);
+            this.seedExtensionTextBox.Name = "seedExtensionTextBox";
+            this.seedExtensionTextBox.Size = new System.Drawing.Size(126, 19);
+            this.seedExtensionTextBox.TabIndex = 10;
+            // 
+            // seedExtensionLabel
+            // 
+            this.seedExtensionLabel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.seedExtensionLabel.AutoSize = true;
+            this.seedExtensionLabel.Location = new System.Drawing.Point(20, 105);
+            this.seedExtensionLabel.Name = "seedExtensionLabel";
+            this.seedExtensionLabel.Size = new System.Drawing.Size(109, 24);
+            this.seedExtensionLabel.TabIndex = 9;
+            this.seedExtensionLabel.Text = "seedファイルの拡張子(--seed-extension)";
+            this.seedExtensionLabel.TextAlign = System.Drawing.ContentAlignment.TopRight;
+            // 
+            // deleteCheckBox
+            // 
+            this.deleteCheckBox.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.deleteCheckBox.AutoSize = true;
+            this.mainTableLayoutPanel.SetColumnSpan(this.deleteCheckBox, 2);
+            this.deleteCheckBox.DataBindings.Add(new System.Windows.Forms.Binding("Checked", this.toOptionsBindingSource, "delete", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
+            this.deleteCheckBox.Location = new System.Drawing.Point(3, 143);
+            this.deleteCheckBox.Name = "deleteCheckBox";
+            this.deleteCheckBox.Size = new System.Drawing.Size(258, 29);
+            this.deleteCheckBox.TabIndex = 7;
+            this.deleteCheckBox.Text = "変換元にないデータを削除する\r\n(--delete)";
+            this.deleteCheckBox.UseVisualStyleBackColor = true;
+            // 
             // calcFormulasCheckBox
             // 
             this.calcFormulasCheckBox.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
@@ -210,17 +221,6 @@
             this.calcFormulasCheckBox.TabIndex = 8;
             this.calcFormulasCheckBox.Text = "yml→xlsx変換時に数式キャッシュを再計算する\r\n(--calc-formulas)";
             this.calcFormulasCheckBox.UseVisualStyleBackColor = true;
-            // 
-            // seedExtensionTextBox
-            // 
-            this.seedExtensionTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.seedExtensionTextBox.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.toOptionsBindingSource, "seedExtension", true));
-            this.seedExtensionTextBox.Location = new System.Drawing.Point(135, 108);
-            this.seedExtensionTextBox.Name = "seedExtensionTextBox";
-            this.seedExtensionTextBox.Size = new System.Drawing.Size(126, 19);
-            this.seedExtensionTextBox.TabIndex = 10;
             // 
             // tableLayoutPanel2
             // 
