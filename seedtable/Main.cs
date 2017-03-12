@@ -57,7 +57,7 @@ namespace SeedTable {
         public bool delete { get; set; } = false;
 
         [Option("seed-extension", Default = ".yml", HelpText = "seed file extension")]
-        public virtual string seedExtension { get; set; }
+        public virtual string seedExtension { get; set; } = ".yml";
     }
 
     [Verb("from", HelpText ="Yaml from Excel")]
