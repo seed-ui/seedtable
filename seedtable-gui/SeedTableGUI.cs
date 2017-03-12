@@ -137,6 +137,7 @@ namespace seedtable_gui {
             options.versionColumn = setting.versionColumn;
             options.requireVersion = setting.requireVersion;
             options.delete = setting.delete;
+            options.seedExtension = options.seedExtension;
             options.calcFormulas = setting.calcFormulas;
             var dialog = new YamlToExcelDialog(options);
             dialog.ShowDialog();
@@ -162,6 +163,7 @@ namespace seedtable_gui {
             options.versionColumn = setting.versionColumn;
             options.requireVersion = setting.requireVersion;
             options.delete = setting.delete;
+            options.seedExtension = options.seedExtension;
             var dialog = new ExcelToYamlDialog(options);
             dialog.ShowDialog();
         }
