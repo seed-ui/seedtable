@@ -71,6 +71,18 @@ namespace XmSeedtable
             return dataStartRowNumericUpDown;
         }
 
+        private Widget WgtSeedExtension(Widget rc) {
+            seedExtensionTextBox = new TextField();
+            seedExtensionTextBox.Columns = 5;
+            seedExtensionTextBox.Value = Options.seedExtension;
+
+            seedExtensionTextBox.ValueChangedEvent += (x,y) => {
+                Options.seedExtension = seedExtensionTextBox.Value;
+            };
+
+            return seedExtensionTextBox;
+        }
+
         private Widget WgtText(Widget rc, out Text rb, IEnumerable<string> val) {
             rb = new Text();
             rb.EditMode = EditMode.Multi;
@@ -95,6 +107,7 @@ namespace XmSeedtable
                 new LeftControls( "エンジン\n(--engine)", WgtEngine),
                 new LeftControls( "カラム名行\n(--column-names-row)", WgtColumn),
                 new LeftControls( "データ開始行\n(--data-start-row)", WgtDataRow),
+                new LeftControls( "seedファイルの拡張子\n(--seed-extension)", WgtSeedExtension),
             };
 
             var vb6 = new Delegaty[] {
@@ -261,6 +274,7 @@ namespace XmSeedtable
         SimpleSpinBox dataStartRowNumericUpDown;
         SimpleOptionMenu engineComboBox;
         SimpleSpinBox columnNamesRowNumericUpDown;
+        TextField seedExtensionTextBox;
         TonNurako.Widgets.Xm.PushButton okButton;
         TonNurako.Widgets.Xm.PushButton discardButton;
 

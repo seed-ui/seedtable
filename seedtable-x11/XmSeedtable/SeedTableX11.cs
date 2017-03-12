@@ -145,6 +145,7 @@ namespace XmSeedtable
                 options.versionColumn = setting.versionColumn;
                 options.requireVersion = setting.requireVersion;
                 options.delete = setting.delete;
+                options.seedExtension = setting.seedExtension;
                 options.calcFormulas = setting.calcFormulas;
                 d.Destroy();
 
@@ -175,6 +176,7 @@ namespace XmSeedtable
             options.versionColumn = setting.versionColumn;
             options.requireVersion = setting.requireVersion;
             options.delete = setting.delete;
+            options.seedExtension = setting.seedExtension;
 
             var dialog = new ExcelToYamlDialogX11(options);
             this.Layout.Children.Add(dialog);
