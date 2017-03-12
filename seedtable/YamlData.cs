@@ -23,6 +23,7 @@ namespace SeedTable {
 
         public void WriteToSingle(string name, string directory = ".", string extension = ".yml", IEnumerable<string> yamlColumnNames = null) {
             if (!Directory.Exists(directory)) Directory.CreateDirectory(directory);
+            if (extension == null) extension = "";
             File.WriteAllText(Path.Combine(directory, name + extension), YamlData.DataToYaml(data, yamlColumnNames));
         }
 
@@ -36,6 +37,7 @@ namespace SeedTable {
                     File.Delete(file);
                 }
             }
+            if (extension == null) extension = "";
             foreach (var part in data.ToSeparatedDictionaryDictionary(pre_cut, post_cut)) {
                 File.WriteAllText(Path.Combine(named_directory, part.Key + extension), YamlData.DataToYaml(part.Value, yamlColumnNames));
             }

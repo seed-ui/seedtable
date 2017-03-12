@@ -26,6 +26,7 @@
             this.components = new System.ComponentModel.Container();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.mainTableLayoutPanel = new System.Windows.Forms.TableLayoutPanel();
+            this.seedExtensionLabel = new System.Windows.Forms.Label();
             this.engineComboBox = new System.Windows.Forms.ComboBox();
             this.toOptionsBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.deleteCheckBox = new System.Windows.Forms.CheckBox();
@@ -35,18 +36,19 @@
             this.columnNamesRowLabel = new System.Windows.Forms.Label();
             this.dataStartRowLabel = new System.Windows.Forms.Label();
             this.calcFormulasCheckBox = new System.Windows.Forms.CheckBox();
+            this.seedExtensionTextBox = new System.Windows.Forms.TextBox();
             this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
-            this.ignoreColumnsTextBox = new System.Windows.Forms.TextBox();
             this.ignoreTextBox = new System.Windows.Forms.TextBox();
             this.onlyTextBox = new System.Windows.Forms.TextBox();
             this.subdivideLabel = new System.Windows.Forms.Label();
             this.onlyLabel = new System.Windows.Forms.Label();
             this.ignoreLabel = new System.Windows.Forms.Label();
-            this.ignoreColumnsLabel = new System.Windows.Forms.Label();
             this.subdivideTextBox = new System.Windows.Forms.TextBox();
             this.yamlColumnsLabel = new System.Windows.Forms.Label();
             this.yamlColumnsTextBox = new System.Windows.Forms.TextBox();
+            this.ignoreColumnsLabel = new System.Windows.Forms.Label();
             this.mappingLabel = new System.Windows.Forms.Label();
+            this.ignoreColumnsTextBox = new System.Windows.Forms.TextBox();
             this.mappingTextBox = new System.Windows.Forms.TextBox();
             this.tableLayoutPanel1.SuspendLayout();
             this.mainTableLayoutPanel.SuspendLayout();
@@ -68,7 +70,7 @@
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
             this.tableLayoutPanel1.RowCount = 1;
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(890, 181);
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(890, 217);
             this.tableLayoutPanel1.TabIndex = 0;
             // 
             // mainTableLayoutPanel
@@ -79,23 +81,39 @@
             this.mainTableLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.mainTableLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.mainTableLayoutPanel.Controls.Add(this.engineComboBox, 1, 0);
-            this.mainTableLayoutPanel.Controls.Add(this.deleteCheckBox, 0, 3);
             this.mainTableLayoutPanel.Controls.Add(this.dataStartRowNumericUpDown, 1, 2);
             this.mainTableLayoutPanel.Controls.Add(this.columnNamesRowNumericUpDown, 1, 1);
             this.mainTableLayoutPanel.Controls.Add(this.engineLabel, 0, 0);
             this.mainTableLayoutPanel.Controls.Add(this.columnNamesRowLabel, 0, 1);
             this.mainTableLayoutPanel.Controls.Add(this.dataStartRowLabel, 0, 2);
-            this.mainTableLayoutPanel.Controls.Add(this.calcFormulasCheckBox, 0, 4);
+            this.mainTableLayoutPanel.Controls.Add(this.seedExtensionTextBox, 1, 3);
+            this.mainTableLayoutPanel.Controls.Add(this.seedExtensionLabel, 0, 3);
+            this.mainTableLayoutPanel.Controls.Add(this.deleteCheckBox, 0, 4);
+            this.mainTableLayoutPanel.Controls.Add(this.calcFormulasCheckBox, 0, 5);
             this.mainTableLayoutPanel.Location = new System.Drawing.Point(3, 3);
             this.mainTableLayoutPanel.Name = "mainTableLayoutPanel";
-            this.mainTableLayoutPanel.RowCount = 5;
-            this.mainTableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 10F));
-            this.mainTableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 10F));
-            this.mainTableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 10F));
-            this.mainTableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 10F));
-            this.mainTableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 10F));
-            this.mainTableLayoutPanel.Size = new System.Drawing.Size(264, 175);
+            this.mainTableLayoutPanel.RowCount = 6;
+            this.mainTableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 16.66667F));
+            this.mainTableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 16.66667F));
+            this.mainTableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 16.66667F));
+            this.mainTableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 16.66667F));
+            this.mainTableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 16.66667F));
+            this.mainTableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 16.66667F));
+            this.mainTableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.mainTableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.mainTableLayoutPanel.Size = new System.Drawing.Size(264, 211);
             this.mainTableLayoutPanel.TabIndex = 1;
+            // 
+            // seedExtensionLabel
+            // 
+            this.seedExtensionLabel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.seedExtensionLabel.AutoSize = true;
+            this.seedExtensionLabel.Location = new System.Drawing.Point(20, 105);
+            this.seedExtensionLabel.Name = "seedExtensionLabel";
+            this.seedExtensionLabel.Size = new System.Drawing.Size(109, 24);
+            this.seedExtensionLabel.TabIndex = 9;
+            this.seedExtensionLabel.Text = "seedファイルの拡張子(--seed-extension)";
+            this.seedExtensionLabel.TextAlign = System.Drawing.ContentAlignment.TopRight;
             // 
             // engineComboBox
             // 
@@ -122,7 +140,7 @@
             this.deleteCheckBox.AutoSize = true;
             this.mainTableLayoutPanel.SetColumnSpan(this.deleteCheckBox, 2);
             this.deleteCheckBox.DataBindings.Add(new System.Windows.Forms.Binding("Checked", this.toOptionsBindingSource, "delete", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
-            this.deleteCheckBox.Location = new System.Drawing.Point(3, 108);
+            this.deleteCheckBox.Location = new System.Drawing.Point(3, 143);
             this.deleteCheckBox.Name = "deleteCheckBox";
             this.deleteCheckBox.Size = new System.Drawing.Size(258, 29);
             this.deleteCheckBox.TabIndex = 7;
@@ -186,12 +204,23 @@
             this.calcFormulasCheckBox.AutoSize = true;
             this.mainTableLayoutPanel.SetColumnSpan(this.calcFormulasCheckBox, 2);
             this.calcFormulasCheckBox.DataBindings.Add(new System.Windows.Forms.Binding("Checked", this.toOptionsBindingSource, "calcFormulas", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
-            this.calcFormulasCheckBox.Location = new System.Drawing.Point(3, 143);
+            this.calcFormulasCheckBox.Location = new System.Drawing.Point(3, 178);
             this.calcFormulasCheckBox.Name = "calcFormulasCheckBox";
-            this.calcFormulasCheckBox.Size = new System.Drawing.Size(258, 29);
+            this.calcFormulasCheckBox.Size = new System.Drawing.Size(258, 30);
             this.calcFormulasCheckBox.TabIndex = 8;
             this.calcFormulasCheckBox.Text = "yml→xlsx変換時に数式キャッシュを再計算する\r\n(--calc-formulas)";
             this.calcFormulasCheckBox.UseVisualStyleBackColor = true;
+            // 
+            // seedExtensionTextBox
+            // 
+            this.seedExtensionTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.seedExtensionTextBox.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.toOptionsBindingSource, "seedExtension", true));
+            this.seedExtensionTextBox.Location = new System.Drawing.Point(135, 108);
+            this.seedExtensionTextBox.Name = "seedExtensionTextBox";
+            this.seedExtensionTextBox.Size = new System.Drawing.Size(126, 19);
+            this.seedExtensionTextBox.TabIndex = 10;
             // 
             // tableLayoutPanel2
             // 
@@ -222,20 +251,8 @@
             this.tableLayoutPanel2.RowCount = 2;
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 25F));
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel2.Size = new System.Drawing.Size(614, 175);
+            this.tableLayoutPanel2.Size = new System.Drawing.Size(614, 211);
             this.tableLayoutPanel2.TabIndex = 9;
-            // 
-            // ignoreColumnsTextBox
-            // 
-            this.ignoreColumnsTextBox.AcceptsReturn = true;
-            this.ignoreColumnsTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.ignoreColumnsTextBox.Location = new System.Drawing.Point(411, 28);
-            this.ignoreColumnsTextBox.Multiline = true;
-            this.ignoreColumnsTextBox.Name = "ignoreColumnsTextBox";
-            this.ignoreColumnsTextBox.Size = new System.Drawing.Size(96, 144);
-            this.ignoreColumnsTextBox.TabIndex = 7;
             // 
             // ignoreTextBox
             // 
@@ -246,7 +263,7 @@
             this.ignoreTextBox.Location = new System.Drawing.Point(207, 28);
             this.ignoreTextBox.Multiline = true;
             this.ignoreTextBox.Name = "ignoreTextBox";
-            this.ignoreTextBox.Size = new System.Drawing.Size(96, 144);
+            this.ignoreTextBox.Size = new System.Drawing.Size(96, 180);
             this.ignoreTextBox.TabIndex = 6;
             // 
             // onlyTextBox
@@ -258,7 +275,7 @@
             this.onlyTextBox.Location = new System.Drawing.Point(105, 28);
             this.onlyTextBox.Multiline = true;
             this.onlyTextBox.Name = "onlyTextBox";
-            this.onlyTextBox.Size = new System.Drawing.Size(96, 144);
+            this.onlyTextBox.Size = new System.Drawing.Size(96, 180);
             this.onlyTextBox.TabIndex = 5;
             // 
             // subdivideLabel
@@ -288,15 +305,6 @@
             this.ignoreLabel.TabIndex = 2;
             this.ignoreLabel.Text = "このシートを無視\r\n--ignore";
             // 
-            // ignoreColumnsLabel
-            // 
-            this.ignoreColumnsLabel.AutoSize = true;
-            this.ignoreColumnsLabel.Location = new System.Drawing.Point(411, 0);
-            this.ignoreColumnsLabel.Name = "ignoreColumnsLabel";
-            this.ignoreColumnsLabel.Size = new System.Drawing.Size(96, 24);
-            this.ignoreColumnsLabel.TabIndex = 3;
-            this.ignoreColumnsLabel.Text = "このカラム名を無視\r\n--ignore-columns";
-            // 
             // subdivideTextBox
             // 
             this.subdivideTextBox.AcceptsReturn = true;
@@ -306,7 +314,7 @@
             this.subdivideTextBox.Location = new System.Drawing.Point(3, 28);
             this.subdivideTextBox.Multiline = true;
             this.subdivideTextBox.Name = "subdivideTextBox";
-            this.subdivideTextBox.Size = new System.Drawing.Size(96, 144);
+            this.subdivideTextBox.Size = new System.Drawing.Size(96, 180);
             this.subdivideTextBox.TabIndex = 4;
             // 
             // yamlColumnsLabel
@@ -327,8 +335,17 @@
             this.yamlColumnsTextBox.Location = new System.Drawing.Point(513, 28);
             this.yamlColumnsTextBox.Multiline = true;
             this.yamlColumnsTextBox.Name = "yamlColumnsTextBox";
-            this.yamlColumnsTextBox.Size = new System.Drawing.Size(98, 144);
+            this.yamlColumnsTextBox.Size = new System.Drawing.Size(98, 180);
             this.yamlColumnsTextBox.TabIndex = 9;
+            // 
+            // ignoreColumnsLabel
+            // 
+            this.ignoreColumnsLabel.AutoSize = true;
+            this.ignoreColumnsLabel.Location = new System.Drawing.Point(411, 0);
+            this.ignoreColumnsLabel.Name = "ignoreColumnsLabel";
+            this.ignoreColumnsLabel.Size = new System.Drawing.Size(96, 24);
+            this.ignoreColumnsLabel.TabIndex = 3;
+            this.ignoreColumnsLabel.Text = "このカラム名を無視\r\n--ignore-columns";
             // 
             // mappingLabel
             // 
@@ -339,6 +356,18 @@
             this.mappingLabel.TabIndex = 10;
             this.mappingLabel.Text = "yamlシート名対応\r\n--mapping";
             // 
+            // ignoreColumnsTextBox
+            // 
+            this.ignoreColumnsTextBox.AcceptsReturn = true;
+            this.ignoreColumnsTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.ignoreColumnsTextBox.Location = new System.Drawing.Point(411, 28);
+            this.ignoreColumnsTextBox.Multiline = true;
+            this.ignoreColumnsTextBox.Name = "ignoreColumnsTextBox";
+            this.ignoreColumnsTextBox.Size = new System.Drawing.Size(96, 180);
+            this.ignoreColumnsTextBox.TabIndex = 7;
+            // 
             // mappingTextBox
             // 
             this.mappingTextBox.AcceptsReturn = true;
@@ -348,14 +377,14 @@
             this.mappingTextBox.Location = new System.Drawing.Point(309, 28);
             this.mappingTextBox.Multiline = true;
             this.mappingTextBox.Name = "mappingTextBox";
-            this.mappingTextBox.Size = new System.Drawing.Size(96, 144);
+            this.mappingTextBox.Size = new System.Drawing.Size(96, 180);
             this.mappingTextBox.TabIndex = 11;
             // 
             // SettingDialog
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(890, 181);
+            this.ClientSize = new System.Drawing.Size(890, 217);
             this.Controls.Add(this.tableLayoutPanel1);
             this.Name = "SettingDialog";
             this.Text = "設定";
@@ -397,5 +426,7 @@
         private System.Windows.Forms.TextBox yamlColumnsTextBox;
         private System.Windows.Forms.Label mappingLabel;
         private System.Windows.Forms.TextBox mappingTextBox;
+        private System.Windows.Forms.Label seedExtensionLabel;
+        private System.Windows.Forms.TextBox seedExtensionTextBox;
     }
 }
