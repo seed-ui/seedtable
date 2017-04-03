@@ -66,15 +66,17 @@ namespace SeedTable {
         }
 
         public static DataDictionaryList YamlToData(TextReader stream) {
-            var yaml_stream = new YamlStream();
-            yaml_stream.Load(stream);
-            var root = (YamlMappingNode)yaml_stream.Documents[0].RootNode;
+            var deserializer = new DeserializerBuilder().Build();
+            var root = (Dictionary<object, object>)deserializer.Deserialize(stream);
             var jsonSerializer = new SerializerBuilder().JsonCompatible().Build();
-            var table = root.Children
-                .Select(child => (YamlMappingNode)child.Value)
+            var table = root
+                .Select(pair => (Dictionary<object, object>)pair.Value)
                 .Select(row => row.ToDictionary(
-                    pair => ((YamlScalarNode)pair.Key).Value,
-                    pair => pair.Value is YamlScalarNode ? GetTypedYamlValue(((YamlScalarNode)pair.Value).Value) : jsonSerializer.Serialize(pair.Value)
+                    pair => (string)pair.Key,
+                    pair =>
+                        pair.Value is string || pair.Value is long || pair.Value is double || pair.Value is bool || pair.Value == null ?
+                        GetTypedYamlValue(pair.Value) :
+                        jsonSerializer.Serialize(pair.Value)
                 ));
             return new DataDictionaryList(table);
         }
@@ -107,13 +109,18 @@ namespace SeedTable {
             return writer.ToString();
         }
 
-        private static object GetTypedYamlValue(string value) {
-            if (value == null || value == "null") return "";
-            long longValue;
-            if (long.TryParse(value, out longValue)) return longValue;
-            double doubleValue;
-            if (double.TryParse(value, out doubleValue)) return doubleValue;
-            return value;
+        private static object GetTypedYamlValue(object value) {
+            if (value == null) return "";
+            if (value is string) {
+                if ((string)value == "null") return "";
+                long longValue;
+                if (long.TryParse((string)value, out longValue)) return longValue;
+                double doubleValue;
+                if (double.TryParse((string)value, out doubleValue)) return doubleValue;
+                return value;
+            } else {
+                return value;
+            }
         }
 
         private static object ConvertDataTableWithYamlColumns(Dictionary<string, Dictionary<string, object>> datatable, IEnumerable<string> yamlColumnNames = null) {
