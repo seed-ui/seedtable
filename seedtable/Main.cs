@@ -44,6 +44,9 @@ namespace SeedTable {
         [Option('n', "ignore-columns", Separator = ',', HelpText = "ignore columns")]
         public IEnumerable<string> ignoreColumns { get; set; } = new List<string> { };
 
+        [Option('f', "format", Separator = ',', HelpText = "format")]
+        public SeedYamlFormat format { get; set; } = SeedYamlFormat.Hash;
+
         [Option("column-names-row", Default = 2, HelpText = "column names row index")]
         public int columnNamesRow { get; set; } = 2;
 
@@ -174,7 +177,7 @@ namespace SeedTable {
                     continue;
                 }
                 try {
-                    seedTable.DataToExcel(yamlData.data, options.delete);
+                    seedTable.DataToExcel(yamlData.Data, options.delete);
                 } catch (IdParseException exception) {
                     WriteInfo($"      ERROR: {exception.Message}");
                     throw new CannotContinueException();
@@ -256,15 +259,18 @@ namespace SeedTable {
                 if (seedTable.Errors.Count != 0) {
                     continue;
                 }
-                new YamlData(seedTable.ExcelToData(options.requireVersion)).WriteTo(
-                    yamlTableName,
-                    options.output,
+                new YamlData(
+                    seedTable.ExcelToData(options.requireVersion),
                     subdivide.NeedSubdivide,
                     subdivide.CutPrefix,
                     subdivide.CutPostfix,
-                    options.seedExtension,
-                    yamlColumnNames: options.yamlColumns,
-                    deletePrevious: options.delete
+                    options.format,
+                    options.delete,
+                    options.yamlColumns
+                ).WriteTo(
+                    yamlTableName,
+                    options.output,
+                    options.seedExtension
                 );
                 var now = DateTime.Now;
                 DurationLog("      write-time", previousTime, now);
