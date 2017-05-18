@@ -276,6 +276,7 @@ namespace XmSeedtable
                 calcFormulasCheckBox.Sensitive        =
                 yamlColumnsTextBox.Sensitive          =
                 ignoreColumnsTextBox.Sensitive        =
+                mappingTextBox.Sensitive              =
                 ignoreTextBox.Sensitive               =
                 onlyTextBox.Sensitive                 =
                 formatComboBox.Sensitive              =
@@ -283,6 +284,7 @@ namespace XmSeedtable
                 dataStartRowNumericUpDown.Sensitive   =
                 engineComboBox.Sensitive              =
                 okButton.Sensitive                    =
+                seedExtensionTextBox.Sensitive        =
                 columnNamesRowNumericUpDown.Sensitive = false;
             }
         }
