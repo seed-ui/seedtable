@@ -28,6 +28,7 @@ namespace seedtable_gui {
             yamlColumnsTextBox.DataBindings.Add("Text", toOptionsStringListDataSource, "yamlColumns", true, DataSourceUpdateMode.OnPropertyChanged);
 
             engineComboBox.DataSource = Enum.GetValues(typeof(ToOptions.Engine));
+            formatComboBox.DataSource = Enum.GetValues(typeof(SeedYamlFormat));
             toOptionsBindingSource.DataSource = options;
         }
     }

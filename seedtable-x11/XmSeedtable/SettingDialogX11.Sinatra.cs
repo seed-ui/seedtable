@@ -83,6 +83,27 @@ namespace XmSeedtable
             return seedExtensionTextBox;
         }
 
+        private Widget WgtFormat(Widget rc) {
+            formatComboBox = new SimpleOptionMenu();
+            var format = new List<string>();
+            int i = 0;
+            int v = 0;
+            foreach (SeedTable.SeedYamlFormat f in Enum.GetValues(typeof(SeedTable.SeedYamlFormat))) {
+                format.Add(f.ToString());
+                if (Options.format == f) {
+                    v = i;
+                }
+                i++;
+            }
+            formatComboBox.ButtonSet = v;
+            formatComboBox.ButtonCount = format.Count;
+            formatComboBox.Buttons = format.ToArray();
+            formatComboBox.SimpleEvent += (x, y) => {
+                Options.format = (SeedTable.SeedYamlFormat)y.SelectedIndex;
+            };
+            return formatComboBox;
+        }
+
         private Widget WgtText(Widget rc, out Text rb, IEnumerable<string> val) {
             rb = new Text();
             rb.EditMode = EditMode.Multi;
@@ -108,6 +129,7 @@ namespace XmSeedtable
                 new LeftControls( "カラム名行\n(--column-names-row)", WgtColumn),
                 new LeftControls( "データ開始行\n(--data-start-row)", WgtDataRow),
                 new LeftControls( "seedファイルの拡張子\n(--seed-extension)", WgtSeedExtension),
+                new LeftControls( "yamlのフォーマット\n(--format)", WgtFormat),
             };
 
             var vb6 = new Delegaty[] {
@@ -254,12 +276,15 @@ namespace XmSeedtable
                 calcFormulasCheckBox.Sensitive        =
                 yamlColumnsTextBox.Sensitive          =
                 ignoreColumnsTextBox.Sensitive        =
+                mappingTextBox.Sensitive              =
                 ignoreTextBox.Sensitive               =
                 onlyTextBox.Sensitive                 =
+                formatComboBox.Sensitive              =
                 subdivideTextBox.Sensitive            =
                 dataStartRowNumericUpDown.Sensitive   =
                 engineComboBox.Sensitive              =
                 okButton.Sensitive                    =
+                seedExtensionTextBox.Sensitive        =
                 columnNamesRowNumericUpDown.Sensitive = false;
             }
         }
@@ -275,6 +300,7 @@ namespace XmSeedtable
         SimpleOptionMenu engineComboBox;
         SimpleSpinBox columnNamesRowNumericUpDown;
         Text seedExtensionTextBox;
+        SimpleOptionMenu formatComboBox;
         TonNurako.Widgets.Xm.PushButton okButton;
         TonNurako.Widgets.Xm.PushButton discardButton;
 
