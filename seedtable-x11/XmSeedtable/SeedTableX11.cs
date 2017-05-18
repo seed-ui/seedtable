@@ -138,6 +138,7 @@ namespace XmSeedtable
                 options.dataStartRow = setting.dataStartRow;
                 options.engine = setting.engine;
                 options.ignoreColumns = setting.ignoreColumns;
+                options.format = setting.format;
                 options.ignore = setting.ignore;
                 options.only = setting.only;
                 options.subdivide = setting.subdivide;
@@ -168,6 +169,7 @@ namespace XmSeedtable
             options.dataStartRow = setting.dataStartRow;
             options.engine = setting.engine;
             options.ignoreColumns = setting.ignoreColumns;
+            options.format = setting.format;
             options.yamlColumns = setting.yamlColumns;
             options.ignore = setting.ignore;
             options.only = setting.only;
