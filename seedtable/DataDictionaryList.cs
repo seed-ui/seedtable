@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 
 namespace SeedTable {
-    class DataDictionaryList {
+    public class DataDictionaryList {
         public IEnumerable<Dictionary<string, object>> Table { get; private set; }
 
         public DataDictionaryList(IEnumerable<Dictionary<string, object>> table) {
@@ -57,7 +57,7 @@ namespace SeedTable {
             var idLength = id.Length;
             if (idLength == 0) return null; // idが空なものはスキップ
             var useIdLength = idLength - preCut - postCut;
-            return id.Substring(preCut, useIdLength < 0 ? 0 : useIdLength);
+            return id.Substring(preCut > idLength ? idLength : preCut, useIdLength < 0 ? 0 : useIdLength);
         }
     }
 }

@@ -1,0 +1,29 @@
+data1:
+  id: 1
+  name: a
+  data_yaml:
+  - 12
+  - 12
+data2:
+  id: 2
+  name: b
+  data_yaml:
+    a: 12
+data4:
+  id: 4
+  name: c
+  data_yaml: 4
+data5:
+  id: 5
+  name: d
+  data_yaml:
+  - a: b
+data6:
+  id: 6
+  name: e
+  data_yaml: aaa
+data7:
+  id: 7
+  name: f
+  data_yaml:
+    aaa: 5

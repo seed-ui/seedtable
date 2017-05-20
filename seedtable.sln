@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "seedtable", "seedtable\seed
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "seedtable-gui", "seedtable-gui\seedtable-gui.csproj", "{C4F0466D-88F8-4E40-AF57-325C47B7F93D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "seedtable-test", "seedtable-test\seedtable-test.csproj", "{3E8A7E5F-5B32-40B7-BEC4-6DA114ED3E4A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -31,6 +33,14 @@ Global
 		{C4F0466D-88F8-4E40-AF57-325C47B7F93D}.Release|Any CPU.Build.0 = Release|Any CPU
 		{C4F0466D-88F8-4E40-AF57-325C47B7F93D}.Release|x86.ActiveCfg = Release|Any CPU
 		{C4F0466D-88F8-4E40-AF57-325C47B7F93D}.Release|x86.Build.0 = Release|Any CPU
+		{3E8A7E5F-5B32-40B7-BEC4-6DA114ED3E4A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3E8A7E5F-5B32-40B7-BEC4-6DA114ED3E4A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3E8A7E5F-5B32-40B7-BEC4-6DA114ED3E4A}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{3E8A7E5F-5B32-40B7-BEC4-6DA114ED3E4A}.Debug|x86.Build.0 = Debug|Any CPU
+		{3E8A7E5F-5B32-40B7-BEC4-6DA114ED3E4A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3E8A7E5F-5B32-40B7-BEC4-6DA114ED3E4A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3E8A7E5F-5B32-40B7-BEC4-6DA114ED3E4A}.Release|x86.ActiveCfg = Release|Any CPU
+		{3E8A7E5F-5B32-40B7-BEC4-6DA114ED3E4A}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

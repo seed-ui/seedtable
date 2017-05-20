@@ -10,6 +10,10 @@ before_build:
   - nuget restore
 build:
   project: seedtable.sln
+test:
+  assemblies:
+    only:
+      - "**/*-test.dll"
 artifacts:
   - path: seedtable-gui/bin/Release
     name: seedtable
