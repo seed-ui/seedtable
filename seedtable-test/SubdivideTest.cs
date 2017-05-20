@@ -9,7 +9,7 @@ using Xunit;
 using SeedTable;
 
 namespace seedtable_test {
-    public class SubdivideTest : FromTestBase {
+    public class SubdivideTest : FromToTestBase {
         private const string SheetName = "foo_bars";
         private readonly IEnumerable<Dictionary<string, object>> AllData;
 
@@ -21,7 +21,7 @@ namespace seedtable_test {
         }
 
         protected FromOptions BuildOptions(int? preCut = null, int? postCut = null) {
-            var options = base.BuildOptions();
+            var options = base.BuildFromOptions();
             options.only = new string[] { SheetName };
             var preCutStr = preCut == null ? "" : $"{preCut}:";
             var postCutStr = postCut == null ? "" : $":{postCut}";

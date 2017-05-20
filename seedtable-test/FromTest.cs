@@ -9,10 +9,10 @@ using Xunit;
 using SeedTable;
 
 namespace seedtable_test {
-    public class FromTest : FromTestBase {
+    public class FromTest : FromToTestBase {
         [Fact]
         public void EqualToExample() {
-            var options = BuildOptions();
+            var options = BuildFromOptions();
             Prepare(options);
 
             foreach (var sourcePath in Directory.GetFiles(Paths.SourceSeedPath)) {

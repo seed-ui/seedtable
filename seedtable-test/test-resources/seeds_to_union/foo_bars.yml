@@ -1,0 +1,165 @@
+data10001:
+  id: 10001
+  foo_id: 1
+  dummy: 100
+  value: 10000
+data10008:
+  id: 10008
+  foo_id: 1
+  dummy: 100
+  value: 10000
+data10015:
+  id: 10015
+  foo_id: 3
+  dummy: 300
+  value: 30000
+data10022:
+  id: 10022
+  foo_id: 2
+  dummy: 200
+  value: 20000
+data10029:
+  id: 10029
+  foo_id: 3
+  dummy: 300
+  value: 30000
+data10036:
+  id: 10036
+  foo_id: 3
+  dummy: 300
+  value: 30000
+data10043:
+  id: 10043
+  foo_id: 4
+  dummy: 400
+  value: 40000
+data10050:
+  id: 10050
+  foo_id: 4
+  dummy: 400
+  value: 40000
+data10057:
+  id: 10057
+  foo_id: 5
+  dummy: 500
+  value: 50000
+data10064:
+  id: 10064
+  foo_id: 5
+  dummy: 500
+  value: 50000
+data10071:
+  id: 10071
+  foo_id: 6
+  dummy: 600
+  value: 60000
+data10078:
+  id: 10078
+  foo_id: 6
+  dummy: 600
+  value: 60000
+data10085:
+  id: 10085
+  foo_id: 7
+  dummy: 700
+  value: 70000
+data10092:
+  id: 10092
+  foo_id: 7
+  dummy: 700
+  value: 70000
+data10099:
+  id: 10099
+  foo_id: 8
+  dummy: 800
+  value: 80000
+data10106:
+  id: 10106
+  foo_id: 8
+  dummy: 800
+  value: 80000
+data10113:
+  id: 10113
+  foo_id: 9
+  dummy: 900
+  value: 90000
+data10120:
+  id: 10120
+  foo_id: 9
+  dummy: 900
+  value: 90000
+data10127:
+  id: 10127
+  foo_id: 10
+  dummy: 1000
+  value: 100000
+data10134:
+  id: 10134
+  foo_id: 10
+  dummy: 1000
+  value: 100000
+data10141:
+  id: 10141
+  foo_id: 11
+  dummy: 1100
+  value: 110000
+data10148:
+  id: 10148
+  foo_id: 11
+  dummy: 1100
+  value: 110000
+data10155:
+  id: 10155
+  foo_id: 12
+  dummy: 1200
+  value: 120000
+data10162:
+  id: 10162
+  foo_id: 12
+  dummy: 1200
+  value: 120000
+data10169:
+  id: 10169
+  foo_id: 13
+  dummy: 1300
+  value: 130000
+data10176:
+  id: 10176
+  foo_id: 13
+  dummy: 1300
+  value: 130000
+data10183:
+  id: 10183
+  foo_id: 14
+  dummy: 1400
+  value: 140000
+data10190:
+  id: 10190
+  foo_id: 14
+  dummy: 1400
+  value: 140000
+data10197:
+  id: 10197
+  foo_id: 15
+  dummy: 1500
+  value: 150000
+data10204:
+  id: 10204
+  foo_id: 15
+  dummy: 1500
+  value: 150000
+data10211:
+  id: 10211
+  foo_id: 16
+  dummy: 1600
+  value: 160000
+data10218:
+  id: 10218
+  foo_id: 16
+  dummy: 1600
+  value: 160000
+data10220:
+  id: 10220
+  foo_id: 16
+  dummy: 1600
+  value: 160000

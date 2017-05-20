@@ -1,0 +1,160 @@
+data1:
+  id: 1
+  foo_bar_id: 10001
+  dummy: 10000
+  value: 1000000
+data2:
+  id: 2
+  foo_bar_id: 10008
+  dummy: 10000
+  value: 1000000
+data3:
+  id: 3
+  foo_bar_id: 10015
+  dummy: 30000
+  value: 3000000
+data4:
+  id: 4
+  foo_bar_id: 10022
+  dummy: 20000
+  value: 2000000
+data5:
+  id: 5
+  foo_bar_id: 10029
+  dummy: 30000
+  value: 3000000
+data6:
+  id: 6
+  foo_bar_id: 10036
+  dummy: 30000
+  value: 3000000
+data7:
+  id: 7
+  foo_bar_id: 10043
+  dummy: 40000
+  value: 4000000
+data8:
+  id: 8
+  foo_bar_id: 10050
+  dummy: 40000
+  value: 4000000
+data9:
+  id: 9
+  foo_bar_id: 10057
+  dummy: 50000
+  value: 5000000
+data10:
+  id: 10
+  foo_bar_id: 10064
+  dummy: 50000
+  value: 5000000
+data11:
+  id: 11
+  foo_bar_id: 10071
+  dummy: 60000
+  value: 6000000
+data12:
+  id: 12
+  foo_bar_id: 10078
+  dummy: 60000
+  value: 6000000
+data13:
+  id: 13
+  foo_bar_id: 10085
+  dummy: 70000
+  value: 7000000
+data14:
+  id: 14
+  foo_bar_id: 10092
+  dummy: 70000
+  value: 7000000
+data15:
+  id: 15
+  foo_bar_id: 10099
+  dummy: 80000
+  value: 8000000
+data16:
+  id: 16
+  foo_bar_id: 10106
+  dummy: 80000
+  value: 8000000
+data17:
+  id: 17
+  foo_bar_id: 10113
+  dummy: 90000
+  value: 9000000
+data18:
+  id: 18
+  foo_bar_id: 10120
+  dummy: 90000
+  value: 9000000
+data19:
+  id: 19
+  foo_bar_id: 10127
+  dummy: 100000
+  value: 10000000
+data20:
+  id: 20
+  foo_bar_id: 10134
+  dummy: 100000
+  value: 10000000
+data21:
+  id: 21
+  foo_bar_id: 10141
+  dummy: 110000
+  value: 11000000
+data22:
+  id: 22
+  foo_bar_id: 10148
+  dummy: 110000
+  value: 11000000
+data23:
+  id: 23
+  foo_bar_id: 10155
+  dummy: 120000
+  value: 12000000
+data24:
+  id: 24
+  foo_bar_id: 10162
+  dummy: 120000
+  value: 12000000
+data25:
+  id: 25
+  foo_bar_id: 10169
+  dummy: 130000
+  value: 13000000
+data26:
+  id: 26
+  foo_bar_id: 10176
+  dummy: 130000
+  value: 13000000
+data27:
+  id: 27
+  foo_bar_id: 10183
+  dummy: 140000
+  value: 14000000
+data28:
+  id: 28
+  foo_bar_id: 10190
+  dummy: 140000
+  value: 14000000
+data29:
+  id: 29
+  foo_bar_id: 10197
+  dummy: 150000
+  value: 15000000
+data30:
+  id: 30
+  foo_bar_id: 10204
+  dummy: 150000
+  value: 15000000
+data31:
+  id: 31
+  foo_bar_id: 10211
+  dummy: 160000
+  value: 16000000
+data32:
+  id: 32
+  foo_bar_id: 10218
+  dummy: 160000
+  value: 16000000

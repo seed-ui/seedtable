@@ -1,0 +1,15 @@
+data10001:
+  id: 10001
+  foo_id: 1
+  dummy: 100
+  value: 10000
+data10015:
+  id: 10015
+  foo_id: 3
+  dummy: 100
+  value: 10000
+data10220:
+  id: 10220
+  foo_id: 16
+  dummy: 100
+  value: 10000

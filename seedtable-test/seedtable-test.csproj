@@ -60,10 +60,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="FromTest.cs" />
-    <Compile Include="FromTestBase.cs" />
+    <Compile Include="FromToTestBase.cs" />
     <Compile Include="Paths.cs" />
     <Compile Include="SubdivideTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ToTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
