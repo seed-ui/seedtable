@@ -10,12 +10,19 @@ _after_success: &after_success
   - cp -R seedtable-x11/XmSeedtable/bin/Release XmSeedtable
   - zip -r -9 XmSeedtable-${TRAVIS_OS_NAME}.zip XmSeedtable
 language: csharp
+solution: ${SOLUTION}
+script:
+  - xbuild /p:Configuration=Release ${SOLUTION}
+  - mono ./packages/xunit.runner.console.2.2.0/tools/xunit.console.exe ./seedtable-test/bin/Release/seedtable-test.dll -verbose
 matrix:
   include:
-    - solution: seedtable.sln
-    - solution: seedtable.sln
+    - env:
+        - SOLUTION=seedtable.sln
+    - env:
+        - SOLUTION=seedtable.sln
       os: osx
-    - solution: seedtable-x11/XmSeedtable.sln
+    - env:
+        - SOLUTION=seedtable-x11/XmSeedtable.sln
       install:
         - sudo apt-get -qq update
         - sudo apt-get -qq install libmotif-dev libxpm-dev libxmu-dev libxt-dev
@@ -23,10 +30,10 @@ matrix:
         - nuget restore seedtable-x11/XmSeedtable.sln
       after_success: *after_success
       deploy: *deploy
-    - solution: seedtable-x11/XmSeedtable.sln
-      os: osx
-      env:
+    - env:
+        - SOLUTION=seedtable-x11/XmSeedtable.sln
         - XQUARTZ_VERSION=2.7.8
+      os: osx
       install:
         - curl -L -O http://xquartz.macosforge.org/downloads/SL/XQuartz-${XQUARTZ_VERSION}.dmg
         - hdiutil mount XQuartz-${XQUARTZ_VERSION}.dmg
