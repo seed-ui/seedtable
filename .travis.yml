@@ -9,17 +9,19 @@ _deploy: &deploy
 _after_success: &after_success
   - cp -R seedtable-x11/XmSeedtable/bin/Release XmSeedtable
   - zip -r -9 XmSeedtable-${TRAVIS_OS_NAME}.zip XmSeedtable
-language: csharp
-solution: ${SOLUTION}
-script:
+_script_with_test: &script_with_test
   - xbuild /p:Configuration=Release ${SOLUTION}
   - mono ./packages/xunit.runner.console.2.2.0/tools/xunit.console.exe ./seedtable-test/bin/Release/seedtable-test.dll -verbose
+language: csharp
+solution: ${SOLUTION}
 matrix:
   include:
     - env:
         - SOLUTION=seedtable.sln
+      script: *script_with_test
     - env:
         - SOLUTION=seedtable.sln
+      script: *script_with_test
       os: osx
     - env:
         - SOLUTION=seedtable-x11/XmSeedtable.sln
