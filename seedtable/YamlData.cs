@@ -97,7 +97,9 @@ namespace SeedTable {
             var root = deserializer.Deserialize(stream);
             var jsonSerializer = new SerializerBuilder().JsonCompatible().Build();
             IEnumerable<Dictionary<object, object>> recordList;
-            if (root is List<object>) {
+            if (root == null) {
+                recordList = new Dictionary<object, object>[] { };
+            } else if (root is List<object>) {
                 recordList = ((List<object>)root).Select(record => (Dictionary<object, object>)record);
             } else {
                 recordList = ((Dictionary<object, object>)root).Select(pair => (Dictionary<object, object>)pair.Value);
