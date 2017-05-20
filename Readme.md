@@ -155,9 +155,7 @@ seedtableではxlsxファイルを扱うバックエンドとして複数のラ�
 OpenXmlとEPPlusのfrom処理速度はほぼ同じですが、ファイルによって3割程度の速度差がある場合があります。
 ClosedXMLはその2倍以上程度の時間がかかります。
 
-xlsx -> yaml (from) 時はOpenXml(デフォルト)かEPPlusがおすすめです。
-
-yaml -> xlsx (to) 時はEPPlus(デフォルト)がおすすめです。
+EPPlus(デフォルト)がおすすめです。
 
 #### --subdivide yml分割設定
 
