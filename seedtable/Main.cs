@@ -53,7 +53,7 @@ namespace SeedTable {
         [Option("data-start-row", Default = 3, HelpText = "data start row index")]
         public int dataStartRow { get; set; } = 3;
 
-        [Option('e', "engine", Default = Engine.OpenXml, HelpText = "parser engine")]
+        [Option('e', "engine", Default = Engine.EPPlus, HelpText = "parser engine")]
         public virtual Engine engine { get; set; }
 
         [Option('d', "delete", Default = false, HelpText = "delete data which is not exists in source")]
@@ -65,8 +65,8 @@ namespace SeedTable {
 
     [Verb("from", HelpText ="Yaml from Excel")]
     public class FromOptions : CommonOptions {
-        [Option('e', "engine", Default = Engine.OpenXml, HelpText = "parser engine")]
-        public override Engine engine { get; set; } = Engine.OpenXml;
+        [Option('e', "engine", Default = Engine.EPPlus, HelpText = "parser engine")]
+        public override Engine engine { get; set; } = Engine.EPPlus;
 
         // [Option('d', "stdout", Default = false, HelpText = "output one sheets to stdout")]
         // public bool stdout { get; set; }
