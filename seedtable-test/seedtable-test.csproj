@@ -59,7 +59,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="XlsxTest.cs" />
+    <Compile Include="FromTest.cs" />
+    <Compile Include="FromTestBase.cs" />
+    <Compile Include="Paths.cs" />
+    <Compile Include="SubdivideTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -67,6 +70,12 @@
   </ItemGroup>
   <ItemGroup>
     <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\seedtable\seedtable.csproj">
+      <Project>{8bd2867d-75b8-4da7-9e62-b23e994cd3a0}</Project>
+      <Name>seedtable</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

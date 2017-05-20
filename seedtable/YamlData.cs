@@ -6,7 +6,7 @@ using YamlDotNet.RepresentationModel;
 using YamlDotNet.Serialization;
 
 namespace SeedTable {
-    class YamlData {
+    public class YamlData {
         public DataDictionaryList Data { get; private set; }
         public bool NeedSubdivide { get; set; }
         public int PreCut { get; set; }
