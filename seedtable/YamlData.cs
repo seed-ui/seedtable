@@ -6,6 +6,8 @@ using YamlDotNet.RepresentationModel;
 using YamlDotNet.Serialization;
 
 namespace SeedTable {
+    using YamlColumnNamesType = Wildcards<Wildcard>;
+
     public class YamlData {
         public DataDictionaryList Data { get; private set; }
         public bool NeedSubdivide { get; set; }
@@ -13,7 +15,7 @@ namespace SeedTable {
         public int PostCut { get; set; }
         public SeedYamlFormat Format { get; set; }
         public bool DeletePrevious { get; set; }
-        public IEnumerable<string> YamlColumnNames { get; set; }
+        public YamlColumnNamesType YamlColumnNames { get; set; }
 
         public YamlData(
             DataDictionaryList data,
@@ -30,7 +32,10 @@ namespace SeedTable {
             PostCut = postCut;
             Format = format;
             DeletePrevious = deletePrevious;
-            YamlColumnNames = yamlColumnNames;
+            YamlColumnNames =
+                yamlColumnNames == null ?
+                new YamlColumnNamesType() :
+                new YamlColumnNamesType(yamlColumnNames.Select(yamlColumnName => new Wildcard(yamlColumnName)));
         }
 
         public void WriteTo(string name, string directory = ".", string extension = ".yml") {
@@ -118,7 +123,7 @@ namespace SeedTable {
             return YamlToData(new StringReader(yaml));
         }
 
-        public static void DataToYaml(TextWriter writer, Dictionary<string, Dictionary<string, object>> datatable, IEnumerable<string> yamlColumnNames = null) {
+        public static void DataToYaml(TextWriter writer, Dictionary<string, Dictionary<string, object>> datatable, YamlColumnNamesType yamlColumnNames = null) {
             var builder = new SerializerBuilder();
             builder.EmitDefaults();
             var serializer = builder.Build();
@@ -126,7 +131,7 @@ namespace SeedTable {
             serializer.Serialize(writer, tree);
         }
 
-        public static void DataToYaml(TextWriter writer, IEnumerable<Dictionary<string, object>> datatable, IEnumerable<string> yamlColumnNames = null) {
+        public static void DataToYaml(TextWriter writer, IEnumerable<Dictionary<string, object>> datatable, YamlColumnNamesType yamlColumnNames = null) {
             var builder = new SerializerBuilder();
             builder.EmitDefaults();
             var serializer = builder.Build();
@@ -134,7 +139,7 @@ namespace SeedTable {
             serializer.Serialize(writer, tree);
         }
 
-        public static void DataToYaml(TextWriter writer, DataDictionaryList datatable, SeedYamlFormat format = SeedYamlFormat.Hash, IEnumerable<string> yamlColumnNames = null) {
+        public static void DataToYaml(TextWriter writer, DataDictionaryList datatable, SeedYamlFormat format = SeedYamlFormat.Hash, YamlColumnNamesType yamlColumnNames = null) {
             if (format == SeedYamlFormat.Hash) {
                 DataToYaml(writer, datatable.ToDictionaryDictionary(), yamlColumnNames);
             } else {
@@ -142,19 +147,19 @@ namespace SeedTable {
             }
         }
 
-        public static string DataToYaml(Dictionary<string, Dictionary<string, object>> datatable, IEnumerable<string> yamlColumnNames = null) {
+        public static string DataToYaml(Dictionary<string, Dictionary<string, object>> datatable, YamlColumnNamesType yamlColumnNames = null) {
             var writer = new StringWriter();
             DataToYaml(writer, datatable, yamlColumnNames);
             return writer.ToString();
         }
 
-        public static string DataToYaml(List<Dictionary<string, object>> datatable, IEnumerable<string> yamlColumnNames = null) {
+        public static string DataToYaml(List<Dictionary<string, object>> datatable, YamlColumnNamesType yamlColumnNames = null) {
             var writer = new StringWriter();
             DataToYaml(writer, datatable, yamlColumnNames);
             return writer.ToString();
         }
 
-        public static string DataToYaml(DataDictionaryList datatable, SeedYamlFormat format = SeedYamlFormat.Hash, IEnumerable<string> yamlColumnNames = null) {
+        public static string DataToYaml(DataDictionaryList datatable, SeedYamlFormat format = SeedYamlFormat.Hash, YamlColumnNamesType yamlColumnNames = null) {
             var writer = new StringWriter();
             DataToYaml(writer, datatable, format, yamlColumnNames);
             return writer.ToString();
@@ -174,7 +179,7 @@ namespace SeedTable {
             }
         }
 
-        private static object ConvertDataTableWithYamlColumns(Dictionary<string, Dictionary<string, object>> datatable, IEnumerable<string> yamlColumnNames) {
+        private static object ConvertDataTableWithYamlColumns(Dictionary<string, Dictionary<string, object>> datatable, YamlColumnNamesType yamlColumnNames) {
             var builder = new DeserializerBuilder();
             var deserializer = builder.Build();
             return datatable.ToDictionary(
@@ -183,7 +188,7 @@ namespace SeedTable {
             );
         }
 
-        private static object ConvertDataTableWithYamlColumns(IEnumerable<Dictionary<string, object>> datatable, IEnumerable<string> yamlColumnNames) {
+        private static object ConvertDataTableWithYamlColumns(IEnumerable<Dictionary<string, object>> datatable, YamlColumnNamesType yamlColumnNames) {
             var builder = new DeserializerBuilder();
             var deserializer = builder.Build();
             return datatable.Select(
@@ -191,13 +196,13 @@ namespace SeedTable {
             );
         }
 
-        private static object ConvertValueWithYamlColumns(Deserializer deserializer, Dictionary<string, object> value, IEnumerable<string> yamlColumnNames) {
+        private static object ConvertValueWithYamlColumns(Deserializer deserializer, Dictionary<string, object> value, YamlColumnNamesType yamlColumnNames) {
             return value.ToDictionary(
                 pair => pair.Key,
                 pair => {
                     if (pair.Value == null) {
                         return null;
-                    } else if (yamlColumnNames.Contains(pair.Key)) {
+                    } else if (yamlColumnNames != null && yamlColumnNames.Contains(pair.Key)) {
                         return deserializer.Deserialize(new StringReader(pair.Value.ToString()));
                     } else {
                         return pair.Value;

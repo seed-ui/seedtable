@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 
 namespace SeedTable {
-    class Wildcards<T> : List<T> where T : Wildcard {
+    public class Wildcards<T> : List<T> where T : Wildcard {
         public Wildcards() : base() { }
 
         public Wildcards(IEnumerable<T> wildcards) : base(
@@ -29,7 +29,7 @@ namespace SeedTable {
         }
     }
 
-    class Wildcard {
+    public class Wildcard {
         public string Name { get; }
         public WildcardMatchType MatchType { get; }
         private Regex NameMatcher { get; }
