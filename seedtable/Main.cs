@@ -359,11 +359,11 @@ namespace SeedTable {
         }
 
         class SheetNameWithSubdivides : List<SheetNameWithSubdivide> {
-            public static SheetNameWithSubdivides FromMixed(IEnumerable<string> mixedSheetNames = null) {
-                return mixedSheetNames == null ?
+            public static SheetNameWithSubdivides FromMixed(IEnumerable<string> mixedNames = null) {
+                return mixedNames == null ?
                     new SheetNameWithSubdivides() :
                     new SheetNameWithSubdivides(
-                        mixedSheetNames.Select(mixedSheetName => SheetNameWithSubdivide.FromMixed(mixedSheetName))
+                        mixedNames.Select(mixedName => SheetNameWithSubdivide.FromMixed(mixedName))
                     );
             }
 
@@ -371,74 +371,74 @@ namespace SeedTable {
 
             public SheetNameWithSubdivides(IEnumerable<SheetNameWithSubdivide> sheetNameWithSubdivides) : base(
                 sheetNameWithSubdivides.Where(
-                    sheetNameWithSubdivide => sheetNameWithSubdivide.MatchType == SheetNameWithSubdivide.SheetNameMatchType.Exact
+                    sheetNameWithSubdivide => sheetNameWithSubdivide.MatchType == SheetNameWithSubdivide.NameMatchType.Exact
                 ).Concat(
                     sheetNameWithSubdivides.Where(
-                        sheetNameWithSubdivide => sheetNameWithSubdivide.MatchType == SheetNameWithSubdivide.SheetNameMatchType.Wildcard
+                        sheetNameWithSubdivide => sheetNameWithSubdivide.MatchType == SheetNameWithSubdivide.NameMatchType.Wildcard
                     )
                 ).Concat(
                     sheetNameWithSubdivides.Where(
-                        sheetNameWithSubdivide => sheetNameWithSubdivide.MatchType == SheetNameWithSubdivide.SheetNameMatchType.All
+                        sheetNameWithSubdivide => sheetNameWithSubdivide.MatchType == SheetNameWithSubdivide.NameMatchType.All
                     ).Take(1)
                 )
             ) { }
 
-            public SheetNameWithSubdivide Find(string sheetName) {
-                return Find(sheetNameWithSubdivide => sheetNameWithSubdivide.IsMatch(sheetName));
+            public SheetNameWithSubdivide Find(string name) {
+                return Find(sheetNameWithSubdivide => sheetNameWithSubdivide.IsMatch(name));
             }
 
-            public bool Contains(string sheetName) {
-                return Find(sheetName) != null;
+            public bool Contains(string name) {
+                return Find(name) != null;
             }
         }
 
         class SheetNameWithSubdivide {
-            public static SheetNameWithSubdivide FromMixed(string mixedSheetName) {
-                var result = Regex.Match(mixedSheetName, @"^(?:(\d+):)?(.+?)(?::(\d+))?$");
-                if (!result.Success) throw new Exception($"{mixedSheetName} is wrong sheet name and subdivide rule definition");
+            public static SheetNameWithSubdivide FromMixed(string mixedName) {
+                var result = Regex.Match(mixedName, @"^(?:(\d+):)?(.+?)(?::(\d+))?$");
+                if (!result.Success) throw new Exception($"{mixedName} is wrong sheet name and subdivide rule definition");
                 var cutPrefixStr = result.Groups[1].Value;
-                var sheetName = result.Groups[2].Value;
+                var name = result.Groups[2].Value;
                 var cutPostfixStr = result.Groups[3].Value;
                 var needSubdivide = cutPrefixStr.Length != 0 || cutPostfixStr.Length != 0;
                 var cutPrefix = cutPrefixStr.Length == 0 ? 0 : Convert.ToInt32(cutPrefixStr);
                 var cutPostfix = cutPostfixStr.Length == 0 ? 0 : Convert.ToInt32(cutPostfixStr);
-                return new SheetNameWithSubdivide(sheetName, needSubdivide, cutPrefix, cutPostfix);
+                return new SheetNameWithSubdivide(name, needSubdivide, cutPrefix, cutPostfix);
             }
 
-            public string SheetName { get; }
+            public string Name { get; }
             public bool NeedSubdivide { get; }
             public int CutPrefix { get; }
             public int CutPostfix { get; }
-            public SheetNameMatchType MatchType { get; }
-            private Regex SheetNameMatcher { get; }
+            public NameMatchType MatchType { get; }
+            private Regex NameMatcher { get; }
 
-            public SheetNameWithSubdivide(string sheetName, bool needSubdivide = false, int cutPrefix = 0, int cutPostfix = 0) {
-                SheetName = sheetName;
+            public SheetNameWithSubdivide(string name, bool needSubdivide = false, int cutPrefix = 0, int cutPostfix = 0) {
+                Name = name;
                 NeedSubdivide = needSubdivide;
                 CutPrefix = cutPrefix;
                 CutPostfix = cutPostfix;
-                if (SheetName == "*") {
-                    MatchType = SheetNameMatchType.All;
-                } else if (SheetName.Contains("*") || SheetName.Contains("?")) {
-                    SheetNameMatcher = new Regex("^" + Regex.Escape(sheetName).Replace(@"\*", ".*").Replace(@"\?", ".") + "$");
-                    MatchType = SheetNameMatchType.Wildcard;
+                if (Name == "*") {
+                    MatchType = NameMatchType.All;
+                } else if (Name.Contains("*") || Name.Contains("?")) {
+                    NameMatcher = new Regex("^" + Regex.Escape(name).Replace(@"\*", ".*").Replace(@"\?", ".") + "$");
+                    MatchType = NameMatchType.Wildcard;
                 } else {
-                    MatchType = SheetNameMatchType.Exact;
+                    MatchType = NameMatchType.Exact;
                 }
             }
 
-            public bool IsMatch(string sheetName) {
+            public bool IsMatch(string name) {
                 switch (MatchType) {
-                    case SheetNameMatchType.Exact:
-                        return sheetName == SheetName;
-                    case SheetNameMatchType.Wildcard:
-                        return SheetNameMatcher.IsMatch(sheetName);
+                    case NameMatchType.Exact:
+                        return name == Name;
+                    case NameMatchType.Wildcard:
+                        return NameMatcher.IsMatch(name);
                     default:
                         return true;
                 }
             }
 
-            public enum SheetNameMatchType {
+            public enum NameMatchType {
                 All = 0,
                 Wildcard,
                 Exact,
