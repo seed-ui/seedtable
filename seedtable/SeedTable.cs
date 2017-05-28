@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace SeedTable {
     interface IExcelData : IDisposable {
@@ -12,7 +13,7 @@ namespace SeedTable {
     abstract class SeedTableBase {
         public int ColumnNamesRowIndex { get; }
         public int DataStartRowIndex { get; }
-        public HashSet<string> IgnoreColumnNames { get; }
+        public Wildcards<Wildcard> IgnoreColumnNames { get; }
         public string VersionColumnName { get; }
 
         public List<Exception> Errors { get; protected set; } = new List<Exception>();
@@ -20,7 +21,10 @@ namespace SeedTable {
         public SeedTableBase(int columnNamesRowIndex = 2, int dataStartRowIndex = 3, IEnumerable<string> ignoreColumnNames = null, string versionColumnName = null) {
             ColumnNamesRowIndex = columnNamesRowIndex;
             DataStartRowIndex = dataStartRowIndex;
-            IgnoreColumnNames = ignoreColumnNames == null ? new HashSet<string>() : new HashSet<string>(ignoreColumnNames);
+            IgnoreColumnNames =
+                ignoreColumnNames == null ?
+                new Wildcards<Wildcard>() :
+                new Wildcards<Wildcard>(ignoreColumnNames.Select(ignoreColumnName => new Wildcard(ignoreColumnName)));
             VersionColumnName = versionColumnName;
         }
 
