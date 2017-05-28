@@ -81,6 +81,10 @@ subdivide:
 engine: EPPlus
 ```
 
+GUIの設定ダイアログは以下のようなものです。
+
+![設定ダイアログ](seedtable-gui-settings.png)
+
 この設定をGUIで編集させたくないという場合は、`seedtable-gui.exe`と同じフォルダに`options.readonly`というファイル(中身は空で大丈夫)をおいて下さい。
 
 設定の詳細は後のOptionsの節を参照下さい。
