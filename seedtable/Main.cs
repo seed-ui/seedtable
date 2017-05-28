@@ -358,7 +358,7 @@ namespace SeedTable {
             }
         }
 
-        class SheetNameWithSubdivides : List<SheetNameWithSubdivide> {
+        class SheetNameWithSubdivides : Wildcards<SheetNameWithSubdivide> {
             public static SheetNameWithSubdivides FromMixed(IEnumerable<string> mixedNames = null) {
                 return mixedNames == null ?
                     new SheetNameWithSubdivides() :
@@ -369,30 +369,10 @@ namespace SeedTable {
 
             public SheetNameWithSubdivides() : base() { }
 
-            public SheetNameWithSubdivides(IEnumerable<SheetNameWithSubdivide> sheetNameWithSubdivides) : base(
-                sheetNameWithSubdivides.Where(
-                    sheetNameWithSubdivide => sheetNameWithSubdivide.MatchType == SheetNameWithSubdivide.NameMatchType.Exact
-                ).Concat(
-                    sheetNameWithSubdivides.Where(
-                        sheetNameWithSubdivide => sheetNameWithSubdivide.MatchType == SheetNameWithSubdivide.NameMatchType.Wildcard
-                    )
-                ).Concat(
-                    sheetNameWithSubdivides.Where(
-                        sheetNameWithSubdivide => sheetNameWithSubdivide.MatchType == SheetNameWithSubdivide.NameMatchType.All
-                    ).Take(1)
-                )
-            ) { }
-
-            public SheetNameWithSubdivide Find(string name) {
-                return Find(sheetNameWithSubdivide => sheetNameWithSubdivide.IsMatch(name));
-            }
-
-            public bool Contains(string name) {
-                return Find(name) != null;
-            }
+            public SheetNameWithSubdivides(IEnumerable<SheetNameWithSubdivide> sheetNameWithSubdivides) : base(sheetNameWithSubdivides) { }
         }
 
-        class SheetNameWithSubdivide {
+        class SheetNameWithSubdivide : Wildcard {
             public static SheetNameWithSubdivide FromMixed(string mixedName) {
                 var result = Regex.Match(mixedName, @"^(?:(\d+):)?(.+?)(?::(\d+))?$");
                 if (!result.Success) throw new Exception($"{mixedName} is wrong sheet name and subdivide rule definition");
@@ -405,43 +385,14 @@ namespace SeedTable {
                 return new SheetNameWithSubdivide(name, needSubdivide, cutPrefix, cutPostfix);
             }
 
-            public string Name { get; }
             public bool NeedSubdivide { get; }
             public int CutPrefix { get; }
             public int CutPostfix { get; }
-            public NameMatchType MatchType { get; }
-            private Regex NameMatcher { get; }
 
-            public SheetNameWithSubdivide(string name, bool needSubdivide = false, int cutPrefix = 0, int cutPostfix = 0) {
-                Name = name;
+            public SheetNameWithSubdivide(string name, bool needSubdivide = false, int cutPrefix = 0, int cutPostfix = 0) : base(name) {
                 NeedSubdivide = needSubdivide;
                 CutPrefix = cutPrefix;
                 CutPostfix = cutPostfix;
-                if (Name == "*") {
-                    MatchType = NameMatchType.All;
-                } else if (Name.Contains("*") || Name.Contains("?")) {
-                    NameMatcher = new Regex("^" + Regex.Escape(name).Replace(@"\*", ".*").Replace(@"\?", ".") + "$");
-                    MatchType = NameMatchType.Wildcard;
-                } else {
-                    MatchType = NameMatchType.Exact;
-                }
-            }
-
-            public bool IsMatch(string name) {
-                switch (MatchType) {
-                    case NameMatchType.Exact:
-                        return name == Name;
-                    case NameMatchType.Wildcard:
-                        return NameMatcher.IsMatch(name);
-                    default:
-                        return true;
-                }
-            }
-
-            public enum NameMatchType {
-                All = 0,
-                Wildcard,
-                Exact,
             }
         }
     }

@@ -114,6 +114,7 @@
     <Compile Include="ClosedXML.cs" />
     <Compile Include="DataDictionaryList.cs" />
     <Compile Include="EPPlus.cs" />
+    <Compile Include="Wildcard.cs" />
     <Compile Include="OpenXml.cs" />
     <Compile Include="Main.cs" />
     <Compile Include="AssemblyInfo.cs" />
