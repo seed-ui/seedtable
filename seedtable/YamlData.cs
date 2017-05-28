@@ -182,33 +182,40 @@ namespace SeedTable {
         private static object ConvertDataTableWithYamlColumns(Dictionary<string, Dictionary<string, object>> datatable, YamlColumnNamesType yamlColumnNames) {
             var builder = new DeserializerBuilder();
             var deserializer = builder.Build();
+            var yamlColumnNamesInRecord = GetYamlColumnNamesInRecord(datatable.FirstOrDefault().Value, yamlColumnNames);
             return datatable.ToDictionary(
                 pair => pair.Key,
-                pair => ConvertValueWithYamlColumns(deserializer, pair.Value, yamlColumnNames)
+                pair => ConvertValueWithYamlColumns(deserializer, pair.Value, yamlColumnNamesInRecord)
             );
         }
 
         private static object ConvertDataTableWithYamlColumns(IEnumerable<Dictionary<string, object>> datatable, YamlColumnNamesType yamlColumnNames) {
             var builder = new DeserializerBuilder();
             var deserializer = builder.Build();
+            var yamlColumnNamesInRecord = GetYamlColumnNamesInRecord(datatable.FirstOrDefault(), yamlColumnNames);
             return datatable.Select(
-                value => ConvertValueWithYamlColumns(deserializer, value, yamlColumnNames)
+                value => ConvertValueWithYamlColumns(deserializer, value, yamlColumnNamesInRecord)
             );
         }
 
-        private static object ConvertValueWithYamlColumns(Deserializer deserializer, Dictionary<string, object> value, YamlColumnNamesType yamlColumnNames) {
+        private static object ConvertValueWithYamlColumns(Deserializer deserializer, Dictionary<string, object> value, IEnumerable<string> yamlColumnNames) {
             return value.ToDictionary(
                 pair => pair.Key,
                 pair => {
                     if (pair.Value == null) {
                         return null;
-                    } else if (yamlColumnNames != null && yamlColumnNames.Contains(pair.Key)) {
+                    } else if (yamlColumnNames.Contains(pair.Key)) {
                         return deserializer.Deserialize(new StringReader(pair.Value.ToString()));
                     } else {
                         return pair.Value;
                     }
                 }
             );
+        }
+
+        private static IEnumerable<string> GetYamlColumnNamesInRecord(Dictionary<string, object> record, YamlColumnNamesType yamlColumnNames) {
+            if (record == null || yamlColumnNames == null) return new string[] { };
+            return record.Keys.Where(key => yamlColumnNames.Contains(key));
         }
     }
 
