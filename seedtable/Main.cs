@@ -329,7 +329,7 @@ namespace SeedTable {
             Dictionary<string, string> excelToYamlMapping;
 
             public bool IsUseSheet(string sheetName) {
-                if (IgnoreSheetNames.Contains(sheetName)) return true;
+                if (IgnoreSheetNames.Contains(sheetName)) return false;
                 if (OnlySheetNames.Count != 0 && !OnlySheetNames.Contains(sheetName)) return false;
                 return true;
             }
