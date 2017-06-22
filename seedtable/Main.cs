@@ -393,6 +393,7 @@ namespace SeedTable {
                 if (!result.Success) throw new Exception($"{mixedName} is wrong sheet name and subdivide rule definition");
                 var cutPrefixStr = result.Groups[1].Value;
                 var fileName = result.Groups[2].Value;
+                if (fileName.Length == 0) fileName = "*";
                 var sheetName = result.Groups[3].Value;
                 var cutPostfixStr = result.Groups[4].Value;
                 var needSubdivide = cutPrefixStr.Length != 0 || cutPostfixStr.Length != 0;
@@ -408,7 +409,7 @@ namespace SeedTable {
             public int CutPostfix { get; }
 
             public SheetNameWithSubdivide(string fileName, string sheetName, bool needSubdivide = false, int cutPrefix = 0, int cutPostfix = 0) {
-                FileName = new Wildcard(fileName ?? "*");
+                FileName = new Wildcard(fileName);
                 SheetName = new Wildcard(sheetName);
                 NeedSubdivide = needSubdivide;
                 CutPrefix = cutPrefix;
