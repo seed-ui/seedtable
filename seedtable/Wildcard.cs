@@ -8,14 +8,14 @@ namespace SeedTable {
 
         public Wildcards(IEnumerable<T> wildcards) : base(
             wildcards.Where(
-                wildcard => wildcard.MatchType == Wildcard.WildcardMatchType.Exact
+                wildcard => wildcard.MatchType == WildcardMatchType.Exact
             ).Concat(
                 wildcards.Where(
-                    wildcard => wildcard.MatchType == Wildcard.WildcardMatchType.Wildcard
+                    wildcard => wildcard.MatchType == WildcardMatchType.Wildcard
                 )
             ).Concat(
                 wildcards.Where(
-                    wildcard => wildcard.MatchType == Wildcard.WildcardMatchType.All
+                    wildcard => wildcard.MatchType == WildcardMatchType.All
                 ).Take(1)
             )
         ) { }
@@ -56,11 +56,11 @@ namespace SeedTable {
                     return true;
             }
         }
+    }
 
-        public enum WildcardMatchType {
-            All = 0,
-            Wildcard,
-            Exact,
-        }
+    public enum WildcardMatchType {
+        All = 0,
+        Wildcard,
+        Exact,
     }
 }
