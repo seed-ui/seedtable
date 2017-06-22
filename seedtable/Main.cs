@@ -153,6 +153,7 @@ namespace SeedTable {
 
         static DateTime SeedToExcelCore(IExcelData excelData, string file, ToOptions options, DateTime startTime, DateTime previousTime) {
             Log("  sheets");
+            var fileName = Path.GetFileName(file);
             var sheetsConfig = new SheetsConfig(options.only, options.ignore, null, options.mapping);
             foreach (var sheetName in excelData.SheetNames) {
                 var yamlTableName = sheetsConfig.YamlTableName(sheetName);
@@ -161,7 +162,7 @@ namespace SeedTable {
                 } else {
                     Log($"    {yamlTableName} -> {sheetName}");
                 }
-                if (!sheetsConfig.IsUseSheet(sheetName)) {
+                if (!sheetsConfig.IsUseSheet(fileName, sheetName)) {
                     Log("      ignore", "skip");
                     continue;
                 }
@@ -217,21 +218,21 @@ namespace SeedTable {
                         using (var excelData = OpenXml.ExcelData.FromFile(filePath, false)) {
                             var parseFinishTime = DateTime.Now;
                             DurationLog("  parse-time", startTime, parseFinishTime);
-                            previousTime = ExcelToSeedCore(excelData, options, previousTime, parseFinishTime);
+                            previousTime = ExcelToSeedCore(excelData, file, options, previousTime, parseFinishTime);
                         }
                         break;
                     case FromOptions.Engine.ClosedXML:
                         using (var excelData = ClosedXML.ExcelData.FromFile(filePath)) {
                             var parseFinishTime = DateTime.Now;
                             DurationLog("  parse-time", startTime, parseFinishTime);
-                            previousTime = ExcelToSeedCore(excelData, options, previousTime, parseFinishTime);
+                            previousTime = ExcelToSeedCore(excelData, file, options, previousTime, parseFinishTime);
                         }
                         break;
                     case FromOptions.Engine.EPPlus:
                         using (var excelData = EPPlus.ExcelData.FromFile(filePath)) {
                             var parseFinishTime = DateTime.Now;
                             DurationLog("  parse-time", startTime, parseFinishTime);
-                            previousTime = ExcelToSeedCore(excelData, options, previousTime, parseFinishTime);
+                            previousTime = ExcelToSeedCore(excelData, file, options, previousTime, parseFinishTime);
                         }
                         break;
                 }
@@ -240,8 +241,9 @@ namespace SeedTable {
             return true;
         }
 
-        static DateTime ExcelToSeedCore(IExcelData excelData, FromOptions options, DateTime startTime, DateTime previousTime) {
+        static DateTime ExcelToSeedCore(IExcelData excelData, string file, FromOptions options, DateTime startTime, DateTime previousTime) {
             Log("  sheets");
+            var fileName = Path.GetFileName(file);
             var sheetsConfig = new SheetsConfig(options.only, options.ignore, options.subdivide, options.mapping);
             foreach (var sheetName in excelData.SheetNames) {
                 var yamlTableName = sheetsConfig.YamlTableName(sheetName);
@@ -250,11 +252,11 @@ namespace SeedTable {
                 } else {
                     Log($"    {yamlTableName} <- {sheetName}");
                 }
-                if (!sheetsConfig.IsUseSheet(sheetName)) {
+                if (!sheetsConfig.IsUseSheet(fileName, sheetName)) {
                     Log("      ignore", "skip");
                     continue;
                 }
-                var subdivide = sheetsConfig.subdivide(yamlTableName);
+                var subdivide = sheetsConfig.subdivide(fileName, yamlTableName);
                 var seedTable = GetSeedTable(excelData, sheetName, options);
                 if (seedTable.Errors.Count != 0) {
                     continue;
@@ -328,15 +330,15 @@ namespace SeedTable {
             Dictionary<string, string> yamlToExcelMapping;
             Dictionary<string, string> excelToYamlMapping;
 
-            public bool IsUseSheet(string sheetName) {
-                if (IgnoreSheetNames.Contains(sheetName)) return false;
-                if (OnlySheetNames.Count != 0 && !OnlySheetNames.Contains(sheetName)) return false;
+            public bool IsUseSheet(string fileName, string sheetName) {
+                if (IgnoreSheetNames.Contains(fileName, sheetName)) return false;
+                if (OnlySheetNames.Count != 0 && !OnlySheetNames.Contains(fileName, sheetName)) return false;
                 return true;
             }
 
-            public SheetNameWithSubdivide subdivide(string sheetName) {
-                var subdivideRule = SubdivideRules.Find(sheetName);
-                return subdivideRule ?? new SheetNameWithSubdivide(sheetName);
+            public SheetNameWithSubdivide subdivide(string fileName, string sheetName) {
+                var subdivideRule = SubdivideRules.Find(fileName, sheetName);
+                return subdivideRule ?? new SheetNameWithSubdivide(fileName, sheetName);
             }
 
             public string ExcelSheetName(string yamlTableName) {
@@ -358,7 +360,7 @@ namespace SeedTable {
             }
         }
 
-        class SheetNameWithSubdivides : Wildcards<SheetNameWithSubdivide> {
+        class SheetNameWithSubdivides : List<SheetNameWithSubdivide> {
             public static SheetNameWithSubdivides FromMixed(IEnumerable<string> mixedNames = null) {
                 return mixedNames == null ?
                     new SheetNameWithSubdivides() :
@@ -369,30 +371,53 @@ namespace SeedTable {
 
             public SheetNameWithSubdivides() : base() { }
 
-            public SheetNameWithSubdivides(IEnumerable<SheetNameWithSubdivide> sheetNameWithSubdivides) : base(sheetNameWithSubdivides) { }
+            public SheetNameWithSubdivides(IEnumerable<SheetNameWithSubdivide> sheetNameWithSubdivides) : base(
+                sheetNameWithSubdivides.OrderBy(
+                    sheetNameWithSubdivide =>
+                        - (int)sheetNameWithSubdivide.FileName.MatchType - 10 * (int)sheetNameWithSubdivide.SheetName.MatchType
+                )
+            ) { }
+
+            public SheetNameWithSubdivide Find(string fileName, string sheetName) {
+                return Find(sheetNameWithSubdivide => sheetNameWithSubdivide.IsMatch(fileName, sheetName));
+            }
+
+            public bool Contains(string fileName, string sheetName) {
+                return Find(fileName, sheetName) != null;
+            }
         }
 
-        class SheetNameWithSubdivide : Wildcard {
+        class SheetNameWithSubdivide {
             public static SheetNameWithSubdivide FromMixed(string mixedName) {
-                var result = Regex.Match(mixedName, @"^(?:(\d+):)?(.+?)(?::(\d+))?$");
+                var result = Regex.Match(mixedName, @"^(?:(\d+):)?(?:([^:]+)/)?([^:/]+)(?::(\d+))?$");
                 if (!result.Success) throw new Exception($"{mixedName} is wrong sheet name and subdivide rule definition");
                 var cutPrefixStr = result.Groups[1].Value;
-                var name = result.Groups[2].Value;
-                var cutPostfixStr = result.Groups[3].Value;
+                var fileName = result.Groups[2].Value;
+                if (fileName.Length == 0) fileName = "*";
+                var sheetName = result.Groups[3].Value;
+                var cutPostfixStr = result.Groups[4].Value;
                 var needSubdivide = cutPrefixStr.Length != 0 || cutPostfixStr.Length != 0;
                 var cutPrefix = cutPrefixStr.Length == 0 ? 0 : Convert.ToInt32(cutPrefixStr);
                 var cutPostfix = cutPostfixStr.Length == 0 ? 0 : Convert.ToInt32(cutPostfixStr);
-                return new SheetNameWithSubdivide(name, needSubdivide, cutPrefix, cutPostfix);
+                return new SheetNameWithSubdivide(fileName, sheetName, needSubdivide, cutPrefix, cutPostfix);
             }
 
+            public Wildcard FileName { get; } = null;
+            public Wildcard SheetName { get; }
             public bool NeedSubdivide { get; }
             public int CutPrefix { get; }
             public int CutPostfix { get; }
 
-            public SheetNameWithSubdivide(string name, bool needSubdivide = false, int cutPrefix = 0, int cutPostfix = 0) : base(name) {
+            public SheetNameWithSubdivide(string fileName, string sheetName, bool needSubdivide = false, int cutPrefix = 0, int cutPostfix = 0) {
+                FileName = new Wildcard(fileName);
+                SheetName = new Wildcard(sheetName);
                 NeedSubdivide = needSubdivide;
                 CutPrefix = cutPrefix;
                 CutPostfix = cutPostfix;
+            }
+
+            public bool IsMatch(string fileName, string sheetName) {
+                return FileName.IsMatch(fileName) && SheetName.IsMatch(sheetName);
             }
         }
     }

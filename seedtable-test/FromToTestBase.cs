@@ -13,8 +13,12 @@ namespace seedtable_test {
         private readonly List<CommonOptions> OptionsList = new List<CommonOptions>();
 
         protected virtual FromOptions BuildFromOptions(string input = null, string output = null) {
+            return BuildFromOptions(new string[] { Paths.SourceExcelName }, input, output);
+        }
+
+        protected virtual FromOptions BuildFromOptions(IEnumerable<string> files, string input = null, string output = null) {
             var options = new FromOptions();
-            options.files = new string[] { Paths.SourceExcelName };
+            options.files = files;
             options.engine = CommonOptions.Engine.EPPlus;
             options.yamlColumns = new string[] { "data_yaml" };
             options.input = input ?? Paths.TestResourcesPath;
