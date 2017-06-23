@@ -90,6 +90,12 @@ namespace SeedTable {
         public bool calcFormulas { get; set; } = false;
     }
 
+    [Flags]
+    public enum OnOperation {
+        From = 0b01,
+        To   = 0b10,
+    }
+
     class MainClass {
         public static void Main(string[] args) {
             SeedTableInterface.InformationMessageEvent += (message) => Console.Error.WriteLine(message);
@@ -162,7 +168,7 @@ namespace SeedTable {
                 } else {
                     Log($"    {yamlTableName} -> {sheetName}");
                 }
-                if (!sheetsConfig.IsUseSheet(fileName, sheetName)) {
+                if (!sheetsConfig.IsUseSheet(fileName, sheetName, OnOperation.To)) {
                     Log("      ignore", "skip");
                     continue;
                 }
@@ -252,11 +258,11 @@ namespace SeedTable {
                 } else {
                     Log($"    {yamlTableName} <- {sheetName}");
                 }
-                if (!sheetsConfig.IsUseSheet(fileName, sheetName)) {
+                if (!sheetsConfig.IsUseSheet(fileName, sheetName, OnOperation.From)) {
                     Log("      ignore", "skip");
                     continue;
                 }
-                var subdivide = sheetsConfig.subdivide(fileName, yamlTableName);
+                var subdivide = sheetsConfig.subdivide(fileName, yamlTableName, OnOperation.From);
                 var seedTable = GetSeedTable(excelData, sheetName, options);
                 if (seedTable.Errors.Count != 0) {
                     continue;
@@ -330,14 +336,14 @@ namespace SeedTable {
             Dictionary<string, string> yamlToExcelMapping;
             Dictionary<string, string> excelToYamlMapping;
 
-            public bool IsUseSheet(string fileName, string sheetName) {
-                if (IgnoreSheetNames.Contains(fileName, sheetName)) return false;
-                if (OnlySheetNames.Count != 0 && !OnlySheetNames.Contains(fileName, sheetName)) return false;
+            public bool IsUseSheet(string fileName, string sheetName, OnOperation onOperation) {
+                if (IgnoreSheetNames.Contains(fileName, sheetName, onOperation)) return false;
+                if (OnlySheetNames.Count != 0 && !OnlySheetNames.Contains(fileName, sheetName, onOperation)) return false;
                 return true;
             }
 
-            public SheetNameWithSubdivide subdivide(string fileName, string sheetName) {
-                var subdivideRule = SubdivideRules.Find(fileName, sheetName);
+            public SheetNameWithSubdivide subdivide(string fileName, string sheetName, OnOperation onOperation) {
+                var subdivideRule = SubdivideRules.Find(fileName, sheetName, onOperation);
                 return subdivideRule ?? new SheetNameWithSubdivide(fileName, sheetName);
             }
 
@@ -378,28 +384,29 @@ namespace SeedTable {
                 )
             ) { }
 
-            public SheetNameWithSubdivide Find(string fileName, string sheetName) {
-                return Find(sheetNameWithSubdivide => sheetNameWithSubdivide.IsMatch(fileName, sheetName));
+            public SheetNameWithSubdivide Find(string fileName, string sheetName, OnOperation onOperation) {
+                return Find(sheetNameWithSubdivide => sheetNameWithSubdivide.IsMatch(fileName, sheetName, onOperation));
             }
 
-            public bool Contains(string fileName, string sheetName) {
-                return Find(fileName, sheetName) != null;
+            public bool Contains(string fileName, string sheetName, OnOperation onOperation) {
+                return Find(fileName, sheetName, onOperation) != null;
             }
         }
 
         class SheetNameWithSubdivide {
             public static SheetNameWithSubdivide FromMixed(string mixedName) {
-                var result = Regex.Match(mixedName, @"^(?:(\d+):)?(?:([^:]+)/)?([^:/]+)(?::(\d+))?$");
+                var result = Regex.Match(mixedName, @"^(?:(\d+):)?(?:([^:]+)/)?([^:/]+)(?::(\d+))?(@(?:from|to))?$");
                 if (!result.Success) throw new Exception($"{mixedName} is wrong sheet name and subdivide rule definition");
                 var cutPrefixStr = result.Groups[1].Value;
                 var fileName = result.Groups[2].Value;
                 if (fileName.Length == 0) fileName = "*";
                 var sheetName = result.Groups[3].Value;
                 var cutPostfixStr = result.Groups[4].Value;
+                if (!Enum.TryParse(result.Groups[5].Value, true, out OnOperation onOperation)) onOperation = OnOperation.From | OnOperation.To;
                 var needSubdivide = cutPrefixStr.Length != 0 || cutPostfixStr.Length != 0;
                 var cutPrefix = cutPrefixStr.Length == 0 ? 0 : Convert.ToInt32(cutPrefixStr);
                 var cutPostfix = cutPostfixStr.Length == 0 ? 0 : Convert.ToInt32(cutPostfixStr);
-                return new SheetNameWithSubdivide(fileName, sheetName, needSubdivide, cutPrefix, cutPostfix);
+                return new SheetNameWithSubdivide(fileName, sheetName, needSubdivide, cutPrefix, cutPostfix, onOperation);
             }
 
             public Wildcard FileName { get; } = null;
@@ -407,17 +414,26 @@ namespace SeedTable {
             public bool NeedSubdivide { get; }
             public int CutPrefix { get; }
             public int CutPostfix { get; }
+            public OnOperation OnOperation { get; }
 
-            public SheetNameWithSubdivide(string fileName, string sheetName, bool needSubdivide = false, int cutPrefix = 0, int cutPostfix = 0) {
+            public SheetNameWithSubdivide(
+                string fileName,
+                string sheetName,
+                bool needSubdivide = false,
+                int cutPrefix = 0,
+                int cutPostfix = 0,
+                OnOperation onOperation = OnOperation.From | OnOperation.To
+            ) {
                 FileName = new Wildcard(fileName);
                 SheetName = new Wildcard(sheetName);
                 NeedSubdivide = needSubdivide;
                 CutPrefix = cutPrefix;
                 CutPostfix = cutPostfix;
+                OnOperation = onOperation;
             }
 
-            public bool IsMatch(string fileName, string sheetName) {
-                return FileName.IsMatch(fileName) && SheetName.IsMatch(sheetName);
+            public bool IsMatch(string fileName, string sheetName, OnOperation onOperation) {
+                return FileName.IsMatch(fileName) && SheetName.IsMatch(sheetName) && OnOperation.HasFlag(onOperation);
             }
         }
     }
