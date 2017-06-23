@@ -92,8 +92,8 @@ namespace SeedTable {
 
     [Flags]
     public enum OnOperation {
-        From = 0b01,
-        To   = 0b10,
+        From = 1,
+        To   = 1 << 1,
     }
 
     class MainClass {
@@ -402,7 +402,8 @@ namespace SeedTable {
                 if (fileName.Length == 0) fileName = "*";
                 var sheetName = result.Groups[3].Value;
                 var cutPostfixStr = result.Groups[4].Value;
-                if (!Enum.TryParse(result.Groups[5].Value, true, out OnOperation onOperation)) onOperation = OnOperation.From | OnOperation.To;
+                OnOperation onOperation;
+                if (!Enum.TryParse(result.Groups[5].Value, true, out onOperation)) onOperation = OnOperation.From | OnOperation.To;
                 var needSubdivide = cutPrefixStr.Length != 0 || cutPostfixStr.Length != 0;
                 var cutPrefix = cutPrefixStr.Length == 0 ? 0 : Convert.ToInt32(cutPrefixStr);
                 var cutPostfix = cutPostfixStr.Length == 0 ? 0 : Convert.ToInt32(cutPostfixStr);
