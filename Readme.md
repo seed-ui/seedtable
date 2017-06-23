@@ -167,7 +167,7 @@ xlsx -> yaml (from) 変換で出力するseedファイルをID単位ごとに分
 
 分割しておくと、複数人で同時に別のIDのデータを編集してコミットする等の場合に、コンフリクトがおこりにくくなります。
 
-`(前削除桁数:)(xlsxファイル名/)seedテーブル名(:後削除桁数)`の形式で指定します。（複数指定はコマンドラインでは`,`区切り・GUIでは改行区切り）
+`(前削除桁数:)(xlsxファイル名/)seedテーブル名(:後削除桁数)(@fromまたは@to)`の形式で指定します。（複数指定はコマンドラインでは`,`区切り・GUIでは改行区切り）
 
 xlsxファイル名を指定する場合はパスを含まずファイル名のみ（path/to/foo.xlsxではなくfoo.xlsx）で指定してください。
 
@@ -196,6 +196,8 @@ yaml -> xlsx (to) 変換においてこの指定は考慮されません。指�
 
 上記のsubdivideの設定を同時に記述できます。
 
+`@from`または`@to`をつけたものはそれぞれxlsx -> yaml (from) 変換、yaml -> xlsx (to) 変換のみで有効になります。
+
 #### --ignore このテーブルを無視
 
 指定テーブルを無視します。
@@ -203,6 +205,8 @@ yaml -> xlsx (to) 変換においてこの指定は考慮されません。指�
 onlyに指定があってもこちらに該当すれば無視されます。
 
 テーブル名は上記のsubdivideの設定と同じようにワイルドカードで指定できます。
+
+`@from`または`@to`をつけたものはそれぞれxlsx -> yaml (from) 変換、yaml -> xlsx (to) 変換のみで有効になります。
 
 #### --mapping ymlとシート名の対応
 
@@ -354,6 +358,52 @@ Excelは数式結果値がなくとも再計算してくれますし、保存時
 ### セル範囲指定の制限
 
 EPPlusで`A:A`等行指定のないセル範囲指定は正しく変換できません。実用範囲で`A1:A10000`等として下さい。
+
+### 外部シート参照
+
+foo_barsテーブルからfoosテーブルの中身をVLOOKUPで参照したいが編集xlsxファイルは分けたい場合、以下のようにするとExcelの外部シート参照機能を使わずにseedtableで完結させることができます。
+
+foos.xlsxにfoosテーブル、foo_bars.xlsxにfoo_barsテーブルとfoosテーブルを作り、まず下記のようにyaml -> xlsx (to) 変換します。
+
+```
+seedtable to foos.xlsx bars.xlsx --seed-input seeds
+```
+
+すると例えば下記のようにデータが入ります。
+
+foos.xlsx/foos
+
+|   |  A |   B  |   C   |
+|---|----|------|-------|
+| 1 | ID | 名前 |   値   |
+| 2 | id | name | value |
+| 3 |  1 |  n1  |   v1  |
+
+foo_bars.xlsx/foo_bars
+
+|   |  A |   B  |   C   |
+|---|----|--------|----------|
+| 1 | ID | fooのID | 名前 |
+| 2 | id | foo_id | foo_name |
+| 3 |  1 |    1   | VLOOKUP(B3,foos!$A$3:$B$100, 2) |
+
+foo_bars.xlsx/foos (参照しないカラムは省いて良い)
+
+|   |  A |   B  |
+|---|----|------|
+| 1 | ID | 名前 |
+| 2 | id | name |
+| 3 |  1 |  n1  |
+
+foo_bars.xlsx/foo_barsにあるfoosテーブルへの参照が、Excelの外部参照機能を使わずに可能になっています。
+
+これを適当に編集し、下記のようにfoo_bars.xlsx/foosシートを無視してxlsx -> yaml (from) 変換すれば、適切なfoosテーブルとfoo_barsテーブルのデータが得られます。
+
+```
+seedtable from foos.xlsx bars.xlsx --output seeds --ignore foo_bars.xlsx/foos
+```
+
+seedtable-gui.exeなどGUIクライアントを用いるときは、当該の--ignore（このテーブルを無視）オプションがxlsx -> yaml (from) 変換時のみ無視されるように、`foo_bars.xlsx/foos@from`を指定してください。
 
 ## Contribute
 
