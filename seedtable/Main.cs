@@ -395,7 +395,7 @@ namespace SeedTable {
 
         class SheetNameWithSubdivide {
             public static SheetNameWithSubdivide FromMixed(string mixedName) {
-                var result = Regex.Match(mixedName, @"^(?:(\d+):)?(?:([^:]+)/)?([^:/]+)(?::(\d+))?(@(?:from|to))?$");
+                var result = Regex.Match(mixedName, @"^(?:(\d+):)?(?:([^:@]+)/)?([^:/@]+)(?::(\d+))?(?:@(from|to))?$");
                 if (!result.Success) throw new Exception($"{mixedName} is wrong sheet name and subdivide rule definition");
                 var cutPrefixStr = result.Groups[1].Value;
                 var fileName = result.Groups[2].Value;
