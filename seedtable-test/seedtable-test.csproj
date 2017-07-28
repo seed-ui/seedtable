@@ -63,6 +63,7 @@
     <Compile Include="FromTest.cs" />
     <Compile Include="FromToTestBase.cs" />
     <Compile Include="Paths.cs" />
+    <Compile Include="PrimaryTest.cs" />
     <Compile Include="SheetNameWithFileNameTest.cs" />
     <Compile Include="SubdivideTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
