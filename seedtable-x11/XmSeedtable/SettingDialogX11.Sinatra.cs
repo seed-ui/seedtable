@@ -202,6 +202,9 @@ namespace XmSeedtable
                 new LeftControls( "ymlとシート名の対応\n--mapping", (x) =>{
                         return WgtText(x, out mappingTextBox, Options.mapping);
                     }),
+                new LeftControls( "エイリアスシート名\n--alias", (x) =>{
+                        return WgtText(x, out aliasTextBox, Options.alias);
+                    }),
                 new LeftControls( "このカラム名を無視\n--ignore-columns", (x) =>{
                         return WgtText(x, out ignoreColumnsTextBox, Options.ignoreColumns);
                     }),
@@ -277,6 +280,7 @@ namespace XmSeedtable
                 yamlColumnsTextBox.Sensitive          =
                 ignoreColumnsTextBox.Sensitive        =
                 mappingTextBox.Sensitive              =
+                aliasTextBox.Sensitive                =
                 ignoreTextBox.Sensitive               =
                 onlyTextBox.Sensitive                 =
                 formatComboBox.Sensitive              =
@@ -293,6 +297,7 @@ namespace XmSeedtable
         Text yamlColumnsTextBox;
         Text ignoreColumnsTextBox;
         Text mappingTextBox;
+        Text aliasTextBox;
         Text ignoreTextBox;
         Text onlyTextBox;
         Text subdivideTextBox;

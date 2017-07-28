@@ -143,6 +143,7 @@ namespace XmSeedtable
                 options.only = setting.only;
                 options.subdivide = setting.subdivide;
                 options.mapping = setting.mapping;
+                options.alias = setting.alias;
                 options.versionColumn = setting.versionColumn;
                 options.requireVersion = setting.requireVersion;
                 options.delete = setting.delete;
@@ -175,6 +176,7 @@ namespace XmSeedtable
             options.only = setting.only;
             options.subdivide = setting.subdivide;
             options.mapping = setting.mapping;
+            options.alias = setting.alias;
             options.versionColumn = setting.versionColumn;
             options.requireVersion = setting.requireVersion;
             options.delete = setting.delete;
