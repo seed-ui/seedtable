@@ -122,6 +122,8 @@
     <Compile Include="AssemblyInfo.cs" />
     <Compile Include="SeedTable.cs" />
     <Compile Include="SeedTableInterface.cs" />
+    <Compile Include="SheetNameOnFileName.cs" />
+    <Compile Include="SheetNameOnFileNames.cs" />
     <Compile Include="SheetNameWithSubdivide.cs" />
     <Compile Include="SheetNameWithSubdivides.cs" />
     <Compile Include="SheetsConfig.cs" />
