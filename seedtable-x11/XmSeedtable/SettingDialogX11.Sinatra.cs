@@ -199,6 +199,9 @@ namespace XmSeedtable
                 new LeftControls( "このテーブルを無視\n--ignore", (x) =>{
                         return WgtText(x, out ignoreTextBox, Options.ignore);
                     }),
+                new LeftControls( "優先シート\n--primary", (x) =>{
+                        return WgtText(x, out primaryTextBox, Options.primary);
+                    }),
                 new LeftControls( "ymlとシート名の対応\n--mapping", (x) =>{
                         return WgtText(x, out mappingTextBox, Options.mapping);
                     }),
@@ -283,6 +286,7 @@ namespace XmSeedtable
                 aliasTextBox.Sensitive                =
                 ignoreTextBox.Sensitive               =
                 onlyTextBox.Sensitive                 =
+                primaryTextBox.Sensitive              =
                 formatComboBox.Sensitive              =
                 subdivideTextBox.Sensitive            =
                 dataStartRowNumericUpDown.Sensitive   =
@@ -300,6 +304,7 @@ namespace XmSeedtable
         Text aliasTextBox;
         Text ignoreTextBox;
         Text onlyTextBox;
+        Text primaryTextBox;
         Text subdivideTextBox;
         SimpleSpinBox dataStartRowNumericUpDown;
         SimpleOptionMenu engineComboBox;

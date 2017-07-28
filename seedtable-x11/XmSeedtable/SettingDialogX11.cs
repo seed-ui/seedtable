@@ -39,6 +39,7 @@ namespace XmSeedtable
             Options.alias = aliasTextBox.Value.Split('\n');
             Options.ignore = ignoreTextBox.Value.Split('\n');
             Options.only = onlyTextBox.Value.Split('\n');
+            Options.primary = primaryTextBox.Value.Split('\n');
             XHandler.Save(Options);
         }
     }

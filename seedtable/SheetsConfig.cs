@@ -7,6 +7,7 @@ namespace SeedTable {
             IEnumerable<string> only,
             IEnumerable<string> ignore,
             IEnumerable<string> subdivide = null,
+            IEnumerable<string> primary = null,
             IEnumerable<string> mapping = null,
             IEnumerable<string> alias = null
         ) {
@@ -14,6 +15,7 @@ namespace SeedTable {
             OnlySheetNames = SheetNameWithSubdivides.FromMixed(only);
             IgnoreSheetNames = SheetNameWithSubdivides.FromMixed(ignore);
             SubdivideRules = new SheetNameWithSubdivides(subdivideSheetNames.Concat(OnlySheetNames));
+            PrimarySheetNames = SheetNameOnFileNames.FromMixed(primary);
             excelToYamlMapping = mapping.Select(map => map.Split(':')).ToDictionary(map => map[1], map => map[0]);
             excelToYamlAlias = alias.Select(map => map.Split(':')).ToDictionary(map => map[1], map => map[0]);
         }
@@ -21,6 +23,7 @@ namespace SeedTable {
         SheetNameWithSubdivides SubdivideRules;
         SheetNameWithSubdivides IgnoreSheetNames;
         SheetNameWithSubdivides OnlySheetNames;
+        SheetNameOnFileNames PrimarySheetNames;
         Dictionary<string, string> excelToYamlMapping;
         Dictionary<string, string> excelToYamlAlias;
 
@@ -28,8 +31,12 @@ namespace SeedTable {
         public bool IsUseSheet(string fileName, string sheetName, OnOperation onOperation) {
             if (IgnoreSheetNames.Contains(fileName, sheetName, onOperation)) return false;
             if (OnlySheetNames.Count != 0 && !OnlySheetNames.Contains(fileName, sheetName, onOperation)) return false;
-            // エイリアス設定先のシートはfrom時変換されない
-            if (onOperation.HasFlag(OnOperation.From) && excelToYamlAlias.ContainsKey(sheetName)) return false;
+            if (onOperation.HasFlag(OnOperation.From)) {
+                // TODO: primaryでない的なnoticeを出したほうが良い
+                if (!PrimarySheetNames.IsUseSheet(fileName, sheetName)) return false;
+                // エイリアス設定先のシートはfrom時変換されない
+                if (excelToYamlAlias.ContainsKey(sheetName)) return false;
+            }
             return true;
         }
 

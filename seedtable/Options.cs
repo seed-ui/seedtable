@@ -23,7 +23,10 @@ namespace SeedTable {
         
         [Option('O', "only", Separator = ',', HelpText = "only sheet names")]
         public IEnumerable<string> only { get; set; } = new List<string> { };
-        
+
+        [Option('P', "primary", Separator = ',', HelpText = "primary file for sheet names that exists in multiple files")]
+        public IEnumerable<string> primary { get; set; } = new List<string> { };
+
         [Option('M', "mapping", Separator = ',', HelpText = "sheet names mapping : (seed table name):(excel sheet name)")]
         public IEnumerable<string> mapping { get; set; } = new List<string> { };
 
