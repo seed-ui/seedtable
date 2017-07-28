@@ -208,6 +208,12 @@ onlyに指定があってもこちらに該当すれば無視されます。
 
 `@from`または`@to`をつけたものはそれぞれxlsx -> yaml (from) 変換、yaml -> xlsx (to) 変換のみで有効になります。
 
+#### --primary 優先シート
+
+複数ファイルに同名シートが存在する場合、どのファイルのシートを変換するかを指定します。
+
+`(xlsxファイル名)/(xlsxシート名)`の形式で指定します。（複数指定はコマンドラインでは`,`区切り・GUIでは改行区切り）
+
 #### --mapping ymlとシート名の対応
 
 ymlファイル名とxlsxのシート名が同一でない場合の対応を指定します。
@@ -411,10 +417,10 @@ foo_bars.xlsx/foos (参照しないカラムは省いて良い)
 
 foo_bars.xlsx/foo_barsにあるfoosテーブルへの参照が、Excelの外部参照機能を使わずに可能になっています。
 
-これを適当に編集し、下記のようにfoo_bars.xlsx/foosシートを無視してxlsx -> yaml (from) 変換すれば、適切なfoosテーブルとfoo_barsテーブルのデータが得られます。
+これを適当に編集し、下記のようにfoos.xlsx/foosを優先シートとしてxlsx -> yaml (from) 変換すれば、適切なfoosテーブルとfoo_barsテーブルのデータが得られます。
 
 ```
-seedtable from foos.xlsx bars.xlsx --output seeds --ignore foo_bars.xlsx/foos
+seedtable from foos.xlsx bars.xlsx --output seeds --primary foos.xlsx/foos
 ```
 
 seedtable-gui.exeなどGUIクライアントを用いるときは、当該の--ignore（このテーブルを無視）オプションがxlsx -> yaml (from) 変換時のみ無視されるように、`foo_bars.xlsx/foos@from`を指定してください。
