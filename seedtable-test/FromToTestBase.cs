@@ -48,6 +48,10 @@ namespace seedtable_test {
             SeedTableInterface.SeedToExcel(options);
         }
 
+        protected IEnumerable<Dictionary<string, object>> GetYamlData(string path) {
+            return YamlData.YamlToData(File.ReadAllText(path)).Table;
+        }
+
         public void Dispose() {
             foreach (var output in OptionsList.Select(options => options.output).Distinct()) {
                 Directory.Delete(output, true);

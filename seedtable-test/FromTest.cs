@@ -19,8 +19,8 @@ namespace seedtable_test {
                 var filename = Path.GetFileName(sourcePath);
                 var destinationPath = Path.Combine(options.output, filename);
                 Assert.True(File.Exists(destinationPath));
-                var sourceContent = YamlData.YamlToData(File.ReadAllText(sourcePath)).Table;
-                var destinationContent = YamlData.YamlToData(File.ReadAllText(destinationPath)).Table;
+                var sourceContent = GetYamlData(sourcePath);
+                var destinationContent = GetYamlData(destinationPath);
                 Assert.Equal(sourceContent, destinationContent);
             }
         }
