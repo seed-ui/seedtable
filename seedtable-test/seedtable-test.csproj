@@ -59,6 +59,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AliasTest.cs" />
     <Compile Include="FromTest.cs" />
     <Compile Include="FromToTestBase.cs" />
     <Compile Include="Paths.cs" />

@@ -10,6 +10,7 @@ namespace seedtable_test {
         public static readonly string ToUnionSeedPath = Path.Combine(TestResourcesPath, "seeds_to_union");
         public static readonly string ToDeleteSeedPath = Path.Combine(TestResourcesPath, "seeds_to_delete");
         public static readonly string OtherSeedPath = Path.Combine(TestResourcesPath, "seeds_other");
+        public static readonly string AliasSeedPath = Path.Combine(TestResourcesPath, "seeds_alias");
         public static readonly string DestinationBasePath = Path.Combine("../../test-tmp");
         public static string DestinationSeedPath(string seedPath = null) {
             return Path.Combine(DestinationBasePath, seedPath ?? Path.GetRandomFileName());

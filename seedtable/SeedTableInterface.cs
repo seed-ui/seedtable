@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace SeedTable {
@@ -52,6 +53,7 @@ namespace SeedTable {
             Log("  sheets");
             var fileName = Path.GetFileName(file);
             var sheetsConfig = new SheetsConfig(options.only, options.ignore, null, options.mapping, options.alias);
+            var yamlDataCache = new Dictionary<string, YamlData>(); // aliasのため同テーブルはキャッシュする
             foreach (var sheetName in excelData.SheetNames) {
                 var yamlTableName = sheetsConfig.YamlTableName(sheetName);
                 if (yamlTableName == sheetName) {
@@ -68,11 +70,14 @@ namespace SeedTable {
                     continue;
                 }
                 YamlData yamlData = null;
-                try {
-                    yamlData = YamlData.ReadFrom(yamlTableName, options.seedInput, options.seedExtension);
-                } catch (FileNotFoundException exception) {
-                    Log("      skip", $"seed file [{exception.FileName}] not found");
-                    continue;
+                if (!yamlDataCache.TryGetValue(yamlTableName, out yamlData)) {
+                    try {
+                        yamlData = YamlData.ReadFrom(yamlTableName, options.seedInput, options.seedExtension);
+                        yamlDataCache[yamlTableName] = yamlData;
+                    } catch (FileNotFoundException exception) {
+                        Log("      skip", $"seed file [{exception.FileName}] not found");
+                        continue;
+                    }
                 }
                 try {
                     seedTable.DataToExcel(yamlData.Data, options.delete);
