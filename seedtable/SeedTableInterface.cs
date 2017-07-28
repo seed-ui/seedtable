@@ -3,7 +3,7 @@ using System.IO;
 using System.Linq;
 
 namespace SeedTable {
-    public partial class SeedTableInterface {
+    public class SeedTableInterface {
         public delegate void InformationMessageEventHandler(string message);
         public static event InformationMessageEventHandler InformationMessageEvent = delegate { };
         static void WriteInfo(string message) => InformationMessageEvent(message);

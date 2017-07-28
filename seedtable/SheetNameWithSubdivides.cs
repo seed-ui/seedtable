@@ -2,32 +2,30 @@ using System.Collections.Generic;
 using System.Linq;
 
 namespace SeedTable {
-    public partial class SeedTableInterface {
-        class SheetNameWithSubdivides : List<SheetNameWithSubdivide> {
-            public static SheetNameWithSubdivides FromMixed(IEnumerable<string> mixedNames = null) {
-                return mixedNames == null ?
-                    new SheetNameWithSubdivides() :
-                    new SheetNameWithSubdivides(
-                        mixedNames.Select(mixedName => SheetNameWithSubdivide.FromMixed(mixedName))
-                    );
-            }
+    class SheetNameWithSubdivides : List<SheetNameWithSubdivide> {
+        public static SheetNameWithSubdivides FromMixed(IEnumerable<string> mixedNames = null) {
+            return mixedNames == null ?
+                new SheetNameWithSubdivides() :
+                new SheetNameWithSubdivides(
+                    mixedNames.Select(mixedName => SheetNameWithSubdivide.FromMixed(mixedName))
+                );
+        }
 
-            public SheetNameWithSubdivides() : base() { }
+        public SheetNameWithSubdivides() : base() { }
 
-            public SheetNameWithSubdivides(IEnumerable<SheetNameWithSubdivide> sheetNameWithSubdivides) : base(
-                sheetNameWithSubdivides.OrderBy(
-                    sheetNameWithSubdivide =>
-                        - (int)sheetNameWithSubdivide.FileName.MatchType - 10 * (int)sheetNameWithSubdivide.SheetName.MatchType
-                )
-            ) { }
+        public SheetNameWithSubdivides(IEnumerable<SheetNameWithSubdivide> sheetNameWithSubdivides) : base(
+            sheetNameWithSubdivides.OrderBy(
+                sheetNameWithSubdivide =>
+                    - (int)sheetNameWithSubdivide.FileName.MatchType - 10 * (int)sheetNameWithSubdivide.SheetName.MatchType
+            )
+        ) { }
 
-            public SheetNameWithSubdivide Find(string fileName, string sheetName, OnOperation onOperation) {
-                return Find(sheetNameWithSubdivide => sheetNameWithSubdivide.IsMatch(fileName, sheetName, onOperation));
-            }
+        public SheetNameWithSubdivide Find(string fileName, string sheetName, OnOperation onOperation) {
+            return Find(sheetNameWithSubdivide => sheetNameWithSubdivide.IsMatch(fileName, sheetName, onOperation));
+        }
 
-            public bool Contains(string fileName, string sheetName, OnOperation onOperation) {
-                return Find(fileName, sheetName, onOperation) != null;
-            }
+        public bool Contains(string fileName, string sheetName, OnOperation onOperation) {
+            return Find(fileName, sheetName, onOperation) != null;
         }
     }
 }
