@@ -16,8 +16,8 @@ namespace seedtable_test {
         public SubdivideTest() {
             var options = BuildOptions();
             Prepare(options);
-            var data = YamlData.YamlToData(File.ReadAllText(Path.Combine(options.output, $"{SheetName}.yml")));
-            AllData = data.Table.OrderBy(record => record["id"]);
+            var data = GetYamlData(Path.Combine(options.output, $"{SheetName}.yml"));
+            AllData = data.OrderBy(record => record["id"]);
         }
 
         protected FromOptions BuildOptions(int? preCut = null, int? postCut = null) {
@@ -99,8 +99,7 @@ namespace seedtable_test {
             foreach (var filePath in Directory.GetFiles(destPath)) {
                 var separatedId = Path.GetFileNameWithoutExtension(filePath).Substring(4);
                 separatedAllIds.Add(separatedId.Length == 0 ? null : separatedId);
-                var data = YamlData.YamlToData(File.ReadAllText(filePath));
-                separatedAllData.Add(data.Table);
+                separatedAllData.Add(GetYamlData(filePath));
             }
             var combinedAllData = separatedAllData.SelectMany(data => data).OrderBy(record => record["id"]);
             Assert.Equal(AllData, combinedAllData);

@@ -32,8 +32,12 @@ namespace seedtable_test {
         }
 
         protected virtual ToOptions BuildToOptions(string seedInput, string xlsxInput, string output, bool calcFormulas = true) {
+            return BuildToOptions(new string[] { Paths.SourceExcelName }, seedInput, xlsxInput, output, calcFormulas);
+        }
+
+        protected virtual ToOptions BuildToOptions(IEnumerable<string> files, string seedInput, string xlsxInput, string output, bool calcFormulas = true) {
             var options = new ToOptions();
-            options.files = new string[] { Paths.SourceExcelName };
+            options.files = files;
             options.engine = CommonOptions.Engine.EPPlus;
             options.yamlColumns = new string[] { "data_yaml" };
             options.calcFormulas = calcFormulas;
@@ -46,6 +50,10 @@ namespace seedtable_test {
 
         protected void Prepare(ToOptions options) {
             SeedTableInterface.SeedToExcel(options);
+        }
+
+        protected IEnumerable<Dictionary<string, object>> GetYamlData(string path) {
+            return YamlData.YamlToData(File.ReadAllText(path)).Table;
         }
 
         public void Dispose() {

@@ -117,8 +117,14 @@
     <Compile Include="Wildcard.cs" />
     <Compile Include="OpenXml.cs" />
     <Compile Include="Main.cs" />
+    <Compile Include="OnOperation.cs" />
+    <Compile Include="Options.cs" />
     <Compile Include="AssemblyInfo.cs" />
     <Compile Include="SeedTable.cs" />
+    <Compile Include="SeedTableInterface.cs" />
+    <Compile Include="SheetNameWithSubdivide.cs" />
+    <Compile Include="SheetNameWithSubdivides.cs" />
+    <Compile Include="SheetsConfig.cs" />
     <Compile Include="YamlData.cs" />
   </ItemGroup>
   <ItemGroup>
