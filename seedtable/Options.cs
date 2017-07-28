@@ -61,7 +61,7 @@ namespace SeedTable {
         public virtual string seedExtension { get; set; } = ".yml";
     }
 
-    [Verb("from", HelpText ="Yaml from Excel")]
+    [Verb("from", HelpText ="Yaml from(<-) Excel")]
     public class FromOptions : CommonOptions {
         [Option('e', "engine", Default = Engine.EPPlus, HelpText = "parser engine")]
         public override Engine engine { get; set; } = Engine.EPPlus;
@@ -73,7 +73,7 @@ namespace SeedTable {
         public string input { get; set; } = ".";
     }
 
-    [Verb("to", HelpText = "Yaml to Excel")]
+    [Verb("to", HelpText = "Yaml to(->) Excel")]
     public class ToOptions : CommonOptions {
         [Option('e', "engine", Default = Engine.EPPlus, HelpText = "parser engine")]
         public override Engine engine { get; set; } = Engine.EPPlus;
