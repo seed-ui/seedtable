@@ -52,6 +52,8 @@
             this.mappingLabel = new System.Windows.Forms.Label();
             this.ignoreColumnsTextBox = new System.Windows.Forms.TextBox();
             this.mappingTextBox = new System.Windows.Forms.TextBox();
+            this.aliasLabel = new System.Windows.Forms.Label();
+            this.aliasTextBox = new System.Windows.Forms.TextBox();
             this.tableLayoutPanel1.SuspendLayout();
             this.mainTableLayoutPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.toOptionsBindingSource)).BeginInit();
@@ -72,7 +74,7 @@
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
             this.tableLayoutPanel1.RowCount = 1;
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(934, 254);
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(1050, 254);
             this.tableLayoutPanel1.TabIndex = 0;
             // 
             // mainTableLayoutPanel
@@ -255,31 +257,34 @@
             this.tableLayoutPanel2.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.tableLayoutPanel2.ColumnCount = 6;
-            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 16.66667F));
-            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 16.66667F));
-            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 16.66667F));
-            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 16.66667F));
-            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 16.66667F));
-            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 16.66667F));
+            this.tableLayoutPanel2.ColumnCount = 7;
+            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 14.28653F));
+            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 14.28653F));
+            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 14.28653F));
+            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 14.28653F));
+            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 14.28653F));
+            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 14.28653F));
+            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 14.28081F));
+            this.tableLayoutPanel2.Controls.Add(this.aliasTextBox, 4, 1);
             this.tableLayoutPanel2.Controls.Add(this.ignoreTextBox, 2, 1);
             this.tableLayoutPanel2.Controls.Add(this.onlyTextBox, 1, 1);
             this.tableLayoutPanel2.Controls.Add(this.subdivideLabel, 0, 0);
             this.tableLayoutPanel2.Controls.Add(this.onlyLabel, 1, 0);
             this.tableLayoutPanel2.Controls.Add(this.ignoreLabel, 2, 0);
             this.tableLayoutPanel2.Controls.Add(this.subdivideTextBox, 0, 1);
-            this.tableLayoutPanel2.Controls.Add(this.yamlColumnsLabel, 5, 0);
-            this.tableLayoutPanel2.Controls.Add(this.yamlColumnsTextBox, 5, 1);
-            this.tableLayoutPanel2.Controls.Add(this.ignoreColumnsLabel, 4, 0);
             this.tableLayoutPanel2.Controls.Add(this.mappingLabel, 3, 0);
-            this.tableLayoutPanel2.Controls.Add(this.ignoreColumnsTextBox, 4, 1);
             this.tableLayoutPanel2.Controls.Add(this.mappingTextBox, 3, 1);
+            this.tableLayoutPanel2.Controls.Add(this.yamlColumnsLabel, 6, 0);
+            this.tableLayoutPanel2.Controls.Add(this.yamlColumnsTextBox, 6, 1);
+            this.tableLayoutPanel2.Controls.Add(this.ignoreColumnsLabel, 5, 0);
+            this.tableLayoutPanel2.Controls.Add(this.ignoreColumnsTextBox, 5, 1);
+            this.tableLayoutPanel2.Controls.Add(this.aliasLabel, 4, 0);
             this.tableLayoutPanel2.Location = new System.Drawing.Point(253, 3);
             this.tableLayoutPanel2.Name = "tableLayoutPanel2";
             this.tableLayoutPanel2.RowCount = 2;
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 25F));
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel2.Size = new System.Drawing.Size(678, 248);
+            this.tableLayoutPanel2.Size = new System.Drawing.Size(794, 248);
             this.tableLayoutPanel2.TabIndex = 9;
             // 
             // ignoreTextBox
@@ -288,10 +293,10 @@
             this.ignoreTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.ignoreTextBox.Location = new System.Drawing.Point(227, 28);
+            this.ignoreTextBox.Location = new System.Drawing.Point(229, 28);
             this.ignoreTextBox.Multiline = true;
             this.ignoreTextBox.Name = "ignoreTextBox";
-            this.ignoreTextBox.Size = new System.Drawing.Size(106, 217);
+            this.ignoreTextBox.Size = new System.Drawing.Size(107, 217);
             this.ignoreTextBox.TabIndex = 6;
             // 
             // onlyTextBox
@@ -300,10 +305,10 @@
             this.onlyTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.onlyTextBox.Location = new System.Drawing.Point(115, 28);
+            this.onlyTextBox.Location = new System.Drawing.Point(116, 28);
             this.onlyTextBox.Multiline = true;
             this.onlyTextBox.Name = "onlyTextBox";
-            this.onlyTextBox.Size = new System.Drawing.Size(106, 217);
+            this.onlyTextBox.Size = new System.Drawing.Size(107, 217);
             this.onlyTextBox.TabIndex = 5;
             // 
             // subdivideLabel
@@ -318,7 +323,7 @@
             // onlyLabel
             // 
             this.onlyLabel.AutoSize = true;
-            this.onlyLabel.Location = new System.Drawing.Point(115, 0);
+            this.onlyLabel.Location = new System.Drawing.Point(116, 0);
             this.onlyLabel.Name = "onlyLabel";
             this.onlyLabel.Size = new System.Drawing.Size(106, 24);
             this.onlyLabel.TabIndex = 1;
@@ -327,7 +332,7 @@
             // ignoreLabel
             // 
             this.ignoreLabel.AutoSize = true;
-            this.ignoreLabel.Location = new System.Drawing.Point(227, 0);
+            this.ignoreLabel.Location = new System.Drawing.Point(229, 0);
             this.ignoreLabel.Name = "ignoreLabel";
             this.ignoreLabel.Size = new System.Drawing.Size(94, 24);
             this.ignoreLabel.TabIndex = 2;
@@ -342,13 +347,13 @@
             this.subdivideTextBox.Location = new System.Drawing.Point(3, 28);
             this.subdivideTextBox.Multiline = true;
             this.subdivideTextBox.Name = "subdivideTextBox";
-            this.subdivideTextBox.Size = new System.Drawing.Size(106, 217);
+            this.subdivideTextBox.Size = new System.Drawing.Size(107, 217);
             this.subdivideTextBox.TabIndex = 4;
             // 
             // yamlColumnsLabel
             // 
             this.yamlColumnsLabel.AutoSize = true;
-            this.yamlColumnsLabel.Location = new System.Drawing.Point(563, 0);
+            this.yamlColumnsLabel.Location = new System.Drawing.Point(681, 0);
             this.yamlColumnsLabel.Name = "yamlColumnsLabel";
             this.yamlColumnsLabel.Size = new System.Drawing.Size(107, 24);
             this.yamlColumnsLabel.TabIndex = 8;
@@ -360,16 +365,16 @@
             this.yamlColumnsTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.yamlColumnsTextBox.Location = new System.Drawing.Point(563, 28);
+            this.yamlColumnsTextBox.Location = new System.Drawing.Point(681, 28);
             this.yamlColumnsTextBox.Multiline = true;
             this.yamlColumnsTextBox.Name = "yamlColumnsTextBox";
-            this.yamlColumnsTextBox.Size = new System.Drawing.Size(112, 217);
+            this.yamlColumnsTextBox.Size = new System.Drawing.Size(110, 217);
             this.yamlColumnsTextBox.TabIndex = 9;
             // 
             // ignoreColumnsLabel
             // 
             this.ignoreColumnsLabel.AutoSize = true;
-            this.ignoreColumnsLabel.Location = new System.Drawing.Point(451, 0);
+            this.ignoreColumnsLabel.Location = new System.Drawing.Point(568, 0);
             this.ignoreColumnsLabel.Name = "ignoreColumnsLabel";
             this.ignoreColumnsLabel.Size = new System.Drawing.Size(96, 24);
             this.ignoreColumnsLabel.TabIndex = 3;
@@ -378,7 +383,7 @@
             // mappingLabel
             // 
             this.mappingLabel.AutoSize = true;
-            this.mappingLabel.Location = new System.Drawing.Point(339, 0);
+            this.mappingLabel.Location = new System.Drawing.Point(342, 0);
             this.mappingLabel.Name = "mappingLabel";
             this.mappingLabel.Size = new System.Drawing.Size(105, 24);
             this.mappingLabel.TabIndex = 10;
@@ -390,10 +395,10 @@
             this.ignoreColumnsTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.ignoreColumnsTextBox.Location = new System.Drawing.Point(451, 28);
+            this.ignoreColumnsTextBox.Location = new System.Drawing.Point(568, 28);
             this.ignoreColumnsTextBox.Multiline = true;
             this.ignoreColumnsTextBox.Name = "ignoreColumnsTextBox";
-            this.ignoreColumnsTextBox.Size = new System.Drawing.Size(106, 217);
+            this.ignoreColumnsTextBox.Size = new System.Drawing.Size(107, 217);
             this.ignoreColumnsTextBox.TabIndex = 7;
             // 
             // mappingTextBox
@@ -402,17 +407,38 @@
             this.mappingTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.mappingTextBox.Location = new System.Drawing.Point(339, 28);
+            this.mappingTextBox.Location = new System.Drawing.Point(342, 28);
             this.mappingTextBox.Multiline = true;
             this.mappingTextBox.Name = "mappingTextBox";
-            this.mappingTextBox.Size = new System.Drawing.Size(106, 217);
+            this.mappingTextBox.Size = new System.Drawing.Size(107, 217);
             this.mappingTextBox.TabIndex = 11;
+            // 
+            // aliasLabel
+            // 
+            this.aliasLabel.AutoSize = true;
+            this.aliasLabel.Location = new System.Drawing.Point(455, 0);
+            this.aliasLabel.Name = "aliasLabel";
+            this.aliasLabel.Size = new System.Drawing.Size(88, 24);
+            this.aliasLabel.TabIndex = 12;
+            this.aliasLabel.Text = "エイリアスシート名\r\n--alias";
+            // 
+            // aliasTextBox
+            // 
+            this.aliasTextBox.AcceptsReturn = true;
+            this.aliasTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.aliasTextBox.Location = new System.Drawing.Point(455, 28);
+            this.aliasTextBox.Multiline = true;
+            this.aliasTextBox.Name = "aliasTextBox";
+            this.aliasTextBox.Size = new System.Drawing.Size(107, 217);
+            this.aliasTextBox.TabIndex = 13;
             // 
             // SettingDialog
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(934, 254);
+            this.ClientSize = new System.Drawing.Size(1050, 254);
             this.Controls.Add(this.tableLayoutPanel1);
             this.Name = "SettingDialog";
             this.Text = "設定";
@@ -458,5 +484,7 @@
         private System.Windows.Forms.TextBox seedExtensionTextBox;
         private System.Windows.Forms.Label formatLabel;
         private System.Windows.Forms.ComboBox formatComboBox;
+        private System.Windows.Forms.TextBox aliasTextBox;
+        private System.Windows.Forms.Label aliasLabel;
     }
 }

@@ -24,6 +24,7 @@ namespace seedtable_gui {
             onlyTextBox.DataBindings.Add("Text", toOptionsStringListDataSource, "only", true, DataSourceUpdateMode.OnPropertyChanged);
             ignoreTextBox.DataBindings.Add("Text", toOptionsStringListDataSource, "ignore", true, DataSourceUpdateMode.OnPropertyChanged);
             mappingTextBox.DataBindings.Add("Text", toOptionsStringListDataSource, "mapping", true, DataSourceUpdateMode.OnPropertyChanged);
+            aliasTextBox.DataBindings.Add("Text", toOptionsStringListDataSource, "alias", true, DataSourceUpdateMode.OnPropertyChanged);
             ignoreColumnsTextBox.DataBindings.Add("Text", toOptionsStringListDataSource, "ignoreColumns", true, DataSourceUpdateMode.OnPropertyChanged);
             yamlColumnsTextBox.DataBindings.Add("Text", toOptionsStringListDataSource, "yamlColumns", true, DataSourceUpdateMode.OnPropertyChanged);
 
@@ -62,6 +63,12 @@ namespace seedtable_gui {
         public IEnumerable<string> mapping {
             get { return Options.mapping; }
             set { Options.mapping = value; }
+        }
+
+        [TypeConverter(typeof(StringListToMultiLineStringConverter))]
+        public IEnumerable<string> alias {
+            get { return Options.alias; }
+            set { Options.alias = value; }
         }
 
         [TypeConverter(typeof(StringListToMultiLineStringConverter))]
