@@ -162,6 +162,7 @@ namespace seedtable_gui {
             options.ignore = setting.ignore;
             options.only = setting.only;
             options.subdivide = setting.subdivide;
+            options.primary = setting.primary;
             options.mapping = setting.mapping;
             options.alias = setting.alias;
             options.versionColumn = setting.versionColumn;

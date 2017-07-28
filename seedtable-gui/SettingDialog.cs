@@ -23,6 +23,7 @@ namespace seedtable_gui {
             subdivideTextBox.DataBindings.Add("Text", toOptionsStringListDataSource, "subdivide", true, DataSourceUpdateMode.OnPropertyChanged);
             onlyTextBox.DataBindings.Add("Text", toOptionsStringListDataSource, "only", true, DataSourceUpdateMode.OnPropertyChanged);
             ignoreTextBox.DataBindings.Add("Text", toOptionsStringListDataSource, "ignore", true, DataSourceUpdateMode.OnPropertyChanged);
+            primaryTextBox.DataBindings.Add("Text", toOptionsStringListDataSource, "primary", true, DataSourceUpdateMode.OnPropertyChanged);
             mappingTextBox.DataBindings.Add("Text", toOptionsStringListDataSource, "mapping", true, DataSourceUpdateMode.OnPropertyChanged);
             aliasTextBox.DataBindings.Add("Text", toOptionsStringListDataSource, "alias", true, DataSourceUpdateMode.OnPropertyChanged);
             ignoreColumnsTextBox.DataBindings.Add("Text", toOptionsStringListDataSource, "ignoreColumns", true, DataSourceUpdateMode.OnPropertyChanged);
@@ -57,6 +58,12 @@ namespace seedtable_gui {
         public IEnumerable<string> ignore {
             get { return Options.ignore; }
             set { Options.ignore = value; }
+        }
+
+        [TypeConverter(typeof(StringListToMultiLineStringConverter))]
+        public IEnumerable<string> primary {
+            get { return Options.primary; }
+            set { Options.primary = value; }
         }
 
         [TypeConverter(typeof(StringListToMultiLineStringConverter))]
