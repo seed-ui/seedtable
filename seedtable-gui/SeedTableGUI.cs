@@ -121,24 +121,25 @@ namespace seedtable_gui {
             } else {
                 return;
             }
-            var options = new ToOptions();
-            options.files = fileBaseNames;
-            options.seedInput = SeedPath;
-            options.xlsxInput = fileDirName;
-            options.output = DataExcelsDirectoryPath;
-            options.columnNamesRow = setting.columnNamesRow;
-            options.dataStartRow = setting.dataStartRow;
-            options.engine = setting.engine;
-            options.ignoreColumns = setting.ignoreColumns;
-            options.format = setting.format;
-            options.ignore = setting.ignore;
-            options.only = setting.only;
-            options.subdivide = setting.subdivide;
-            options.mapping = setting.mapping;
-            options.alias = setting.alias;
-            options.versionColumn = setting.versionColumn;
-            options.requireVersion = setting.requireVersion;
-            options.delete = setting.delete;
+            var options = new ToOptions() {
+                files = fileBaseNames,
+                seedInput = SeedPath,
+                xlsxInput = fileDirName,
+                output = DataExcelsDirectoryPath,
+                columnNamesRow = setting.columnNamesRow,
+                dataStartRow = setting.dataStartRow,
+                engine = setting.engine,
+                ignoreColumns = setting.ignoreColumns,
+                format = setting.format,
+                ignore = setting.ignore,
+                only = setting.only,
+                subdivide = setting.subdivide,
+                mapping = setting.mapping,
+                alias = setting.alias,
+                versionColumn = setting.versionColumn,
+                requireVersion = setting.requireVersion,
+                delete = setting.delete
+            };
             options.seedExtension = options.seedExtension;
             options.calcFormulas = setting.calcFormulas;
             var dialog = new YamlToExcelDialog(options);
@@ -149,25 +150,26 @@ namespace seedtable_gui {
             if (fileNames == null) return;
             var setting = LoadSetting();
             if (setting == null) return;
-            var options = new FromOptions();
-            options.files = fileNames;
-            options.input = ".";
-            options.output = SeedPath;
-            options.columnNamesRow = setting.columnNamesRow;
-            options.dataStartRow = setting.dataStartRow;
-            options.engine = setting.engine;
-            options.ignoreColumns = setting.ignoreColumns;
-            options.format = setting.format;
-            options.yamlColumns = setting.yamlColumns;
-            options.ignore = setting.ignore;
-            options.only = setting.only;
-            options.subdivide = setting.subdivide;
-            options.primary = setting.primary;
-            options.mapping = setting.mapping;
-            options.alias = setting.alias;
-            options.versionColumn = setting.versionColumn;
-            options.requireVersion = setting.requireVersion;
-            options.delete = setting.delete;
+            var options = new FromOptions() {
+                files = fileNames,
+                input = ".",
+                output = SeedPath,
+                columnNamesRow = setting.columnNamesRow,
+                dataStartRow = setting.dataStartRow,
+                engine = setting.engine,
+                ignoreColumns = setting.ignoreColumns,
+                format = setting.format,
+                yamlColumns = setting.yamlColumns,
+                ignore = setting.ignore,
+                only = setting.only,
+                subdivide = setting.subdivide,
+                primary = setting.primary,
+                mapping = setting.mapping,
+                alias = setting.alias,
+                versionColumn = setting.versionColumn,
+                requireVersion = setting.requireVersion,
+                delete = setting.delete
+            };
             options.seedExtension = options.seedExtension;
             var dialog = new ExcelToYamlDialog(options);
             dialog.ShowDialog();
