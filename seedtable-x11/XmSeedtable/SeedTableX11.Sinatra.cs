@@ -159,7 +159,7 @@ namespace XmSeedtable
             yamlToExcelGroupBox.BottomAttachment = AttachmentType.Form;
             yamlToExcelGroupBox.TopAttachment = AttachmentType.Form;
 
-            yamlToExcelPixmap = Pixmap.FromBuffer(this, global::XmSeedtable.Properties.Resources.yamlToExcel);
+            yamlToExcelPixmap = Pixmap.FromXpm(this, global::XmSeedtable.Properties.Resources.yamlToExcel);
             this.ToolkitResources.RetainCustomObject(yamlToExcelPixmap);
 
             yamlToExcelArea = new TonNurako.Widgets.Xm.PushButton();
@@ -169,7 +169,7 @@ namespace XmSeedtable
             yamlToExcelArea.ActivateEvent += yamlToExcelArea_Click;
             yamlToExcelGroupBox.Children.Add(yamlToExcelArea);
 
-            excelToYamlPixmap = Pixmap.FromBuffer(this, global::XmSeedtable.Properties.Resources.excelToYaml);
+            excelToYamlPixmap = Pixmap.FromXpm(this, global::XmSeedtable.Properties.Resources.excelToYaml);
             this.ToolkitResources.RetainCustomObject(excelToYamlPixmap);
 
             excelToYamlArea = new TonNurako.Widgets.Xm.PushButton();

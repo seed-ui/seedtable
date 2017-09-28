@@ -27,7 +27,7 @@ matrix:
         - SOLUTION=seedtable-x11/XmSeedtable.sln
       install:
         - sudo apt-get -qq update
-        - sudo apt-get -qq install libmotif-dev libxpm-dev libxmu-dev libxt-dev
+        - sudo apt-get -qq install libmotif-dev libxmu-dev libxt-dev
         - nuget restore seedtable.sln
         - nuget restore seedtable-x11/XmSeedtable.sln
       after_success: *after_success
