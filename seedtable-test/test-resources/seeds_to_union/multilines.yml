@@ -1,0 +1,37 @@
+data1:
+  id: 1
+  single: line1
+  multi: |-
+    line1
+    line2
+data2:
+  id: 2
+  single: line1
+  multi: |-
+    line1
+    line2
+
+    line4
+
+
+    line7
+data3:
+  id: 3
+  single: line1
+  multi: |
+
+    line2
+    line3
+
+    line5
+
+
+
+    line9
+data4:
+  id: 4
+  single: line1
+  multi: |-
+    line1
+
+    line3
