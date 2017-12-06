@@ -185,8 +185,8 @@ namespace seedtable_gui {
 
         private string[] GetDropedExcel(DragEventArgs e) {
             var fileNames = (string[]) e.Data.GetData(DataFormats.FileDrop, false);
-            if (!fileNames.All(fileName => Path.GetExtension(fileName) == ".xlsx")) {
-                MessageBox.Show("xlsxファイルだけを指定して下さい", "エラー");
+            if (!fileNames.All(fileName => AllowExtensions.Contains(Path.GetExtension(fileName)))) {
+                MessageBox.Show("xlsxまたはxlsmファイルだけを指定して下さい", "エラー");
                 return null;
             }
             return fileNames;
@@ -334,5 +334,7 @@ namespace seedtable_gui {
             get { return Path.Combine(Application.StartupPath, SettingReadOnlyFile); }
         }
         private const string SettingReadOnlyFile = "options.readonly";
+
+        private static HashSet<string> AllowExtensions = new HashSet<string> {".xlsx", ".xlsm"};
     }
 }
