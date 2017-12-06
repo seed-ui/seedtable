@@ -36,12 +36,12 @@
             this.seedPathButton = new System.Windows.Forms.Button();
             this.settingPathTextBox = new System.Windows.Forms.TextBox();
             this.settingPathButton = new System.Windows.Forms.Button();
+            this.settingButton = new System.Windows.Forms.Button();
             this.seedFolderBrowserDialog = new System.Windows.Forms.FolderBrowserDialog();
             this.settingOpenFileDialog = new System.Windows.Forms.OpenFileDialog();
             this.dataExcelFolderBrowserDialog = new System.Windows.Forms.FolderBrowserDialog();
             this.dataExcelOpenFileDialog = new System.Windows.Forms.OpenFileDialog();
             this.templateExcelOpenFileDialog = new System.Windows.Forms.OpenFileDialog();
-            this.settingButton = new System.Windows.Forms.Button();
             this.mainLayout.SuspendLayout();
             this.tableLayoutPanel2.SuspendLayout();
             this.yamlToExcelGroupBox.SuspendLayout();
@@ -210,6 +210,17 @@
             this.settingPathButton.UseVisualStyleBackColor = true;
             this.settingPathButton.Click += new System.EventHandler(this.settingPathButton_Click);
             // 
+            // settingButton
+            // 
+            this.settingButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.settingButton.Location = new System.Drawing.Point(3, 44);
+            this.settingButton.Name = "settingButton";
+            this.settingButton.Size = new System.Drawing.Size(52, 23);
+            this.settingButton.TabIndex = 6;
+            this.settingButton.Text = "設定";
+            this.settingButton.UseVisualStyleBackColor = true;
+            this.settingButton.Click += new System.EventHandler(this.settingButton_Click);
+            // 
             // seedFolderBrowserDialog
             // 
             this.seedFolderBrowserDialog.Description = "seedフォルダ";
@@ -227,26 +238,15 @@
             // 
             // dataExcelOpenFileDialog
             // 
-            this.dataExcelOpenFileDialog.Filter = "Excelファイル|*.xlsx";
+            this.dataExcelOpenFileDialog.Filter = "Excelファイル|*.xlsx;*.xlsm";
             this.dataExcelOpenFileDialog.Multiselect = true;
             this.dataExcelOpenFileDialog.ReadOnlyChecked = true;
             // 
             // templateExcelOpenFileDialog
             // 
-            this.templateExcelOpenFileDialog.Filter = "Excelファイル|*.xlsx";
+            this.templateExcelOpenFileDialog.Filter = "Excelファイル|*.xlsx;*.xlsm";
             this.templateExcelOpenFileDialog.Multiselect = true;
             this.templateExcelOpenFileDialog.ReadOnlyChecked = true;
-            // 
-            // settingButton
-            // 
-            this.settingButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.settingButton.Location = new System.Drawing.Point(3, 44);
-            this.settingButton.Name = "settingButton";
-            this.settingButton.Size = new System.Drawing.Size(52, 23);
-            this.settingButton.TabIndex = 6;
-            this.settingButton.Text = "設定";
-            this.settingButton.UseVisualStyleBackColor = true;
-            this.settingButton.Click += new System.EventHandler(this.settingButton_Click);
             // 
             // SeedTableGUI
             // 
