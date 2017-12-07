@@ -11,7 +11,7 @@ _after_success: &after_success
   - zip -r -9 XmSeedtable-${TRAVIS_OS_NAME}.zip XmSeedtable
 _script_with_test: &script_with_test
   - xbuild /p:Configuration=Release ${SOLUTION}
-  - mono ./packages/xunit.runner.console.2.2.0/tools/xunit.console.exe ./seedtable-test/bin/Release/seedtable-test.dll -verbose
+  - mono ./packages/xunit.runner.console.2.3.1/tools/net452/xunit.console.exe ./seedtable-test/bin/Release/seedtable-test.dll -verbose
 language: csharp
 solution: ${SOLUTION}
 matrix:
