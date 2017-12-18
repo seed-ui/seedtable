@@ -46,9 +46,7 @@ matrix:
         # - hdiutil unmount /Volumes/XQuartz-${XQUARTZ_VERSION}
         - brew update
         - brew install homebrew/x11/openmotif
-        # - cat seedtable-x11/TonNurako/TonNurakoEx/Config.mp3 | sed 's/\/usr\/lib\//\/usr\/local\/lib\//g' | sed 's/\/usr\/include\//\/usr\/local\/include\//g' | sed 's/\/usr\/X11R6\//\/usr\/X11\//g' > seedtable-x11/TonNurako/TonNurakoEx/Site.mp3
         - nuget restore seedtable.sln
         - nuget restore seedtable-x11/XmSeedtable.sln
-        - cd seedtable-x11/TonNurako/TonNurakoEx && make audio && cd ../../..
       after_success: *after_success
       deploy: *deploy
