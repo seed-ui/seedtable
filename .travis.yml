@@ -36,6 +36,7 @@ matrix:
     - env:
         - SOLUTION=seedtable-x11/XmSeedtable.sln
         # - XQUARTZ_VERSION=2.7.8
+        - PKG_CONFIG_PATH=/opt/X11/lib/pkgconfig
       os: osx
       osx_image: xcode7.3
       install:
