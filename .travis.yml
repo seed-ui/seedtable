@@ -35,16 +35,17 @@ matrix:
       deploy: *deploy
     - env:
         - SOLUTION=seedtable-x11/XmSeedtable.sln
-        - XQUARTZ_VERSION=2.7.8
+        # - XQUARTZ_VERSION=2.7.8
+        - PKG_CONFIG_PATH=/opt/X11/lib/pkgconfig
       os: osx
+      osx_image: xcode7.3
       install:
-        - curl -L -O http://xquartz.macosforge.org/downloads/SL/XQuartz-${XQUARTZ_VERSION}.dmg
-        - hdiutil mount XQuartz-${XQUARTZ_VERSION}.dmg
-        - sudo installer -store -pkg /Volumes/XQuartz-${XQUARTZ_VERSION}/XQuartz.pkg -target /
-        - hdiutil unmount /Volumes/XQuartz-${XQUARTZ_VERSION}
+        # - curl -L -O http://xquartz.macosforge.org/downloads/SL/XQuartz-${XQUARTZ_VERSION}.dmg
+        # - hdiutil mount XQuartz-${XQUARTZ_VERSION}.dmg
+        # - sudo installer -store -pkg /Volumes/XQuartz-${XQUARTZ_VERSION}/XQuartz.pkg -target /
+        # - hdiutil unmount /Volumes/XQuartz-${XQUARTZ_VERSION}
         - brew update
         - brew install homebrew/x11/openmotif
-        - cat seedtable-x11/TonNurako/TonNurakoEx/Config.mp3 | sed 's/\/usr\/dt\//\/usr\/local\//g' | sed 's/\/usr\/X11R6\//\/usr\/X11\//g' > seedtable-x11/TonNurako/TonNurakoEx/Site.mp3
         - nuget restore seedtable.sln
         - nuget restore seedtable-x11/XmSeedtable.sln
       after_success: *after_success
