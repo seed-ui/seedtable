@@ -13,7 +13,7 @@ _script_with_test: &script_with_test
   - xbuild /p:Configuration=Release ${SOLUTION}
   - mono ./packages/xunit.runner.console.2.3.1/tools/net452/xunit.console.exe ./seedtable-test/bin/Release/seedtable-test.dll -verbose
 language: csharp
-mono: 5.0.1
+mono: latest
 solution: ${SOLUTION}
 matrix:
   include:
@@ -45,7 +45,7 @@ matrix:
         # - sudo installer -store -pkg /Volumes/XQuartz-${XQUARTZ_VERSION}/XQuartz.pkg -target /
         # - hdiutil unmount /Volumes/XQuartz-${XQUARTZ_VERSION}
         - brew update
-        - brew install homebrew/x11/openmotif
+        - brew install openmotif
         - nuget restore seedtable.sln
         - nuget restore seedtable-x11/XmSeedtable.sln
       after_success: *after_success
