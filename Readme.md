@@ -31,9 +31,11 @@ Excelは大きな長所と同時に大きな短所をもち、運用上の扱い
 
 ## Requires
 
-.NET Framework 4.6.1以上が必要だと思います。 (Windows)
+Windows: .NET Framework 4.6.1以上
 
-Monoだと4.4以降で動きます。(Mac / Linux)
+Linux: Mono 4.4以上
+
+Mac: Mono 4.4～5.0.1 (5.2以降だとseedtable-guiが動きません)
 
 ## Install
 
