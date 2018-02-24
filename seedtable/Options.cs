@@ -156,14 +156,4 @@ namespace SeedTable {
         [Option('c', "calc-formulas", Default = false, HelpText = "calculate all formulas and store results to cache fields")]
         public bool calcFormulas { get; set; } = false;
     }
-
-    public class BasicOptions : CommonBasicOptions, IBasicOptions {
-        public IEnumerable<string> yamlColumns { get; set; } = new List<string> { };
-
-        public IEnumerable<string> primary { get; set; } = new List<string> { };
-
-        public IEnumerable<string> subdivide { get; set; } = new List<string> { };
-
-        public bool calcFormulas { get; set; } = false;
-    }
 }

@@ -129,25 +129,12 @@ namespace XmSeedtable
                 YamlToExcelTargetFolder = System.IO.Path.Combine(d.Directory, d.TextString);
                 SaveFormValues();
 
-                var options = new ToOptions();
-                options.files = fileBaseNames;
-                options.seedInput = SeedPath;
-                options.xlsxInput = fileDirName;
-                options.output = YamlToExcelTargetFolder;
-                options.columnNamesRow = setting.columnNamesRow;
-                options.dataStartRow = setting.dataStartRow;
-                options.engine = setting.engine;
-                options.ignoreColumns = setting.ignoreColumns;
-                options.format = setting.format;
-                options.ignore = setting.ignore;
-                options.only = setting.only;
-                options.mapping = setting.mapping;
-                options.alias = setting.alias;
-                options.versionColumn = setting.versionColumn;
-                options.requireVersion = setting.requireVersion;
-                options.delete = setting.delete;
-                options.seedExtension = setting.seedExtension;
-                options.calcFormulas = setting.calcFormulas;
+                var options = setting.ToOptions(
+                    files: fileBaseNames,
+                    seedInput: SeedPath,
+                    xlsxInput: fileDirName,
+                    output: YamlToExcelTargetFolder
+                );
                 d.Destroy();
 
                 var dialog = new YamlToExcelDialogX11(options);
@@ -161,26 +148,11 @@ namespace XmSeedtable
             if (fileNames == null) return;
             var setting = LoadSetting();
             if (setting == null) return;
-            var options = new FromOptions();
-            options.files = fileNames;
-            options.input = ".";
-            options.output = SeedPath;
-            options.columnNamesRow = setting.columnNamesRow;
-            options.dataStartRow = setting.dataStartRow;
-            options.engine = setting.engine;
-            options.ignoreColumns = setting.ignoreColumns;
-            options.format = setting.format;
-            options.yamlColumns = setting.yamlColumns;
-            options.ignore = setting.ignore;
-            options.only = setting.only;
-            options.subdivide = setting.subdivide;
-            options.primary = setting.primary;
-            options.mapping = setting.mapping;
-            options.alias = setting.alias;
-            options.versionColumn = setting.versionColumn;
-            options.requireVersion = setting.requireVersion;
-            options.delete = setting.delete;
-            options.seedExtension = setting.seedExtension;
+            var options = setting.FromOptions(
+                files: fileNames,
+                input: ".",
+                output: SeedPath
+            );
 
             var dialog = new ExcelToYamlDialogX11(options);
             this.Layout.Children.Add(dialog);
@@ -256,32 +228,18 @@ namespace XmSeedtable
                 if (showAlert) ShowMessageBox("指定された設定ファイルがありません", "エラー");
                 return null;
             }
-            var yaml = File.ReadAllText(SettingPath);
-            var builder = new DeserializerBuilder();
-            builder.WithNamingConvention(new HyphenatedNamingConvention());
-            builder.IgnoreUnmatchedProperties();
-            var deserializer = builder.Build();
-            var options = deserializer.Deserialize<BasicOptions>(yaml);
-            if (options == null) {
-               if (showAlert)  ShowMessageBox("設定ファイルが空です", "エラー");
-                return null;
-            }
-            return options;
+            return BasicOptions.Load(SettingPath);
         }
 
         private const string DefaultSettingFile = "options.yml";
 
         internal void SaveSetting(BasicOptions options) {
-            var builder = new SerializerBuilder();
-            builder.WithNamingConvention(new HyphenatedNamingConvention());
-            var serializer = builder.Build();
-            var yaml = serializer.Serialize(options);
             if (SettingPath == null || SettingPath.Length == 0) {
                 // TODO: もう少しエレガントな方法は無いものか
                 SettingPath =
                     Path.Combine(Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location), DefaultSettingFile);
             }
-            File.WriteAllText(SettingPath, yaml);
+            options.Save(SettingPath);
         }
 
         public class SettingHandler {

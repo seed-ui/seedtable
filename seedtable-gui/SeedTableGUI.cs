@@ -121,26 +121,12 @@ namespace seedtable_gui {
             } else {
                 return;
             }
-            var options = new ToOptions() {
-                files = fileBaseNames,
-                seedInput = SeedPath,
-                xlsxInput = fileDirName,
-                output = DataExcelsDirectoryPath,
-                columnNamesRow = setting.columnNamesRow,
-                dataStartRow = setting.dataStartRow,
-                engine = setting.engine,
-                ignoreColumns = setting.ignoreColumns,
-                format = setting.format,
-                ignore = setting.ignore,
-                only = setting.only,
-                mapping = setting.mapping,
-                alias = setting.alias,
-                versionColumn = setting.versionColumn,
-                requireVersion = setting.requireVersion,
-                delete = setting.delete,
-                seedExtension = setting.seedExtension,
-                calcFormulas = setting.calcFormulas,
-            };
+            var options = setting.ToOptions(
+                files: fileBaseNames,
+                seedInput: SeedPath,
+                xlsxInput: fileDirName,
+                output: DataExcelsDirectoryPath
+            );
             var dialog = new YamlToExcelDialog(options);
             dialog.ShowDialog();
         }
@@ -149,27 +135,11 @@ namespace seedtable_gui {
             if (fileNames == null) return;
             var setting = LoadSetting();
             if (setting == null) return;
-            var options = new FromOptions() {
-                files = fileNames,
-                input = ".",
-                output = SeedPath,
-                columnNamesRow = setting.columnNamesRow,
-                dataStartRow = setting.dataStartRow,
-                engine = setting.engine,
-                ignoreColumns = setting.ignoreColumns,
-                format = setting.format,
-                yamlColumns = setting.yamlColumns,
-                ignore = setting.ignore,
-                only = setting.only,
-                subdivide = setting.subdivide,
-                primary = setting.primary,
-                mapping = setting.mapping,
-                alias = setting.alias,
-                versionColumn = setting.versionColumn,
-                requireVersion = setting.requireVersion,
-                delete = setting.delete,
-                seedExtension = setting.seedExtension,
-            };
+            var options = setting.FromOptions(
+                files: fileNames,
+                input: ".",
+                output: SeedPath
+            );
             var dialog = new ExcelToYamlDialog(options);
             dialog.ShowDialog();
         }
@@ -268,22 +238,12 @@ namespace seedtable_gui {
                 if (showAlert) MessageBox.Show("指定された設定ファイルがありません", "エラー");
                 return null;
             }
-            var yaml = File.ReadAllText(SettingPath);
-            var builder = new DeserializerBuilder();
-            builder.WithNamingConvention(new HyphenatedNamingConvention());
-            builder.IgnoreUnmatchedProperties();
-            var deserializer = builder.Build();
-            var options = deserializer.Deserialize<BasicOptions>(yaml);
-            return options ?? new BasicOptions();
+            return BasicOptions.Load(SettingPath);
         }
 
         private void SaveSetting(BasicOptions options) {
-            var builder = new SerializerBuilder();
-            builder.WithNamingConvention(new HyphenatedNamingConvention());
-            var serializer = builder.Build();
-            var yaml = serializer.Serialize(options);
             if (SettingPath == null || SettingPath.Length == 0) SettingPath = Path.Combine(Application.StartupPath, DefaultSettingFile);
-            File.WriteAllText(SettingPath, yaml);
+            options.Save(SettingPath);
         }
 
         private bool SettingReadOnly() {
