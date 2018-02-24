@@ -27,7 +27,7 @@
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.mainTableLayoutPanel = new System.Windows.Forms.TableLayoutPanel();
             this.engineComboBox = new System.Windows.Forms.ComboBox();
-            this.toOptionsBindingSource = new System.Windows.Forms.BindingSource(this.components);
+            this.basicOptionsBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.dataStartRowNumericUpDown = new System.Windows.Forms.NumericUpDown();
             this.columnNamesRowNumericUpDown = new System.Windows.Forms.NumericUpDown();
             this.engineLabel = new System.Windows.Forms.Label();
@@ -40,25 +40,25 @@
             this.formatLabel = new System.Windows.Forms.Label();
             this.formatComboBox = new System.Windows.Forms.ComboBox();
             this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
-            this.aliasTextBox = new System.Windows.Forms.TextBox();
             this.ignoreTextBox = new System.Windows.Forms.TextBox();
             this.onlyTextBox = new System.Windows.Forms.TextBox();
             this.subdivideLabel = new System.Windows.Forms.Label();
             this.onlyLabel = new System.Windows.Forms.Label();
             this.ignoreLabel = new System.Windows.Forms.Label();
             this.subdivideTextBox = new System.Windows.Forms.TextBox();
-            this.mappingLabel = new System.Windows.Forms.Label();
-            this.mappingTextBox = new System.Windows.Forms.TextBox();
-            this.yamlColumnsLabel = new System.Windows.Forms.Label();
             this.yamlColumnsTextBox = new System.Windows.Forms.TextBox();
+            this.yamlColumnsLabel = new System.Windows.Forms.Label();
             this.ignoreColumnsLabel = new System.Windows.Forms.Label();
             this.ignoreColumnsTextBox = new System.Windows.Forms.TextBox();
             this.aliasLabel = new System.Windows.Forms.Label();
+            this.aliasTextBox = new System.Windows.Forms.TextBox();
+            this.mappingLabel = new System.Windows.Forms.Label();
             this.primaryLabel = new System.Windows.Forms.Label();
+            this.mappingTextBox = new System.Windows.Forms.TextBox();
             this.primaryTextBox = new System.Windows.Forms.TextBox();
             this.tableLayoutPanel1.SuspendLayout();
             this.mainTableLayoutPanel.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.toOptionsBindingSource)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.basicOptionsBindingSource)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataStartRowNumericUpDown)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.columnNamesRowNumericUpDown)).BeginInit();
             this.tableLayoutPanel2.SuspendLayout();
@@ -117,7 +117,7 @@
             this.engineComboBox.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.engineComboBox.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.toOptionsBindingSource, "engine", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
+            this.engineComboBox.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.basicOptionsBindingSource, "engine", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.engineComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.engineComboBox.FormattingEnabled = true;
             this.engineComboBox.Location = new System.Drawing.Point(149, 3);
@@ -125,13 +125,13 @@
             this.engineComboBox.Size = new System.Drawing.Size(92, 20);
             this.engineComboBox.TabIndex = 1;
             // 
-            // toOptionsBindingSource
+            // basicOptionsBindingSource
             // 
-            this.toOptionsBindingSource.DataSource = typeof(SeedTable.ToOptions);
+            this.basicOptionsBindingSource.DataSource = typeof(SeedTable.BasicOptions);
             // 
             // dataStartRowNumericUpDown
             // 
-            this.dataStartRowNumericUpDown.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.toOptionsBindingSource, "dataStartRow", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
+            this.dataStartRowNumericUpDown.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.basicOptionsBindingSource, "dataStartRow", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.dataStartRowNumericUpDown.Location = new System.Drawing.Point(149, 73);
             this.dataStartRowNumericUpDown.Name = "dataStartRowNumericUpDown";
             this.dataStartRowNumericUpDown.Size = new System.Drawing.Size(38, 19);
@@ -139,7 +139,7 @@
             // 
             // columnNamesRowNumericUpDown
             // 
-            this.columnNamesRowNumericUpDown.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.toOptionsBindingSource, "columnNamesRow", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
+            this.columnNamesRowNumericUpDown.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.basicOptionsBindingSource, "columnNamesRow", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.columnNamesRowNumericUpDown.Location = new System.Drawing.Point(149, 38);
             this.columnNamesRowNumericUpDown.Name = "columnNamesRowNumericUpDown";
             this.columnNamesRowNumericUpDown.Size = new System.Drawing.Size(37, 19);
@@ -183,7 +183,7 @@
             this.seedExtensionTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.seedExtensionTextBox.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.toOptionsBindingSource, "seedExtension", true));
+            this.seedExtensionTextBox.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.basicOptionsBindingSource, "seedExtension", true));
             this.seedExtensionTextBox.Location = new System.Drawing.Point(149, 108);
             this.seedExtensionTextBox.Name = "seedExtensionTextBox";
             this.seedExtensionTextBox.Size = new System.Drawing.Size(92, 19);
@@ -207,7 +207,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.calcFormulasCheckBox.AutoSize = true;
             this.mainTableLayoutPanel.SetColumnSpan(this.calcFormulasCheckBox, 2);
-            this.calcFormulasCheckBox.DataBindings.Add(new System.Windows.Forms.Binding("Checked", this.toOptionsBindingSource, "calcFormulas", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
+            this.calcFormulasCheckBox.DataBindings.Add(new System.Windows.Forms.Binding("Checked", this.basicOptionsBindingSource, "calcFormulas", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.calcFormulasCheckBox.Location = new System.Drawing.Point(3, 213);
             this.calcFormulasCheckBox.Name = "calcFormulasCheckBox";
             this.calcFormulasCheckBox.Size = new System.Drawing.Size(238, 32);
@@ -222,7 +222,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.deleteCheckBox.AutoSize = true;
             this.mainTableLayoutPanel.SetColumnSpan(this.deleteCheckBox, 2);
-            this.deleteCheckBox.DataBindings.Add(new System.Windows.Forms.Binding("Checked", this.toOptionsBindingSource, "delete", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
+            this.deleteCheckBox.DataBindings.Add(new System.Windows.Forms.Binding("Checked", this.basicOptionsBindingSource, "delete", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.deleteCheckBox.Location = new System.Drawing.Point(3, 178);
             this.deleteCheckBox.Name = "deleteCheckBox";
             this.deleteCheckBox.Size = new System.Drawing.Size(238, 29);
@@ -246,7 +246,7 @@
             this.formatComboBox.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.formatComboBox.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.toOptionsBindingSource, "format", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
+            this.formatComboBox.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.basicOptionsBindingSource, "format", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.formatComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.formatComboBox.FormattingEnabled = true;
             this.formatComboBox.Location = new System.Drawing.Point(149, 143);
@@ -291,18 +291,6 @@
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanel2.Size = new System.Drawing.Size(905, 248);
             this.tableLayoutPanel2.TabIndex = 9;
-            // 
-            // aliasTextBox
-            // 
-            this.aliasTextBox.AcceptsReturn = true;
-            this.aliasTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.aliasTextBox.Location = new System.Drawing.Point(568, 28);
-            this.aliasTextBox.Multiline = true;
-            this.aliasTextBox.Name = "aliasTextBox";
-            this.aliasTextBox.Size = new System.Drawing.Size(107, 217);
-            this.aliasTextBox.TabIndex = 13;
             // 
             // ignoreTextBox
             // 
@@ -367,36 +355,6 @@
             this.subdivideTextBox.Size = new System.Drawing.Size(107, 217);
             this.subdivideTextBox.TabIndex = 4;
             // 
-            // mappingLabel
-            // 
-            this.mappingLabel.AutoSize = true;
-            this.mappingLabel.Location = new System.Drawing.Point(455, 0);
-            this.mappingLabel.Name = "mappingLabel";
-            this.mappingLabel.Size = new System.Drawing.Size(105, 24);
-            this.mappingLabel.TabIndex = 10;
-            this.mappingLabel.Text = "ymlとシート名の対応\r\n--mapping";
-            // 
-            // mappingTextBox
-            // 
-            this.mappingTextBox.AcceptsReturn = true;
-            this.mappingTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.mappingTextBox.Location = new System.Drawing.Point(455, 28);
-            this.mappingTextBox.Multiline = true;
-            this.mappingTextBox.Name = "mappingTextBox";
-            this.mappingTextBox.Size = new System.Drawing.Size(107, 217);
-            this.mappingTextBox.TabIndex = 11;
-            // 
-            // yamlColumnsLabel
-            // 
-            this.yamlColumnsLabel.AutoSize = true;
-            this.yamlColumnsLabel.Location = new System.Drawing.Point(794, 0);
-            this.yamlColumnsLabel.Name = "yamlColumnsLabel";
-            this.yamlColumnsLabel.Size = new System.Drawing.Size(107, 24);
-            this.yamlColumnsLabel.TabIndex = 8;
-            this.yamlColumnsLabel.Text = "YAML扱いするカラム \r\n--yaml-columns";
-            // 
             // yamlColumnsTextBox
             // 
             this.yamlColumnsTextBox.AcceptsReturn = true;
@@ -408,6 +366,15 @@
             this.yamlColumnsTextBox.Name = "yamlColumnsTextBox";
             this.yamlColumnsTextBox.Size = new System.Drawing.Size(108, 217);
             this.yamlColumnsTextBox.TabIndex = 9;
+            // 
+            // yamlColumnsLabel
+            // 
+            this.yamlColumnsLabel.AutoSize = true;
+            this.yamlColumnsLabel.Location = new System.Drawing.Point(794, 0);
+            this.yamlColumnsLabel.Name = "yamlColumnsLabel";
+            this.yamlColumnsLabel.Size = new System.Drawing.Size(107, 24);
+            this.yamlColumnsLabel.TabIndex = 8;
+            this.yamlColumnsLabel.Text = "YAML扱いするカラム \r\n--yaml-columns";
             // 
             // ignoreColumnsLabel
             // 
@@ -439,6 +406,27 @@
             this.aliasLabel.TabIndex = 12;
             this.aliasLabel.Text = "エイリアスシート名\r\n--alias";
             // 
+            // aliasTextBox
+            // 
+            this.aliasTextBox.AcceptsReturn = true;
+            this.aliasTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.aliasTextBox.Location = new System.Drawing.Point(568, 28);
+            this.aliasTextBox.Multiline = true;
+            this.aliasTextBox.Name = "aliasTextBox";
+            this.aliasTextBox.Size = new System.Drawing.Size(107, 217);
+            this.aliasTextBox.TabIndex = 13;
+            // 
+            // mappingLabel
+            // 
+            this.mappingLabel.AutoSize = true;
+            this.mappingLabel.Location = new System.Drawing.Point(455, 0);
+            this.mappingLabel.Name = "mappingLabel";
+            this.mappingLabel.Size = new System.Drawing.Size(105, 24);
+            this.mappingLabel.TabIndex = 10;
+            this.mappingLabel.Text = "ymlとシート名の対応\r\n--mapping";
+            // 
             // primaryLabel
             // 
             this.primaryLabel.AutoSize = true;
@@ -447,6 +435,18 @@
             this.primaryLabel.Size = new System.Drawing.Size(57, 24);
             this.primaryLabel.TabIndex = 14;
             this.primaryLabel.Text = "優先シート\r\n--primary";
+            // 
+            // mappingTextBox
+            // 
+            this.mappingTextBox.AcceptsReturn = true;
+            this.mappingTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.mappingTextBox.Location = new System.Drawing.Point(455, 28);
+            this.mappingTextBox.Multiline = true;
+            this.mappingTextBox.Name = "mappingTextBox";
+            this.mappingTextBox.Size = new System.Drawing.Size(107, 217);
+            this.mappingTextBox.TabIndex = 11;
             // 
             // primaryTextBox
             // 
@@ -471,7 +471,7 @@
             this.tableLayoutPanel1.ResumeLayout(false);
             this.mainTableLayoutPanel.ResumeLayout(false);
             this.mainTableLayoutPanel.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.toOptionsBindingSource)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.basicOptionsBindingSource)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataStartRowNumericUpDown)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.columnNamesRowNumericUpDown)).EndInit();
             this.tableLayoutPanel2.ResumeLayout(false);
@@ -501,7 +501,7 @@
         private System.Windows.Forms.Label ignoreLabel;
         private System.Windows.Forms.Label ignoreColumnsLabel;
         private System.Windows.Forms.TextBox subdivideTextBox;
-        private System.Windows.Forms.BindingSource toOptionsBindingSource;
+        private System.Windows.Forms.BindingSource basicOptionsBindingSource;
         private System.Windows.Forms.Label yamlColumnsLabel;
         private System.Windows.Forms.TextBox yamlColumnsTextBox;
         private System.Windows.Forms.Label mappingLabel;

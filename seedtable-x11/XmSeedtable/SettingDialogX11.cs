@@ -6,12 +6,12 @@ namespace XmSeedtable
         TonNurako.Widgets.Xm.DialogShell
     {
 
-        ToOptions Options { get; }
+        BasicOptions Options { get; }
         SeedTableX11.SettingHandler XHandler {get;}
 
         bool Changable = false;
         public bool Status {get; private set;} = false;
-        public SettingDialogX11(ToOptions options,bool changeable, SeedTableX11.SettingHandler handler) : base() {
+        public SettingDialogX11(BasicOptions options,bool changeable, SeedTableX11.SettingHandler handler) : base() {
             this.Width = 700;
             this.Height = 600;
             Options = options;

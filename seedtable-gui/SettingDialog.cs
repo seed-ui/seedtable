@@ -13,13 +13,13 @@ using SeedTable;
 
 namespace seedtable_gui {
     public partial class SettingDialog : Form {
-        public SettingDialog(ToOptions options, bool changeable = true) {
+        public SettingDialog(BasicOptions options, bool changeable = true) {
             InitializeComponent();
             foreach (Control controll in Controls) {
                 controll.Enabled = changeable;
             }
 
-            var toOptionsStringListDataSource = new ToOptionsStringListDataSource(options);
+            var toOptionsStringListDataSource = new CommonOptionsStringListDataSource(options);
             subdivideTextBox.DataBindings.Add("Text", toOptionsStringListDataSource, "subdivide", true, DataSourceUpdateMode.OnPropertyChanged);
             onlyTextBox.DataBindings.Add("Text", toOptionsStringListDataSource, "only", true, DataSourceUpdateMode.OnPropertyChanged);
             ignoreTextBox.DataBindings.Add("Text", toOptionsStringListDataSource, "ignore", true, DataSourceUpdateMode.OnPropertyChanged);
@@ -29,16 +29,16 @@ namespace seedtable_gui {
             ignoreColumnsTextBox.DataBindings.Add("Text", toOptionsStringListDataSource, "ignoreColumns", true, DataSourceUpdateMode.OnPropertyChanged);
             yamlColumnsTextBox.DataBindings.Add("Text", toOptionsStringListDataSource, "yamlColumns", true, DataSourceUpdateMode.OnPropertyChanged);
 
-            engineComboBox.DataSource = Enum.GetValues(typeof(ToOptions.Engine));
+            engineComboBox.DataSource = Enum.GetValues(typeof(BasicOptions.Engine));
             formatComboBox.DataSource = Enum.GetValues(typeof(SeedYamlFormat));
-            toOptionsBindingSource.DataSource = options;
+            basicOptionsBindingSource.DataSource = options;
         }
     }
 
-    class ToOptionsStringListDataSource {
-        ToOptions Options;
+    class CommonOptionsStringListDataSource {
+        BasicOptions Options;
 
-        public ToOptionsStringListDataSource(ToOptions options) {
+        public CommonOptionsStringListDataSource(BasicOptions options) {
             Options = options;
         }
 
