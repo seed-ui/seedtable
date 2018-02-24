@@ -119,6 +119,9 @@ namespace SeedTable {
 
         [Option('o', "output", Default = ".", HelpText = "output directory")]
         public virtual string output { get; set; } = ".";
+
+        [Option('C', "config", HelpText = "settings file (ignore non IO commandline options)")]
+        public virtual string config { get; set; }
     }
 
     [Verb("from", HelpText ="Yaml from(<-) Excel")]
@@ -128,6 +131,9 @@ namespace SeedTable {
 
         [Option('o', "output", Default = ".", HelpText = "output directory")]
         public override string output { get; set; } = ".";
+
+        [Option('C', "config", HelpText = "settings file (ignore non IO commandline options)")]
+        public override string config { get; set; }
 
         // [Option('d', "stdout", Default = false, HelpText = "output one sheets to stdout")]
         // public bool stdout { get; set; }
@@ -152,6 +158,9 @@ namespace SeedTable {
 
         [Option('o', "output", Default = ".", HelpText = "output directory")]
         public override string output { get; set; } = ".";
+
+        [Option('C', "config", HelpText = "settings file (ignore non IO commandline options)")]
+        public override string config { get; set; }
 
         [Option('c', "calc-formulas", Default = false, HelpText = "calculate all formulas and store results to cache fields")]
         public bool calcFormulas { get; set; } = false;
