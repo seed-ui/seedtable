@@ -141,7 +141,6 @@ namespace XmSeedtable
                 options.format = setting.format;
                 options.ignore = setting.ignore;
                 options.only = setting.only;
-                options.subdivide = setting.subdivide;
                 options.mapping = setting.mapping;
                 options.alias = setting.alias;
                 options.versionColumn = setting.versionColumn;
@@ -248,7 +247,7 @@ namespace XmSeedtable
 
         private string YamlToExcelTargetFolder { get; set; }
 
-        internal ToOptions LoadSetting(bool showAlert = true) {
+        internal BasicOptions LoadSetting(bool showAlert = true) {
             if (SettingPath == null || SettingPath.Length == 0) {
                 if (showAlert) ShowMessageBox("設定ファイルを指定して下さい", "エラー");
                 return null;
@@ -261,7 +260,7 @@ namespace XmSeedtable
             var builder = new DeserializerBuilder();
             builder.WithNamingConvention(new HyphenatedNamingConvention());
             var deserializer = builder.Build();
-            var options = deserializer.Deserialize<ToOptions>(yaml);
+            var options = deserializer.Deserialize<BasicOptions>(yaml);
             if (options == null) {
                if (showAlert)  ShowMessageBox("設定ファイルが空です", "エラー");
                 return null;
@@ -271,11 +270,7 @@ namespace XmSeedtable
 
         private const string DefaultSettingFile = "options.yml";
 
-        internal void SaveSetting(ToOptions options) {
-            // 使わないパス情報は空にして出力しないようにする
-            options.output = null;
-            options.seedInput = null;
-            options.xlsxInput = null;
+        internal void SaveSetting(BasicOptions options) {
             var builder = new SerializerBuilder();
             builder.WithNamingConvention(new HyphenatedNamingConvention());
             var serializer = builder.Build();
@@ -293,7 +288,7 @@ namespace XmSeedtable
             public SettingHandler(SeedTableX11 x) {
                 x11 = x;
             }
-            public void Save(ToOptions opt) {
+            public void Save(BasicOptions opt) {
                 x11.SaveSetting(opt);
             }
         }
@@ -305,7 +300,7 @@ namespace XmSeedtable
         private void settingButton_Click(object sender, EventArgs e) {
             var setting = LoadSetting(false);
             if (setting == null) {
-                 setting = new ToOptions();
+                 setting = new BasicOptions();
             }
             var settingReadOnly = SettingReadOnly();
 

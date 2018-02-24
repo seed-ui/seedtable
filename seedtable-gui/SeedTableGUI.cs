@@ -73,7 +73,7 @@ namespace seedtable_gui {
         }
 
         private void settingButton_Click(object sender, EventArgs e) {
-            var setting = LoadSetting(false) ?? new ToOptions();
+            var setting = LoadSetting(false) ?? new BasicOptions();
             var settingReadOnly = SettingReadOnly();
             var dialog = new SettingDialog(setting, !settingReadOnly);
             dialog.ShowDialog();
@@ -133,7 +133,6 @@ namespace seedtable_gui {
                 format = setting.format,
                 ignore = setting.ignore,
                 only = setting.only,
-                subdivide = setting.subdivide,
                 mapping = setting.mapping,
                 alias = setting.alias,
                 versionColumn = setting.versionColumn,
@@ -260,7 +259,7 @@ namespace seedtable_gui {
         }
         private string _TemplateExcelsDirectoryPath;
 
-        private ToOptions LoadSetting(bool showAlert = true) {
+        private BasicOptions LoadSetting(bool showAlert = true) {
             if (SettingPath == null || SettingPath.Length == 0) {
                 if (showAlert) MessageBox.Show("設定ファイルを指定して下さい", "エラー");
                 return null;
@@ -273,15 +272,11 @@ namespace seedtable_gui {
             var builder = new DeserializerBuilder();
             builder.WithNamingConvention(new HyphenatedNamingConvention());
             var deserializer = builder.Build();
-            var options = deserializer.Deserialize<ToOptions>(yaml);
-            return options ?? new ToOptions();
+            var options = deserializer.Deserialize<BasicOptions>(yaml);
+            return options ?? new BasicOptions();
         }
 
-        private void SaveSetting(ToOptions options) {
-            // 使わないパス情報は空にして出力しないようにする
-            options.output = null;
-            options.seedInput = null;
-            options.xlsxInput = null;
+        private void SaveSetting(BasicOptions options) {
             var builder = new SerializerBuilder();
             builder.WithNamingConvention(new HyphenatedNamingConvention());
             var serializer = builder.Build();

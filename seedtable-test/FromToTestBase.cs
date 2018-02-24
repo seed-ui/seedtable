@@ -39,7 +39,6 @@ namespace seedtable_test {
             var options = new ToOptions();
             options.files = files;
             options.engine = CommonOptions.Engine.EPPlus;
-            options.yamlColumns = new string[] { "data_yaml" };
             options.calcFormulas = calcFormulas;
             options.xlsxInput = xlsxInput;
             options.seedInput = seedInput;
