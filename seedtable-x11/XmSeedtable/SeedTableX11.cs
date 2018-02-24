@@ -259,6 +259,7 @@ namespace XmSeedtable
             var yaml = File.ReadAllText(SettingPath);
             var builder = new DeserializerBuilder();
             builder.WithNamingConvention(new HyphenatedNamingConvention());
+            builder.IgnoreUnmatchedProperties();
             var deserializer = builder.Build();
             var options = deserializer.Deserialize<BasicOptions>(yaml);
             if (options == null) {

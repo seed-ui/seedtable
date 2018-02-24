@@ -271,6 +271,7 @@ namespace seedtable_gui {
             var yaml = File.ReadAllText(SettingPath);
             var builder = new DeserializerBuilder();
             builder.WithNamingConvention(new HyphenatedNamingConvention());
+            builder.IgnoreUnmatchedProperties();
             var deserializer = builder.Build();
             var options = deserializer.Deserialize<BasicOptions>(yaml);
             return options ?? new BasicOptions();
