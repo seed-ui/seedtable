@@ -137,10 +137,10 @@ namespace seedtable_gui {
                 alias = setting.alias,
                 versionColumn = setting.versionColumn,
                 requireVersion = setting.requireVersion,
-                delete = setting.delete
+                delete = setting.delete,
+                seedExtension = setting.seedExtension,
+                calcFormulas = setting.calcFormulas,
             };
-            options.seedExtension = options.seedExtension;
-            options.calcFormulas = setting.calcFormulas;
             var dialog = new YamlToExcelDialog(options);
             dialog.ShowDialog();
         }
@@ -167,9 +167,9 @@ namespace seedtable_gui {
                 alias = setting.alias,
                 versionColumn = setting.versionColumn,
                 requireVersion = setting.requireVersion,
-                delete = setting.delete
+                delete = setting.delete,
+                seedExtension = setting.seedExtension,
             };
-            options.seedExtension = options.seedExtension;
             var dialog = new ExcelToYamlDialog(options);
             dialog.ShowDialog();
         }
