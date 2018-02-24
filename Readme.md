@@ -163,6 +163,25 @@ ClosedXMLはその2倍以上程度の時間がかかります。
 
 EPPlus(デフォルト)がおすすめです。
 
+#### --config 設定ファイル
+
+設定ファイルを使ってオプションを決めます。
+
+コマンドラインオプションのうちinput/output系のオプション以外は無視され、設定ファイルのものが常に使われます。
+
+設定ファイルは下記のように、seedtable.exeのオプションのうちinput/output系を除いた長いオプション名をyamlで設定するものです。
+
+```yaml
+ignore-columns:
+  - dummy
+subdivide:
+  - "foos:0"
+  - "bars:2"
+engine: EPPlus
+```
+
+seedtable-gui.exe、XmSeedtable.exeと共通の形式です（GUIで設定可能です）。
+
 #### --subdivide yml分割設定
 
 xlsx -> yaml (from) 変換で出力するseedファイルをID単位ごとに分割できます。
