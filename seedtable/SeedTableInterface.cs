@@ -65,14 +65,15 @@ namespace SeedTable {
                     Log("      ignore", "skip");
                     continue;
                 }
-                var seedTable = GetSeedTable(excelData, sheetName, options);
+                var subdivide = sheetsConfig.subdivide(fileName, sheetName, OnOperation.To);
+                var seedTable = GetSeedTable(excelData, sheetName, options, subdivide);
                 if (seedTable.Errors.Count != 0) {
                     continue;
                 }
                 YamlData yamlData = null;
                 if (!yamlDataCache.TryGetValue(yamlTableName, out yamlData)) {
                     try {
-                        yamlData = YamlData.ReadFrom(yamlTableName, options.seedInput, options.seedExtension);
+                        yamlData = YamlData.ReadFrom(yamlTableName, options.seedInput, options.seedExtension, subdivide.KeyColumnName);
                         yamlDataCache[yamlTableName] = yamlData;
                     } catch (FileNotFoundException exception) {
                         Log("      skip", $"seed file [{exception.FileName}] not found");
@@ -159,7 +160,7 @@ namespace SeedTable {
                     continue;
                 }
                 var subdivide = sheetsConfig.subdivide(fileName, yamlTableName, OnOperation.From);
-                var seedTable = GetSeedTable(excelData, sheetName, options);
+                var seedTable = GetSeedTable(excelData, sheetName, options, subdivide);
                 if (seedTable.Errors.Count != 0) {
                     continue;
                 }
@@ -183,8 +184,8 @@ namespace SeedTable {
             return previousTime;
         }
 
-        static SeedTableBase GetSeedTable(IExcelData excelData, string sheetName, CommonOptions options) {
-            var seedTable = excelData.GetSeedTable(sheetName, options.columnNamesRow, options.dataStartRow, options.ignoreColumns, options.versionColumn);
+        static SeedTableBase GetSeedTable(IExcelData excelData, string sheetName, CommonOptions options, SheetNameWithSubdivide subdivide) {
+            var seedTable = excelData.GetSeedTable(sheetName, options.columnNamesRow, options.dataStartRow, options.ignoreColumns, subdivide.KeyColumnName, options.versionColumn);
             if (seedTable.Errors.Count != 0) {
                 var skipExceptions = seedTable.Errors.Where(error => error is NoIdColumnException);
                 if (skipExceptions.Count() != 0) {

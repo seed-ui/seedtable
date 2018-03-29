@@ -6,6 +6,8 @@ namespace SeedTable {
     public class DataDictionaryList {
         /** [{id: 1, name: "foo"}, ...] */
         public IEnumerable<Dictionary<string, object>> Table { get; private set; }
+        /** key column name (ex. "id") */
+        public string KeyColumnName { get; private set; }
 
         /**
          * コンストラクタ
@@ -14,9 +16,10 @@ namespace SeedTable {
          *
          * @param table [{id: 1, name: "foo"}, ...]的なデータ
          */
-        public DataDictionaryList(IEnumerable<Dictionary<string, object>> table) {
+        public DataDictionaryList(IEnumerable<Dictionary<string, object>> table, string keyColumnName) {
+            KeyColumnName = keyColumnName;
             Table = table
-                .Where(rowData => rowData.ContainsKey("id") && rowData["id"] != null && (rowData["id"].ToString()).Length != 0)
+                .Where(rowData => rowData.ContainsKey(KeyColumnName) && rowData[KeyColumnName] != null && (rowData[KeyColumnName].ToString()).Length != 0)
                 .Select(rowData => rowData.ToDictionary(pair => pair.Key, pair => pair.Value is string && ((string) pair.Value) == "" ? null : pair.Value));
         }
 
@@ -26,7 +29,7 @@ namespace SeedTable {
         public Dictionary<string, Dictionary<string, object>> ToDictionaryDictionary() {
             var dic = new Dictionary<string, Dictionary<string, object>>();
             foreach (var row in Table) {
-                dic["data" + row["id"]] = row;
+                dic["data" + row[KeyColumnName]] = row;
             }
             return dic;
         }
@@ -37,7 +40,7 @@ namespace SeedTable {
         public Dictionary<string, Dictionary<string, object>> IndexById() {
             var dic = new Dictionary<string, Dictionary<string, object>>();
             foreach (var row in Table) {
-                dic[row["id"].ToString()] = row;
+                dic[row[KeyColumnName].ToString()] = row;
             }
             return dic;
         }
@@ -50,7 +53,7 @@ namespace SeedTable {
         public Dictionary<string, List<Dictionary<string, object>>> ToSeparated(int preCut = 0, int postCut = 0) {
             var dic = new Dictionary<string, List<Dictionary<string, object>>>();
             foreach (var row in Table) {
-                var id = row["id"].ToString();
+                var id = row[KeyColumnName].ToString();
                 var subdivideId = SubdivideId(id, preCut, postCut);
                 if (subdivideId == null) continue; // idが空なものはスキップ
                 var cutIdKey = "data" + subdivideId;
@@ -68,7 +71,7 @@ namespace SeedTable {
         public Dictionary<string, Dictionary<string, Dictionary<string, object>>> ToSeparatedDictionaryDictionary(int preCut = 0, int postCut = 0) {
             var dic = new Dictionary<string, Dictionary<string, Dictionary<string, object>>>();
             foreach (var row in Table) {
-                var id = row["id"].ToString();
+                var id = row[KeyColumnName].ToString();
                 var subdivideId = SubdivideId(id, preCut, postCut);
                 if (subdivideId == null) continue; // idが空なものはスキップ
                 var cutIdKey = "data" + subdivideId;
