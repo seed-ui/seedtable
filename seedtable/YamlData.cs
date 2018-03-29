@@ -74,30 +74,31 @@ namespace SeedTable {
             }
         }
 
-        public static YamlData ReadFrom(string name, string directory = ".", string extension = ".yml") {
+        public static YamlData ReadFrom(string name, string directory = ".", string extension = ".yml", string keyColumnName = "id") {
             var namedDirectory = Path.Combine(directory, name);
             if (Directory.Exists(namedDirectory)) {
-                return ReadFromMulti(name, directory, extension);
+                return ReadFromMulti(name, directory, extension, keyColumnName);
             } else {
-                return ReadFromSingle(name, directory, extension);
+                return ReadFromSingle(name, directory, extension, keyColumnName);
             }
         }
 
-        public static YamlData ReadFromSingle(string name, string directory = ".", string extension = ".yml") {
+        public static YamlData ReadFromSingle(string name, string directory = ".", string extension = ".yml", string keyColumnName = "id") {
             var fstream = new FileStream(Path.Combine(directory, name + extension), FileMode.Open);
-            return new YamlData(YamlData.YamlToData(new StreamReader(fstream)));
+            return new YamlData(YamlData.YamlToData(new StreamReader(fstream), keyColumnName));
         }
 
-        public static YamlData ReadFromMulti(string name, string directory = ".", string extension = ".yml") {
+        public static YamlData ReadFromMulti(string name, string directory = ".", string extension = ".yml", string keyColumnName = "id") {
             var namedDirectory = Path.Combine(directory, name);
             return new YamlData(
                 YamlData.YamlToData(
-                    string.Join("\n", Directory.EnumerateFiles(namedDirectory, $"*{extension}").Select(file => File.ReadAllText(file)).ToArray())
+                    string.Join("\n", Directory.EnumerateFiles(namedDirectory, $"*{extension}").Select(file => File.ReadAllText(file)).ToArray()),
+                    keyColumnName
                 )
             );
         }
 
-        public static DataDictionaryList YamlToData(TextReader stream) {
+        public static DataDictionaryList YamlToData(TextReader stream, string keyColumnName = "id") {
             var deserializer = new DeserializerBuilder().Build();
             var root = deserializer.Deserialize(stream);
             var jsonSerializer = new SerializerBuilder().JsonCompatible().Build();
@@ -116,11 +117,11 @@ namespace SeedTable {
                         GetTypedYamlValue(pair.Value) :
                         jsonSerializer.Serialize(pair.Value)
                 ));
-            return new DataDictionaryList(table);
+            return new DataDictionaryList(table, keyColumnName);
         }
 
-        public static DataDictionaryList YamlToData(string yaml) {
-            return YamlToData(new StringReader(yaml));
+        public static DataDictionaryList YamlToData(string yaml, string keyColumnName = "id") {
+            return YamlToData(new StringReader(yaml), keyColumnName);
         }
 
         public static void DataToYaml(TextWriter writer, Dictionary<string, Dictionary<string, object>> datatable, YamlColumnNamesType yamlColumnNames = null) {

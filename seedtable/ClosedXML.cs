@@ -18,14 +18,14 @@ namespace SeedTable {
                 get { return Workbook.Worksheets.Select(worksheet => worksheet.Name); }
             }
 
-            public SeedTableBase GetSeedTable(string sheetName, int columnNamesRowIndex = 2, int dataStartRowIndex = 3, IEnumerable<string> ignoreColumnNames = null, string versionColumnName = null) {
+            public SeedTableBase GetSeedTable(string sheetName, int columnNamesRowIndex = 2, int dataStartRowIndex = 3, IEnumerable<string> ignoreColumnNames = null, string keyColumnName = "id", string versionColumnName = null) {
                 IXLWorksheet worksheet;
                 try {
                     worksheet = Workbook.Worksheet(sheetName);
                 } catch (Exception exception) {
                     throw new SheetNotFoundException($"sheet [{sheetName}] not found", exception);
                 }
-                return new SeedTable(worksheet, columnNamesRowIndex, dataStartRowIndex, ignoreColumnNames, versionColumnName);
+                return new SeedTable(worksheet, columnNamesRowIndex, dataStartRowIndex, ignoreColumnNames, keyColumnName, versionColumnName);
             }
 
             public void Save() => Workbook.Save();
@@ -57,7 +57,7 @@ namespace SeedTable {
             public int VersionColumnIndex { get; private set; }
             public int IdColumnIndex { get; private set; }
 
-            public SeedTable(IXLWorksheet worksheet, int columnNamesRowIndex = 2, int dataStartRowIndex = 3, IEnumerable<string> ignoreColumnNames = null, string versionColumnName = null) : base(columnNamesRowIndex, dataStartRowIndex, ignoreColumnNames, versionColumnName) {
+            public SeedTable(IXLWorksheet worksheet, int columnNamesRowIndex = 2, int dataStartRowIndex = 3, IEnumerable<string> ignoreColumnNames = null, string keyColumnName = "id", string versionColumnName = null) : base(columnNamesRowIndex, dataStartRowIndex, ignoreColumnNames, keyColumnName, versionColumnName) {
                 Worksheet = worksheet;
 
                 GetColumns();
@@ -72,7 +72,7 @@ namespace SeedTable {
                         VersionColumnIndex = cell.Address.ColumnNumber;
                     } else {
                         var columnIndex = cell.Address.ColumnNumber;
-                        if ("id" == value) IdColumnIndex = columnIndex;
+                        if (KeyColumnName == value) IdColumnIndex = columnIndex;
                         Columns.Add(new SeedTableColumn(value, columnIndex));
                     }
                 }
@@ -80,7 +80,7 @@ namespace SeedTable {
             }
 
             void CheckColumns() {
-                if (IdColumnIndex == 0) Errors.Add(new NoIdColumnException($"id column not found [{SheetName}]"));
+                if (IdColumnIndex == 0) Errors.Add(new NoIdColumnException($"key column [{KeyColumnName}] not found [{SheetName}]"));
                 var columnNames = new HashSet<string>();
                 foreach(var column in Columns) {
                     var columnName = column.Name;
@@ -111,7 +111,7 @@ namespace SeedTable {
 
             public override DataDictionaryList ExcelToData(string requireVersion = "") {
                 var table = Worksheet.Rows().Skip(DataStartRowIndex - 1).Select(row => this.GetRowValuesDictionary(row));
-                return new DataDictionaryList(table);
+                return new DataDictionaryList(table, KeyColumnName);
             }
 
             Dictionary<string, object> GetRowValuesDictionary(IXLRow row) => Columns.ToDictionary(column => column.Name, column => (row.Cell(column.Index).Value));

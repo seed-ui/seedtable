@@ -148,7 +148,7 @@ namespace SeedTable {
 
             Dictionary<string, object> DefaultRowData;
 
-            public SeedTable(string sheetName, Sheet sheet, Worksheet worksheet, SharedStringTableWithIndex sharedStringTable, int columnNamesRowIndex = 2, int dataStartRowIndex = 3, IEnumerable<string> ignoreColumnNames = null, string versionColumnName = null) : base(columnNamesRowIndex, dataStartRowIndex, ignoreColumnNames, versionColumnName) {
+            public SeedTable(string sheetName, Sheet sheet, Worksheet worksheet, SharedStringTableWithIndex sharedStringTable, int columnNamesRowIndex = 2, int dataStartRowIndex = 3, IEnumerable<string> ignoreColumnNames = null, string keyColumnName = "id", string versionColumnName = null) : base(columnNamesRowIndex, dataStartRowIndex, ignoreColumnNames, keyColumnName, versionColumnName) {
                 SheetName = sheetName;
                 Sheet = sheet;
                 Worksheet = worksheet;
@@ -167,7 +167,7 @@ namespace SeedTable {
                         VersionColumnIndex = cell.Column();
                     } else {
                         var columnIndex = cell.Column();
-                        if ("id" == value) IdColumnIndex = columnIndex;
+                        if (KeyColumnName == value) IdColumnIndex = columnIndex;
                         Columns.Add(new SeedTableColumn(value, columnIndex));
                     }
                 }
@@ -176,7 +176,7 @@ namespace SeedTable {
             }
 
             void CheckColumns() {
-                if (IdColumnIndex == null) Errors.Add(new NoIdColumnException($"id column not found [{SheetName}]"));
+                if (IdColumnIndex == null) Errors.Add(new NoIdColumnException($"key column [{KeyColumnName}] not found [{SheetName}]"));
                 var columnNames = new HashSet<string>();
                 foreach(var column in Columns) {
                     var columnName = column.Name;
@@ -198,7 +198,7 @@ namespace SeedTable {
                 var table = rows
                     .Where(row => row.RowIndex >= DataStartRowIndex)
                     .Select(row => GetCellValuesDictionary(row));
-                return new DataDictionaryList(table);
+                return new DataDictionaryList(table, KeyColumnName);
             }
 
             Dictionary<string, object> GetCellValuesDictionary(Row row) {
@@ -336,8 +336,8 @@ namespace SeedTable {
 
             Worksheet Worksheet(string sheetName) => ((WorksheetPart)WorkbookPart.GetPartById(Sheet(sheetName).Id)).Worksheet;
 
-            public SeedTableBase GetSeedTable(string sheetName, int columnNamesRowIndex = 2, int dataStartRowIndex = 3, IEnumerable<string> ignoreColumnNames = null, string versionColumnName = null) {
-                return new SeedTable(sheetName, Sheet(sheetName), Worksheet(sheetName), SharedStringTable, columnNamesRowIndex, dataStartRowIndex, ignoreColumnNames, versionColumnName);
+            public SeedTableBase GetSeedTable(string sheetName, int columnNamesRowIndex = 2, int dataStartRowIndex = 3, IEnumerable<string> ignoreColumnNames = null, string keyColumnName = "id", string versionColumnName = null) {
+                return new SeedTable(sheetName, Sheet(sheetName), Worksheet(sheetName), SharedStringTable, columnNamesRowIndex, dataStartRowIndex, ignoreColumnNames, keyColumnName, versionColumnName);
             }
 
             public void Save() {
