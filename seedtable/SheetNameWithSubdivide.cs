@@ -2,7 +2,7 @@ using System;
 using System.Text.RegularExpressions;
 
 namespace SeedTable {
-    class SheetNameWithSubdivide {
+    public class SheetNameWithSubdivide {
         public static SheetNameWithSubdivide FromMixed(string mixedName) {
             var result = Regex.Match(mixedName, @"^(?:(\d+):)?(?:([^:@]+)/)?([^:/@]+)(?::(\d+))?(?:@(.*))?$");
             if (!result.Success) throw new Exception($"{mixedName} is wrong sheet name and subdivide rule definition");
