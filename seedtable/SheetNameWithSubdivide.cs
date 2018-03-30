@@ -14,17 +14,23 @@ namespace SeedTable {
             var options = result.Groups[5].Value == null ? new string[] { } : result.Groups[5].Value.Split('@');
             var onOperation = OnOperation.From | OnOperation.To;
             var keyColumnName = "id";
+            int? columnNamesRow = null;
+            int? dataStartRow = null;
             foreach (var option in options) {
                 if (Regex.IsMatch(option, $"^(?:from|to)$", RegexOptions.IgnoreCase)) {
                     Enum.TryParse(option, true, out onOperation);
                 } else if (option.StartsWith("key=")) {
                     keyColumnName = option.Substring(4);
+                } else if (option.StartsWith("column-names-row=")) {
+                    columnNamesRow = int.Parse(option.Substring(17));
+                } else if (option.StartsWith("data-start-row=")) {
+                    dataStartRow = int.Parse(option.Substring(15));
                 }
             }
             var needSubdivide = cutPrefixStr.Length != 0 || cutPostfixStr.Length != 0;
             var cutPrefix = cutPrefixStr.Length == 0 ? 0 : Convert.ToInt32(cutPrefixStr);
             var cutPostfix = cutPostfixStr.Length == 0 ? 0 : Convert.ToInt32(cutPostfixStr);
-            return new SheetNameWithSubdivide(fileName, sheetName, needSubdivide, cutPrefix, cutPostfix, keyColumnName, onOperation);
+            return new SheetNameWithSubdivide(fileName, sheetName, needSubdivide, cutPrefix, cutPostfix, keyColumnName, columnNamesRow, dataStartRow, onOperation);
         }
 
         public Wildcard FileName { get; } = null;
@@ -33,6 +39,8 @@ namespace SeedTable {
         public int CutPrefix { get; }
         public int CutPostfix { get; }
         public string KeyColumnName { get; }
+        public int? ColumnNamesRow { get; }
+        public int? DataStartRow { get; }
         public OnOperation OnOperation { get; }
 
         public SheetNameWithSubdivide(
@@ -42,6 +50,8 @@ namespace SeedTable {
             int cutPrefix = 0,
             int cutPostfix = 0,
             string keyColumnName = "id",
+            int? columnNamesRow = null,
+            int? dataStartRow = null,
             OnOperation onOperation = OnOperation.From | OnOperation.To
         ) {
             FileName = new Wildcard(fileName);
@@ -50,6 +60,8 @@ namespace SeedTable {
             CutPrefix = cutPrefix;
             CutPostfix = cutPostfix;
             KeyColumnName = keyColumnName;
+            ColumnNamesRow = columnNamesRow;
+            DataStartRow = dataStartRow;
             OnOperation = onOperation;
         }
 

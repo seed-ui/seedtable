@@ -185,7 +185,7 @@ namespace SeedTable {
         }
 
         static SeedTableBase GetSeedTable(IExcelData excelData, string sheetName, CommonOptions options, SheetNameWithSubdivide subdivide) {
-            var seedTable = excelData.GetSeedTable(sheetName, options.columnNamesRow, options.dataStartRow, options.ignoreColumns, subdivide.KeyColumnName, options.versionColumn);
+            var seedTable = excelData.GetSeedTable(sheetName, subdivide.ColumnNamesRow ?? options.columnNamesRow, subdivide.DataStartRow ?? options.dataStartRow, options.ignoreColumns, subdivide.KeyColumnName, options.versionColumn);
             if (seedTable.Errors.Count != 0) {
                 var skipExceptions = seedTable.Errors.Where(error => error is NoIdColumnException);
                 if (skipExceptions.Count() != 0) {
