@@ -55,7 +55,7 @@ namespace SeedTable {
             var sheetsConfig = new SheetsConfig(options.only, options.ignore, null, null, options.mapping, options.alias);
             var yamlDataCache = new Dictionary<string, YamlData>(); // aliasのため同テーブルはキャッシュする
             foreach (var sheetName in excelData.SheetNames) {
-                var yamlTableName = sheetsConfig.YamlTableName(sheetName);
+                var yamlTableName = sheetsConfig.YamlTableName(fileName, sheetName);
                 if (yamlTableName == sheetName) {
                     Log($"    {yamlTableName}");
                 } else {
@@ -149,7 +149,7 @@ namespace SeedTable {
             var fileName = Path.GetFileName(file);
             var sheetsConfig = new SheetsConfig(options.only, options.ignore, options.subdivide, options.primary, options.mapping, options.alias);
             foreach (var sheetName in excelData.SheetNames) {
-                var yamlTableName = sheetsConfig.YamlTableName(sheetName);
+                var yamlTableName = sheetsConfig.YamlTableName(fileName, sheetName);
                 if (yamlTableName == sheetName) {
                     Log($"    {yamlTableName}");
                 } else {

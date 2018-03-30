@@ -16,16 +16,16 @@ namespace SeedTable {
             IgnoreSheetNames = SheetNameWithSubdivides.FromMixed(ignore);
             SubdivideRules = new SheetNameWithSubdivides(subdivideSheetNames.Concat(OnlySheetNames));
             PrimarySheetNames = SheetNameOnFileNames.FromMixed(primary);
-            excelToYamlMapping = mapping.Select(map => map.Split(':')).ToDictionary(map => map[1], map => map[0]);
-            excelToYamlAlias = alias.Select(map => map.Split(':')).ToDictionary(map => map[1], map => map[0]);
+            excelToYamlMapping = SheetNameMaps.FromMixed(mapping);
+            excelToYamlAlias = SheetNameMaps.FromMixed(alias);
         }
 
         SheetNameWithSubdivides SubdivideRules;
         SheetNameWithSubdivides IgnoreSheetNames;
         SheetNameWithSubdivides OnlySheetNames;
         SheetNameOnFileNames PrimarySheetNames;
-        Dictionary<string, string> excelToYamlMapping;
-        Dictionary<string, string> excelToYamlAlias;
+        SheetNameMaps excelToYamlMapping;
+        SheetNameMaps excelToYamlAlias;
 
         // onOperationはFrom | Toだと正しく動作しない
         public bool IsUseSheet(string fileName, string excelSheetName, string yamlTableName, OnOperation onOperation) {
@@ -35,7 +35,7 @@ namespace SeedTable {
                 // TODO: primaryでない的なnoticeを出したほうが良い
                 if (!PrimarySheetNames.IsUseSheet(fileName, yamlTableName)) return false;
                 // エイリアス設定先のシートはfrom時変換されない
-                if (excelToYamlAlias.ContainsKey(excelSheetName)) return false;
+                if (excelToYamlAlias.Contains(fileName, excelSheetName)) return false;
             }
             return true;
         }
@@ -45,15 +45,9 @@ namespace SeedTable {
             return subdivideRule ?? new SheetNameWithSubdivide(fileName, sheetName);
         }
 
-        public string YamlTableName(string excelSheetName) {
-            string yamlTableName;
-            if (excelToYamlMapping.TryGetValue(excelSheetName, out yamlTableName)) {
-                return yamlTableName;
-            } else if (excelToYamlAlias.TryGetValue(excelSheetName, out yamlTableName)) {
-                return yamlTableName;
-            } else {
-                return excelSheetName;
-            }
+        public string YamlTableName(string fileName, string excelSheetName) {
+            var sheetNameMap = excelToYamlMapping.Find(fileName, excelSheetName) ?? excelToYamlAlias.Find(fileName, excelSheetName);
+            return sheetNameMap == null ? excelSheetName : sheetNameMap.YamlTableName;
         }
     }
 }
