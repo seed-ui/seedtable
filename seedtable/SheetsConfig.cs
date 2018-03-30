@@ -28,14 +28,14 @@ namespace SeedTable {
         Dictionary<string, string> excelToYamlAlias;
 
         // onOperationはFrom | Toだと正しく動作しない
-        public bool IsUseSheet(string fileName, string sheetName, OnOperation onOperation) {
-            if (IgnoreSheetNames.Contains(fileName, sheetName, onOperation)) return false;
-            if (OnlySheetNames.Count != 0 && !OnlySheetNames.Contains(fileName, sheetName, onOperation)) return false;
+        public bool IsUseSheet(string fileName, string excelSheetName, string yamlTableName, OnOperation onOperation) {
+            if (IgnoreSheetNames.Contains(fileName, yamlTableName, onOperation)) return false;
+            if (OnlySheetNames.Count != 0 && !OnlySheetNames.Contains(fileName, yamlTableName, onOperation)) return false;
             if (onOperation.HasFlag(OnOperation.From)) {
                 // TODO: primaryでない的なnoticeを出したほうが良い
-                if (!PrimarySheetNames.IsUseSheet(fileName, sheetName)) return false;
+                if (!PrimarySheetNames.IsUseSheet(fileName, yamlTableName)) return false;
                 // エイリアス設定先のシートはfrom時変換されない
-                if (excelToYamlAlias.ContainsKey(sheetName)) return false;
+                if (excelToYamlAlias.ContainsKey(excelSheetName)) return false;
             }
             return true;
         }

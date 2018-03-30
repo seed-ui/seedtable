@@ -61,11 +61,11 @@ namespace SeedTable {
                 } else {
                     Log($"    {yamlTableName} -> {sheetName}");
                 }
-                if (!sheetsConfig.IsUseSheet(fileName, sheetName, OnOperation.To)) {
+                if (!sheetsConfig.IsUseSheet(fileName, sheetName, yamlTableName, OnOperation.To)) {
                     Log("      ignore", "skip");
                     continue;
                 }
-                var subdivide = sheetsConfig.subdivide(fileName, sheetName, OnOperation.To);
+                var subdivide = sheetsConfig.subdivide(fileName, yamlTableName, OnOperation.To);
                 var seedTable = GetSeedTable(excelData, sheetName, options, subdivide);
                 if (seedTable.Errors.Count != 0) {
                     continue;
@@ -155,7 +155,7 @@ namespace SeedTable {
                 } else {
                     Log($"    {yamlTableName} <- {sheetName}");
                 }
-                if (!sheetsConfig.IsUseSheet(fileName, sheetName, OnOperation.From)) {
+                if (!sheetsConfig.IsUseSheet(fileName, sheetName, yamlTableName, OnOperation.From)) {
                     Log("      ignore", "skip");
                     continue;
                 }
