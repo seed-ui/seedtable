@@ -42,7 +42,7 @@ Mac: Mono 4.4以上
 [Releases](https://github.com/seed-ui/seedtable/releases)にあるzipをダウンロードして適当な場所に配置して下さい。
 
 - seedtable.zip、XmSeedtable-linux.zip、XmSeedtable-mac.zipのいずれも、全環境で動作するseedtable.exeを含みます。
-- seedtable.zipはWindowsで動作するseedtable-gui.exeを含みます（Linux, Macでは設定ダイアログとUIの文字化け以外は正常動作します）。
+- seedtable.zipはWindows/Linux/Macで動作するseedtable-gui.exeを含みます。
 - XmSeedtable-{linux,mac}.zipはそれぞれLinuxとMacで動作するXmSeedtable.exeを含みます。
 
 ## Usage (seedtable.exe)
