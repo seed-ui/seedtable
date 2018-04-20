@@ -35,7 +35,7 @@ Windows: .NET Framework 4.6.1以上
 
 Linux: Mono 4.4以上
 
-Mac: Mono 4.4～5.0.1 (5.2以降だとseedtable-guiが動きません)
+Mac: Mono 4.4以上
 
 ## Install
 
@@ -71,6 +71,8 @@ $ seedtable to -s db/seeds -x doc foo.xlsx -o newdoc
 - 設定 (seedtable.exeのオプション相当 GUIで編集できます)
 
 を入力してから、「yml -> xlsx」、「xlsx -> yml」それぞれをダブルクリックするか、xlsxファイルをドラッグ&ドロップして変換できます。
+
+Linuxでの起動は`mono seedtable-gui.exe`、Macでは`mono --arch=32 seedtable-gui.exe`と32bitを指定して起動してください。
 
 設定ファイルは下記のように、seedtable.exeのオプションのうちinput/output系を除いた長いオプション名をyamlで設定するものです。
 
