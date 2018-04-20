@@ -10,10 +10,10 @@ using System.Windows.Forms;
 using SeedTable;
 
 namespace seedtable_gui {
-    public partial class YamlToExcelDialog : Form {
+    public partial class YamlToExcelDialog : BaseForm {
         ToOptions Options { get; }
 
-        public YamlToExcelDialog(ToOptions options) {
+        public YamlToExcelDialog(ToOptions options) : base() {
             InitializeComponent();
             Options = options;
         }
