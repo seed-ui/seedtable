@@ -72,7 +72,7 @@ $ seedtable to -s db/seeds -x doc foo.xlsx -o newdoc
 
 を入力してから、「yml -> xlsx」、「xlsx -> yml」それぞれをダブルクリックするか、xlsxファイルをドラッグ&ドロップして変換できます。
 
-Linuxでの起動は`LANG=ja_JP mono seedtable-gui.exe`、Macでは`LANG=ja_JP mono --arch=32 seedtable-gui.exe`と32bitを指定して起動してください。
+Linuxでの起動は`LANG=ja_JP mono seedtable-gui.exe`、Macでは`LANG=ja_JP GUIFONT="Hiragino Kaku Gothic Pro" mono --arch=32 seedtable-gui.exe`と32bit/フォントを指定して起動してください。
 
 設定ファイルは下記のように、seedtable.exeのオプションのうちinput/output系を除いた長いオプション名をyamlで設定するものです。
 

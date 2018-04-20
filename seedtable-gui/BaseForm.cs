@@ -9,7 +9,8 @@ using System.Drawing;
 namespace seedtable_gui {
     public abstract class BaseForm : Form {
         public BaseForm() {
-            if (Environment.OSVersion.Platform == PlatformID.MacOSX) Font = new Font("Hiragino Kaku Gothic Pro", Font.Size);
+            var font = Environment.GetEnvironmentVariable("GUIFONT");
+            if (font != null) Font = new Font(font, Font.Size);
         }
     }
 }
