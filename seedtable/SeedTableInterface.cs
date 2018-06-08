@@ -169,6 +169,7 @@ namespace SeedTable {
                     subdivide.NeedSubdivide,
                     subdivide.CutPrefix,
                     subdivide.CutPostfix,
+                    subdivide.SubdivideFilename,
                     options.format,
                     options.delete,
                     options.yamlColumns

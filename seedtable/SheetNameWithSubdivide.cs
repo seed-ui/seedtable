@@ -16,6 +16,7 @@ namespace SeedTable {
             var keyColumnName = "id";
             int? columnNamesRow = null;
             int? dataStartRow = null;
+            string subdivideFilename = null;
             foreach (var option in options) {
                 if (Regex.IsMatch(option, $"^(?:from|to)$", RegexOptions.IgnoreCase)) {
                     Enum.TryParse(option, true, out onOperation);
@@ -25,12 +26,14 @@ namespace SeedTable {
                     columnNamesRow = int.Parse(option.Substring(17));
                 } else if (option.StartsWith("data-start-row=")) {
                     dataStartRow = int.Parse(option.Substring(15));
+                } else if (option.StartsWith("subdivide-filename=")) {
+                    subdivideFilename = option.Substring(19);
                 }
             }
             var needSubdivide = cutPrefixStr.Length != 0 || cutPostfixStr.Length != 0;
             var cutPrefix = cutPrefixStr.Length == 0 ? 0 : Convert.ToInt32(cutPrefixStr);
             var cutPostfix = cutPostfixStr.Length == 0 ? 0 : Convert.ToInt32(cutPostfixStr);
-            return new SheetNameWithSubdivide(fileName, sheetName, needSubdivide, cutPrefix, cutPostfix, keyColumnName, columnNamesRow, dataStartRow, onOperation);
+            return new SheetNameWithSubdivide(fileName, sheetName, needSubdivide, cutPrefix, cutPostfix, keyColumnName, columnNamesRow, dataStartRow, subdivideFilename, onOperation);
         }
 
         public Wildcard FileName { get; } = null;
@@ -41,6 +44,7 @@ namespace SeedTable {
         public string KeyColumnName { get; }
         public int? ColumnNamesRow { get; }
         public int? DataStartRow { get; }
+        public string SubdivideFilename { get; }
         public OnOperation OnOperation { get; }
 
         public SheetNameWithSubdivide(
@@ -52,6 +56,7 @@ namespace SeedTable {
             string keyColumnName = "id",
             int? columnNamesRow = null,
             int? dataStartRow = null,
+            string subdivideFilename = null,
             OnOperation onOperation = OnOperation.From | OnOperation.To
         ) {
             FileName = new Wildcard(fileName);
@@ -62,6 +67,7 @@ namespace SeedTable {
             KeyColumnName = keyColumnName;
             ColumnNamesRow = columnNamesRow;
             DataStartRow = dataStartRow;
+            SubdivideFilename = subdivideFilename;
             OnOperation = onOperation;
         }
 
