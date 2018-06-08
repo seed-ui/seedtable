@@ -56,7 +56,7 @@ namespace SeedTable {
                 var id = row[KeyColumnName].ToString();
                 var subdivideId = SubdivideId(id, preCut, postCut);
                 if (subdivideId == null) continue; // idが空なものはスキップ
-                var cutIdKey = string.Format(subdivideFilename ?? "data{0}", subdivideId);
+                var cutIdKey = CutIdKey(subdivideId, subdivideFilename);
                 if (!dic.ContainsKey(cutIdKey)) dic[cutIdKey] = new List<Dictionary<string, object>>();
                 dic[cutIdKey].Add(row);
             }
@@ -74,7 +74,7 @@ namespace SeedTable {
                 var id = row[KeyColumnName].ToString();
                 var subdivideId = SubdivideId(id, preCut, postCut);
                 if (subdivideId == null) continue; // idが空なものはスキップ
-                var cutIdKey = string.Format(subdivideFilename ?? "data{0}", subdivideId);
+                var cutIdKey = CutIdKey(subdivideId, subdivideFilename);
                 if (!dic.ContainsKey(cutIdKey)) dic[cutIdKey] = new Dictionary<string, Dictionary<string, object>>();
                 dic[cutIdKey]["data" + id] = row;
             }
@@ -86,6 +86,14 @@ namespace SeedTable {
             if (idLength == 0) return null; // idが空なものはスキップ
             var useIdLength = idLength - preCut - postCut;
             return id.Substring(preCut > idLength ? idLength : preCut, useIdLength < 0 ? 0 : useIdLength);
+        }
+
+        private string CutIdKey(string subdivideId, string subdivideFilename = null) {
+            if (subdivideFilename == null) {
+                return "data" + subdivideId;
+            } else {
+                return string.Format(subdivideFilename, int.Parse(subdivideId));
+            }
         }
     }
 }
