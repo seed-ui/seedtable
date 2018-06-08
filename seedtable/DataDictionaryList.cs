@@ -50,13 +50,13 @@ namespace SeedTable {
          *
          * {"data101": [{id: 10101, name: "foo"}], ...}形式で返す
          */
-        public Dictionary<string, List<Dictionary<string, object>>> ToSeparated(int preCut = 0, int postCut = 0) {
+        public Dictionary<string, List<Dictionary<string, object>>> ToSeparated(int preCut = 0, int postCut = 0, string subdivideFilename = null) {
             var dic = new Dictionary<string, List<Dictionary<string, object>>>();
             foreach (var row in Table) {
                 var id = row[KeyColumnName].ToString();
                 var subdivideId = SubdivideId(id, preCut, postCut);
                 if (subdivideId == null) continue; // idが空なものはスキップ
-                var cutIdKey = "data" + subdivideId;
+                var cutIdKey = string.Format(subdivideFilename ?? "data{0}", subdivideId);
                 if (!dic.ContainsKey(cutIdKey)) dic[cutIdKey] = new List<Dictionary<string, object>>();
                 dic[cutIdKey].Add(row);
             }
@@ -68,13 +68,13 @@ namespace SeedTable {
          *
          * {"data101": {data10101: {id: 10101, name: "foo"}}, ...}形式で返す
          */
-        public Dictionary<string, Dictionary<string, Dictionary<string, object>>> ToSeparatedDictionaryDictionary(int preCut = 0, int postCut = 0) {
+        public Dictionary<string, Dictionary<string, Dictionary<string, object>>> ToSeparatedDictionaryDictionary(int preCut = 0, int postCut = 0, string subdivideFilename = null) {
             var dic = new Dictionary<string, Dictionary<string, Dictionary<string, object>>>();
             foreach (var row in Table) {
                 var id = row[KeyColumnName].ToString();
                 var subdivideId = SubdivideId(id, preCut, postCut);
                 if (subdivideId == null) continue; // idが空なものはスキップ
-                var cutIdKey = "data" + subdivideId;
+                var cutIdKey = string.Format(subdivideFilename ?? "data{0}", subdivideId);
                 if (!dic.ContainsKey(cutIdKey)) dic[cutIdKey] = new Dictionary<string, Dictionary<string, object>>();
                 dic[cutIdKey]["data" + id] = row;
             }

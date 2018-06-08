@@ -13,6 +13,7 @@ namespace SeedTable {
         public bool NeedSubdivide { get; set; }
         public int PreCut { get; set; }
         public int PostCut { get; set; }
+        public string SubdivideFilename { get; }
         public SeedYamlFormat Format { get; set; }
         public bool DeletePrevious { get; set; }
         public YamlColumnNamesType YamlColumnNames { get; set; }
@@ -22,6 +23,7 @@ namespace SeedTable {
             bool needSubdivide = false,
             int preCut = 0,
             int postCut = 0,
+            string subdivideFilename = null,
             SeedYamlFormat format = SeedYamlFormat.Hash,
             bool deletePrevious = false,
             IEnumerable<string> yamlColumnNames = null
@@ -30,6 +32,7 @@ namespace SeedTable {
             NeedSubdivide = needSubdivide;
             PreCut = preCut;
             PostCut = postCut;
+            SubdivideFilename = subdivideFilename;
             Format = format;
             DeletePrevious = deletePrevious;
             YamlColumnNames =
@@ -64,11 +67,11 @@ namespace SeedTable {
             }
             if (extension == null) extension = "";
             if (Format == SeedYamlFormat.Hash) {
-                foreach (var part in Data.ToSeparatedDictionaryDictionary(PreCut, PostCut)) {
+                foreach (var part in Data.ToSeparatedDictionaryDictionary(PreCut, PostCut, SubdivideFilename)) {
                     File.WriteAllText(Path.Combine(named_directory, part.Key + extension), YamlData.DataToYaml(part.Value, YamlColumnNames));
                 }
             } else {
-                foreach (var part in Data.ToSeparated(PreCut, PostCut)) {
+                foreach (var part in Data.ToSeparated(PreCut, PostCut, SubdivideFilename)) {
                     File.WriteAllText(Path.Combine(named_directory, part.Key + extension), YamlData.DataToYaml(part.Value, YamlColumnNames));
                 }
             }
