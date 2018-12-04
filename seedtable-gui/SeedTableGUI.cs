@@ -13,9 +13,10 @@ using YamlDotNet.Serialization;
 using YamlDotNet.Serialization.NamingConventions;
 
 namespace seedtable_gui {
-    public partial class SeedTableGUI : Form {
-        public SeedTableGUI() {
+    public partial class SeedTableGUI : BaseForm {
+        public SeedTableGUI() : base() {
             InitializeComponent();
+            // Environment.OSVersion.Platform == PlatformID.Unix
             yamlToExcelArea.AllowDrop = true;
             excelToYamlArea.AllowDrop = true;
         }

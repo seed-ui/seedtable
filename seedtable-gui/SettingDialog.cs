@@ -12,8 +12,8 @@ using System.Windows.Forms;
 using SeedTable;
 
 namespace seedtable_gui {
-    public partial class SettingDialog : Form {
-        public SettingDialog(BasicOptions options, bool changeable = true) {
+    public partial class SettingDialog : BaseForm {
+        public SettingDialog(BasicOptions options, bool changeable = true) : base() {
             InitializeComponent();
             foreach (Control controll in Controls) {
                 controll.Enabled = changeable;

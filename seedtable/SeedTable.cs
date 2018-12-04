@@ -5,7 +5,7 @@ using System.Linq;
 namespace SeedTable {
     interface IExcelData : IDisposable {
         IEnumerable<string> SheetNames { get; }
-        SeedTableBase GetSeedTable(string sheetName, int columnNamesRowIndex = 2, int dataStartRowIndex = 3, IEnumerable<string> ignoreColumnNames = null, string versionColumnName = null);
+        SeedTableBase GetSeedTable(string sheetName, int columnNamesRowIndex = 2, int dataStartRowIndex = 3, IEnumerable<string> ignoreColumnNames = null, string keyColumnName = "id", string versionColumnName = null);
         void Save();
         void SaveAs(string file);
     }
@@ -14,17 +14,19 @@ namespace SeedTable {
         public int ColumnNamesRowIndex { get; }
         public int DataStartRowIndex { get; }
         public Wildcards<Wildcard> IgnoreColumnNames { get; }
+        public string KeyColumnName { get; }
         public string VersionColumnName { get; }
 
         public List<Exception> Errors { get; protected set; } = new List<Exception>();
 
-        public SeedTableBase(int columnNamesRowIndex = 2, int dataStartRowIndex = 3, IEnumerable<string> ignoreColumnNames = null, string versionColumnName = null) {
+        public SeedTableBase(int columnNamesRowIndex = 2, int dataStartRowIndex = 3, IEnumerable<string> ignoreColumnNames = null, string keyColumnName = "id", string versionColumnName = null) {
             ColumnNamesRowIndex = columnNamesRowIndex;
             DataStartRowIndex = dataStartRowIndex;
             IgnoreColumnNames =
                 ignoreColumnNames == null ?
                 new Wildcards<Wildcard>() :
                 new Wildcards<Wildcard>(ignoreColumnNames.Select(ignoreColumnName => new Wildcard(ignoreColumnName)));
+            KeyColumnName = keyColumnName;
             VersionColumnName = versionColumnName;
         }
 

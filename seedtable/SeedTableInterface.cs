@@ -55,24 +55,25 @@ namespace SeedTable {
             var sheetsConfig = new SheetsConfig(options.only, options.ignore, null, null, options.mapping, options.alias);
             var yamlDataCache = new Dictionary<string, YamlData>(); // aliasのため同テーブルはキャッシュする
             foreach (var sheetName in excelData.SheetNames) {
-                var yamlTableName = sheetsConfig.YamlTableName(sheetName);
+                var yamlTableName = sheetsConfig.YamlTableName(fileName, sheetName);
                 if (yamlTableName == sheetName) {
                     Log($"    {yamlTableName}");
                 } else {
                     Log($"    {yamlTableName} -> {sheetName}");
                 }
-                if (!sheetsConfig.IsUseSheet(fileName, sheetName, OnOperation.To)) {
+                if (!sheetsConfig.IsUseSheet(fileName, sheetName, yamlTableName, OnOperation.To)) {
                     Log("      ignore", "skip");
                     continue;
                 }
-                var seedTable = GetSeedTable(excelData, sheetName, options);
+                var subdivide = sheetsConfig.subdivide(fileName, yamlTableName, OnOperation.To);
+                var seedTable = GetSeedTable(excelData, sheetName, options, subdivide);
                 if (seedTable.Errors.Count != 0) {
                     continue;
                 }
                 YamlData yamlData = null;
                 if (!yamlDataCache.TryGetValue(yamlTableName, out yamlData)) {
                     try {
-                        yamlData = YamlData.ReadFrom(yamlTableName, options.seedInput, options.seedExtension);
+                        yamlData = YamlData.ReadFrom(yamlTableName, options.seedInput, options.seedExtension, subdivide.KeyColumnName);
                         yamlDataCache[yamlTableName] = yamlData;
                     } catch (FileNotFoundException exception) {
                         Log("      skip", $"seed file [{exception.FileName}] not found");
@@ -148,18 +149,18 @@ namespace SeedTable {
             var fileName = Path.GetFileName(file);
             var sheetsConfig = new SheetsConfig(options.only, options.ignore, options.subdivide, options.primary, options.mapping, options.alias);
             foreach (var sheetName in excelData.SheetNames) {
-                var yamlTableName = sheetsConfig.YamlTableName(sheetName);
+                var yamlTableName = sheetsConfig.YamlTableName(fileName, sheetName);
                 if (yamlTableName == sheetName) {
                     Log($"    {yamlTableName}");
                 } else {
                     Log($"    {yamlTableName} <- {sheetName}");
                 }
-                if (!sheetsConfig.IsUseSheet(fileName, sheetName, OnOperation.From)) {
+                if (!sheetsConfig.IsUseSheet(fileName, sheetName, yamlTableName, OnOperation.From)) {
                     Log("      ignore", "skip");
                     continue;
                 }
                 var subdivide = sheetsConfig.subdivide(fileName, yamlTableName, OnOperation.From);
-                var seedTable = GetSeedTable(excelData, sheetName, options);
+                var seedTable = GetSeedTable(excelData, sheetName, options, subdivide);
                 if (seedTable.Errors.Count != 0) {
                     continue;
                 }
@@ -168,6 +169,7 @@ namespace SeedTable {
                     subdivide.NeedSubdivide,
                     subdivide.CutPrefix,
                     subdivide.CutPostfix,
+                    subdivide.SubdivideFilename,
                     options.format,
                     options.delete,
                     options.yamlColumns
@@ -183,8 +185,8 @@ namespace SeedTable {
             return previousTime;
         }
 
-        static SeedTableBase GetSeedTable(IExcelData excelData, string sheetName, CommonOptions options) {
-            var seedTable = excelData.GetSeedTable(sheetName, options.columnNamesRow, options.dataStartRow, options.ignoreColumns, options.versionColumn);
+        static SeedTableBase GetSeedTable(IExcelData excelData, string sheetName, CommonOptions options, SheetNameWithSubdivide subdivide) {
+            var seedTable = excelData.GetSeedTable(sheetName, subdivide.ColumnNamesRow ?? options.columnNamesRow, subdivide.DataStartRow ?? options.dataStartRow, options.ignoreColumns, subdivide.KeyColumnName, options.versionColumn);
             if (seedTable.Errors.Count != 0) {
                 var skipExceptions = seedTable.Errors.Where(error => error is NoIdColumnException);
                 if (skipExceptions.Count() != 0) {

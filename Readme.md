@@ -35,14 +35,14 @@ Windows: .NET Framework 4.6.1以上
 
 Linux: Mono 4.4以上
 
-Mac: Mono 4.4～5.0.1 (5.2以降だとseedtable-guiが動きません)
+Mac: Mono 4.4以上
 
 ## Install
 
 [Releases](https://github.com/seed-ui/seedtable/releases)にあるzipをダウンロードして適当な場所に配置して下さい。
 
 - seedtable.zip、XmSeedtable-linux.zip、XmSeedtable-mac.zipのいずれも、全環境で動作するseedtable.exeを含みます。
-- seedtable.zipはWindowsで動作するseedtable-gui.exeを含みます（Linux, Macでは設定ダイアログとUIの文字化け以外は正常動作します）。
+- seedtable.zipはWindows/Linux/Macで動作するseedtable-gui.exeを含みます。
 - XmSeedtable-{linux,mac}.zipはそれぞれLinuxとMacで動作するXmSeedtable.exeを含みます。
 
 ## Usage (seedtable.exe)
@@ -71,6 +71,8 @@ $ seedtable to -s db/seeds -x doc foo.xlsx -o newdoc
 - 設定 (seedtable.exeのオプション相当 GUIで編集できます)
 
 を入力してから、「yml -> xlsx」、「xlsx -> yml」それぞれをダブルクリックするか、xlsxファイルをドラッグ&ドロップして変換できます。
+
+Linuxでの起動は`LANG=ja_JP mono seedtable-gui.exe`、Macでは`LANG=ja_JP GUIFONT="Hiragino Kaku Gothic Pro" mono --arch=32 seedtable-gui.exe`と32bit/フォントを指定して起動してください。
 
 設定ファイルは下記のように、seedtable.exeのオプションのうちinput/output系を除いた長いオプション名をyamlで設定するものです。
 
@@ -188,11 +190,19 @@ xlsx -> yaml (from) 変換で出力するseedファイルをID単位ごとに分
 
 分割しておくと、複数人で同時に別のIDのデータを編集してコミットする等の場合に、コンフリクトがおこりにくくなります。
 
-`(前削除桁数:)(xlsxファイル名/)seedテーブル名(:後削除桁数)(@fromまたは@to)`の形式で指定します。（複数指定はコマンドラインでは`,`区切り・GUIでは改行区切り）
+`(前削除桁数:)(xlsxファイル名/)seedテーブル名(:後削除桁数)(@その他のオプション)`の形式で指定します。（複数指定はコマンドラインでは`,`区切り・GUIでは改行区切り）
 
 xlsxファイル名を指定する場合はパスを含まずファイル名のみ（path/to/foo.xlsxではなくfoo.xlsx）で指定してください。
 
-ID数値の桁を上の方から前削除桁数分、下の方から後削除桁数分削ったものがファイル名として使われます。
+その他のオプション:
+
+- @fromまたは@to: それぞれxlsx -> yaml (from) 変換、yaml -> xlsx (to) 変換のみでそのオプションが有効になります
+- @key=プライマリキー名: プライマリキーを"id"以外にします
+- @column-names-row=数値: --column-names-row をテーブル個別指定
+- @data-start-row=数値: --data-start-row をテーブル個別指定
+- @subdivide-filename=文字列: subdivideでファイル分割をした場合のファイル名指定（詳細は後述）
+
+ID(プライマリキーを指定した場合はそのカラム)数値の桁を上の方から前削除桁数分、下の方から後削除桁数分削ったものがファイル名として使われます。
 
 例:
 
@@ -210,6 +220,11 @@ ID数値の桁を上の方から前削除桁数分、下の方から後削除桁
 xlsxファイル名を指定した場合は、通常のテーブル名のうち通常のファイル名→ワイルドカードを使ったファイル名→`*`、ワイルドカードを使ったテーブル名のうち通常のファイル名→ワイルドカードを使ったファイル名→`*`、`*`と指定されたテーブル名のうち通常のファイル名→ワイルドカードを使ったファイル名、という優先順位でマッチします。
 
 yaml -> xlsx (to) 変換においてこの指定は考慮されません。指定にかかわらず自動判定して読み取ります。
+
+@subdivide-filename指定はC#の文字列フォーマットに準じます。（例: `@subdivide-filename=file{0:D5}` -> `file00042.yml` ）
+ただし引数指定の関係上、","を使用した書式指定はできません。
+デフォルトは`"data" + 分割id文字列`です。
+書式を指定した場合idは数値として扱われます（`"00042"`は`42`扱い）。
 
 #### --only このテーブルのみ変換
 
@@ -233,23 +248,24 @@ onlyに指定があってもこちらに該当すれば無視されます。
 
 複数ファイルに同名シートが存在する場合、どのファイルのシートを変換するかを指定します。
 
-`(xlsxファイル名)/(xlsxシート名)`の形式で指定します。（複数指定はコマンドラインでは`,`区切り・GUIでは改行区切り）
+`xlsxファイル名/seedテーブル名`の形式で指定します。（複数指定はコマンドラインでは`,`区切り・GUIでは改行区切り）
 
 #### --mapping ymlとシート名の対応
 
 ymlファイル名とxlsxのシート名が同一でない場合の対応を指定します。
 
-`(ymlファイル名):(xlsxシート名)`の形式で指定します。（複数指定はコマンドラインでは`,`区切り・GUIでは改行区切り）
+`ymlファイル名:(xlsxファイル名/)xlsxシート名`の形式で指定します。（複数指定はコマンドラインでは`,`区切り・GUIでは改行区切り）
 
-この指定がある場合、--subdivide、--only、--ignoreはxlsxシート名ではなくymlファイル名側での指定となりますのでご注意下さい。
+この指定がある場合、--subdivide、--only、--ignore、--primaryはxlsxシート名ではなくymlファイル名側での指定となりますのでご注意下さい。
 
-xlsxのシート名31文字上限に引っかかった場合などにご利用下さい。
+- 例: xlsxのシート名31文字上限に引っかかった場合の利用 `very_long_long_long_long_table_names:VL4table_names`
+- 例: 何らかの原因で同じシート名にしなければならない場合 `foos:foos.xlsx/contents,bars:bars.xlsx/contents`
 
 #### --alias エイリアスシート名
 
 ymlファイルのテーブルを別名のシートに反映します。
 
-`(ymlファイル名):(xlsxシート名)`の形式で指定します。（複数指定はコマンドラインでは`,`区切り・GUIでは改行区切り）
+`ymlファイル名:(xlsxファイル名/)xlsxシート名`の形式で指定します。（複数指定はコマンドラインでは`,`区切り・GUIでは改行区切り）
 
 同じyml名に対して複数のシート名が指定できます。
 

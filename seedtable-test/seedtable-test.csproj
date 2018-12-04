@@ -68,9 +68,11 @@
     <Compile Include="Paths.cs" />
     <Compile Include="PrimaryTest.cs" />
     <Compile Include="SheetNameWithFileNameTest.cs" />
+    <Compile Include="SheetNameMapsTest.cs" />
     <Compile Include="SubdivideTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ToTest.cs" />
+    <Compile Include="SubdivideOptionTest.cs" />
     <Compile Include="WildcardTest.cs" />
     <Compile Include="WildcardsTest.cs" />
   </ItemGroup>
