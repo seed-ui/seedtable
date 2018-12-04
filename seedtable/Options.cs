@@ -73,6 +73,9 @@ namespace SeedTable {
             EPPlus,
         }
 
+        [Option('S', "subdivide", Separator = ',', HelpText = "subdivide rules : [(pre cut):]sheet-name[:(post cut)]")]
+        public IEnumerable<string> subdivide { get; set; } = new List<string> { };
+
         [Option('I', "ignore", Separator = ',', HelpText = "ignore sheet names")]
         public IEnumerable<string> ignore { get; set; } = new List<string> { };
         
@@ -143,9 +146,6 @@ namespace SeedTable {
 
         [Option('P', "primary", Separator = ',', HelpText = "primary file for sheet names that exists in multiple files")]
         public IEnumerable<string> primary { get; set; } = new List<string> { };
-
-        [Option('S', "subdivide", Separator = ',', HelpText = "subdivide rules : [(pre cut):]sheet-name[:(post cut)]")]
-        public IEnumerable<string> subdivide { get; set; } = new List<string> { };
     }
 
     [Verb("to", HelpText = "Yaml to(->) Excel")]

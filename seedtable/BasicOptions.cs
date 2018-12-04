@@ -9,8 +9,6 @@ namespace SeedTable {
 
         public IEnumerable<string> primary { get; set; } = new List<string> { };
 
-        public IEnumerable<string> subdivide { get; set; } = new List<string> { };
-
         public bool calcFormulas { get; set; } = false;
 
         public FromOptions FromOptions(IEnumerable<string> files = null, string input = ".", string output = ".") {
@@ -53,6 +51,7 @@ namespace SeedTable {
                 delete = delete,
                 seedExtension = seedExtension,
                 calcFormulas = calcFormulas,
+                subdivide = subdivide,
                 seedInput = seedInput,
                 xlsxInput = xlsxInput,
                 output = output,

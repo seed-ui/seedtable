@@ -52,7 +52,7 @@ namespace SeedTable {
         static DateTime SeedToExcelCore(IExcelData excelData, string file, ToOptions options, DateTime startTime, DateTime previousTime) {
             Log("  sheets");
             var fileName = Path.GetFileName(file);
-            var sheetsConfig = new SheetsConfig(options.only, options.ignore, null, null, options.mapping, options.alias);
+            var sheetsConfig = new SheetsConfig(options.only, options.ignore, options.subdivide, null, options.mapping, options.alias);
             var yamlDataCache = new Dictionary<string, YamlData>(); // aliasのため同テーブルはキャッシュする
             foreach (var sheetName in excelData.SheetNames) {
                 var yamlTableName = sheetsConfig.YamlTableName(fileName, sheetName);
