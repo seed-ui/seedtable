@@ -202,7 +202,7 @@ namespace SeedTable {
             );
         }
 
-        private static object ConvertValueWithYamlColumns(Deserializer deserializer, Dictionary<string, object> value, IEnumerable<string> yamlColumnNames) {
+        private static object ConvertValueWithYamlColumns(IDeserializer deserializer, Dictionary<string, object> value, IEnumerable<string> yamlColumnNames) {
             return value.ToDictionary(
                 pair => pair.Key,
                 pair => {
