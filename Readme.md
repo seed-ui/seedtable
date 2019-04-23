@@ -1,3 +1,14 @@
+# Extention
+
+seedtableに機能を追加したものです。
+https://github.com/seed-ui/seedtable
+
+## 追加機能
+
+ExcelのシートでIDよりも左側のセルに # と記述すると
+その行はコメントアウトとしてみなされて、YAMLへは出力されなくなります。
+この機能はEPPlusエンジンにのみ対応しています。
+
 # seedtable
 
 Rails等で扱うseed yaml <-> xlsx を相互変換するツールです。

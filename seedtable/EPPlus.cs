@@ -94,8 +94,27 @@ namespace SeedTable {
             public override string SheetName { get { return Worksheet.Name; } }
 
             public override DataDictionaryList ExcelToData(string requireVersion = "") {
-                var table = Enumerable.Range(DataStartRowIndex, Worksheet.Dimension.Rows).Select(rowIndex => GetCellValuesDictionary(rowIndex));
+                var table
+                    = Enumerable
+                        .Range(DataStartRowIndex, Worksheet.Dimension.Rows)
+                        .Where(IgnoreCommentRow)
+                        .Select(rowIndex => GetCellValuesDictionary(rowIndex));
                 return new DataDictionaryList(table, KeyColumnName);
+            }
+
+            bool IgnoreCommentRow(int rowIndex)
+            {
+                for (int i = 1; i < IdColumnIndex; i++)
+                {
+                    var value = Worksheet.Cells[rowIndex, i].Value;
+                    if (value != null && value.ToString().Trim() == "#")
+                    {
+                        // ID の列よりも左側に # がある行はコメントアウトされたとみなして無視する
+                        return false;
+                    }
+                }
+
+                return true;
             }
 
             Dictionary<string, object> GetCellValuesDictionary(int rowIndex) => Columns.ToDictionary(column => column.Name, column => Worksheet.Cells[rowIndex, column.Index].Value);
