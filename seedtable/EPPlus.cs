@@ -66,7 +66,7 @@ namespace SeedTable {
             }
 
             void GetColumns() {
-                foreach(var columnIndex in Enumerable.Range(1, Worksheet.Dimension.Columns)) {
+                foreach(var columnIndex in Enumerable.Range(1, Worksheet.Dimension.Columns + 1)) {
                     var cell = Worksheet.Cells[ColumnNamesRowIndex, columnIndex];
                     var value = cell.GetValue<string>();
                     if (value == null || value.Length == 0) continue;
