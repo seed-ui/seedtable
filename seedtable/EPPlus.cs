@@ -54,6 +54,9 @@ namespace SeedTable {
         }
 
         class SeedTable : SeedTableBase {
+            const string BackgroundColorThemeKey = "$background-color-theme";
+            const string BackgroundColorRgbKey = "$background-color-rgb";
+
             ExcelWorksheet Worksheet;
 
             public List<SeedTableColumn> Columns { get; } = new List<SeedTableColumn>();
@@ -103,11 +106,11 @@ namespace SeedTable {
                             var backgroundColor = Worksheet.Row(rowIndex).Style.Fill.BackgroundColor;
                             if (!string.IsNullOrEmpty(backgroundColor.Theme))
                             {
-                                valuesDictionary.Add("$background-color-theme", backgroundColor.Theme);
+                                valuesDictionary.Add(BackgroundColorThemeKey, backgroundColor.Theme);
                             }
                             else if (!string.IsNullOrEmpty(backgroundColor.Rgb))
                             {
-                                valuesDictionary.Add("$background-color-rgb", backgroundColor.Rgb);
+                                valuesDictionary.Add(BackgroundColorRgbKey, backgroundColor.Rgb);
                             }
 
                             return valuesDictionary;
@@ -131,8 +134,7 @@ namespace SeedTable {
                     if (indexedData.TryGetValue(id, out rowData)) {
                         restIds.Remove(id);
                         foreach (var column in Columns) {
-                            object value;
-                            if (rowData.TryGetValue(column.Name, out value)) {
+                            if (rowData.TryGetValue(column.Name, out var value)) {
                                 var cell = Worksheet.Cells[rowIndex, column.Index];
                                 if (cell.Formula != null && cell.Formula.Length != 0) continue;
                                 cell.Value = value;
