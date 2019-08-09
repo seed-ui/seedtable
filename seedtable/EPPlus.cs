@@ -94,7 +94,25 @@ namespace SeedTable {
             public override string SheetName { get { return Worksheet.Name; } }
 
             public override DataDictionaryList ExcelToData(string requireVersion = "") {
-                var table = Enumerable.Range(DataStartRowIndex, Worksheet.Dimension.Rows).Select(rowIndex => GetCellValuesDictionary(rowIndex));
+                var table
+                    = Enumerable.Range(DataStartRowIndex, Worksheet.Dimension.Rows)
+                        .Select(rowIndex =>
+                        {
+                            var valuesDictionary = GetCellValuesDictionary(rowIndex);
+
+                            var backgroundColor = Worksheet.Row(rowIndex).Style.Fill.BackgroundColor;
+                            if (!string.IsNullOrEmpty(backgroundColor.Theme))
+                            {
+                                valuesDictionary.Add("$background-color-theme", backgroundColor.Theme);
+                            }
+                            else if (!string.IsNullOrEmpty(backgroundColor.Rgb))
+                            {
+                                valuesDictionary.Add("$background-color-rgb", backgroundColor.Rgb);
+                            }
+
+                            return valuesDictionary;
+                        }).ToArray();
+
                 return new DataDictionaryList(table, KeyColumnName);
             }
 
