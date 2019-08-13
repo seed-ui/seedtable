@@ -227,6 +227,9 @@ namespace SeedTable {
                                 cell.Value = value;
                             }
                         }
+
+                        SetRowStyleFill(rowIndex, rowData);
+
                         --rowIndexOffset;
                     }
                 }
@@ -248,6 +251,28 @@ namespace SeedTable {
                     foreach (var rowIndex in toDeleteIndexes) {
                         Worksheet.DeleteRow(rowIndex);
                     }
+                }
+            }
+
+            void SetRowStyleFill(int rowIndex, IDictionary<string, object> rowData)
+            {
+                try {
+                    var row = Worksheet.Row(rowIndex);
+                    if (rowData.TryGetValue(FillPatternTypeKey, out var fillPatternType)) {
+                        row.Style.Fill.PatternType = (OfficeOpenXml.Style.ExcelFillStyle)Enum.Parse(typeof(OfficeOpenXml.Style.ExcelFillStyle), fillPatternType.ToString());
+                    } else {
+                        // パターンタイプが無ければ色を設定できないので、処理を終了する
+                        return;
+                    }
+
+                    if (rowData.TryGetValue(FillBackgroundColorThemeKey, out var backgroundColorTheme)) {
+                        // TODO: 未実装
+                    } else if (rowData.TryGetValue(FillBackgroundColorRgbKey, out var backgroundColorRgb)) {
+                        var color = Color.FromArgb(int.Parse(backgroundColorRgb.ToString(), System.Globalization.NumberStyles.AllowHexSpecifier));
+                        row.Style.Fill.BackgroundColor.SetColor(color);
+                    }
+                } catch (Exception e) {
+                    Errors.Add(e);
                 }
             }
 
