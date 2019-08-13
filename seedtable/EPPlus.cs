@@ -1,8 +1,11 @@
-﻿using System;
-using System.IO;
+﻿using OfficeOpenXml;
+using System;
 using System.Collections.Generic;
+using System.Drawing;
+using System.IO;
 using System.Linq;
-using OfficeOpenXml;
+using System.Reflection;
+using System.Xml;
 
 namespace SeedTable {
     namespace EPPlus {
@@ -54,8 +57,10 @@ namespace SeedTable {
         }
 
         class SeedTable : SeedTableBase {
-            const string BackgroundColorThemeKey = "$background-color-theme";
-            const string BackgroundColorRgbKey = "$background-color-rgb";
+            const string FillPatternTypeKey = "$fill-pattern-type";
+            const string FillBackgroundColorThemeKey = "$fill-background-color-theme";
+            const string FillBackgroundColorTintKey = "$fill-background-color-tint";
+            const string FillBackgroundColorRgbKey = "$fill-background-color-rgb";
 
             ExcelWorksheet Worksheet;
 
@@ -103,20 +108,28 @@ namespace SeedTable {
                         {
                             var valuesDictionary = GetCellValuesDictionary(rowIndex);
 
-                            var backgroundColor = Worksheet.Row(rowIndex).Style.Fill.BackgroundColor;
-                            if (!string.IsNullOrEmpty(backgroundColor.Theme))
-                            {
-                                valuesDictionary.Add(BackgroundColorThemeKey, backgroundColor.Theme);
-                            }
-                            else if (!string.IsNullOrEmpty(backgroundColor.Rgb))
-                            {
-                                valuesDictionary.Add(BackgroundColorRgbKey, backgroundColor.Rgb);
-                            }
+                            AddRowStyleFill(rowIndex, valuesDictionary);
 
                             return valuesDictionary;
                         }).ToArray();
 
                 return new DataDictionaryList(table, KeyColumnName);
+            }
+
+            void AddRowStyleFill(int rowIndex, Dictionary<string, object> valuesDictionary)
+            {
+                var fill = Worksheet.Row(rowIndex).Style.Fill;
+                if (!string.IsNullOrEmpty(fill.BackgroundColor.Theme))
+                {
+                    valuesDictionary.Add(FillPatternTypeKey, fill.PatternType);
+                    valuesDictionary.Add(FillBackgroundColorThemeKey, fill.BackgroundColor.Theme);
+                    valuesDictionary.Add(FillBackgroundColorTintKey, fill.BackgroundColor.Tint);
+                }
+                else if (!string.IsNullOrEmpty(fill.BackgroundColor.Rgb))
+                {
+                    valuesDictionary.Add(FillPatternTypeKey, fill.PatternType);
+                    valuesDictionary.Add(FillBackgroundColorRgbKey, fill.BackgroundColor.Rgb);
+                }
             }
 
             Dictionary<string, object> GetCellValuesDictionary(int rowIndex) => Columns.ToDictionary(column => column.Name, column => Worksheet.Cells[rowIndex, column.Index].Value);
