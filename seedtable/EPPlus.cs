@@ -294,13 +294,20 @@ namespace SeedTable {
                         }
 
                         var baseColor = themeColorList[int.Parse(backgroundColorTheme.ToString())];
-                        var tint = decimal.Parse(backgroundColorTint.ToString());
+                        var tint = float.Parse(backgroundColorTint.ToString());
 
-                        var r = baseColor.R;
-                        var g = baseColor.G;
-                        var b = baseColor.B;
+                        var hue = baseColor.GetHue();
+                        var saturation = baseColor.GetSaturation();
+                        var brightness = baseColor.GetBrightness();
 
-                        var color = Color.FromArgb(baseColor.A, r, g, b);
+                        if (tint > 0) {
+                            // TODO: 未実装
+                        } else if (tint < 0) {
+                            brightness *= (1.0f + tint);
+                        }
+
+                        var color = HlsToRgb(hue, saturation, brightness);
+
                         row.Style.Fill.BackgroundColor.SetColor(color);
                     } else if (rowData.TryGetValue(FillBackgroundColorRgbKey, out var backgroundColorRgb)) {
                         var color = Color.FromArgb(int.Parse(backgroundColorRgb.ToString(), System.Globalization.NumberStyles.AllowHexSpecifier));
@@ -309,6 +316,66 @@ namespace SeedTable {
                 } catch (Exception e) {
                     Errors.Add(e);
                 }
+            }
+
+            Color HlsToRgb(float hue, float saturation, float brightness) {
+                float s = saturation;
+                float l = brightness;
+
+                float r1, g1, b1;
+                if (s == 0) {
+                    r1 = l;
+                    g1 = l;
+                    b1 = l;
+                } else {
+                    float h = hue / 60f;
+                    int i = (int)Math.Floor(h);
+                    float f = h - i;
+                    //float c = (1f - Math.Abs(2f * l - 1f)) * s;
+                    float c = (l < 0.5f) ? 2f * s * l : 2f * s * (1f - l);
+                    float m = l - c / 2f;
+                    float p = c + m;
+                    //float x = c * (1f - Math.Abs(h % 2f - 1f));
+                    float q = (i % 2 == 0) ? q = l + c * (f - 0.5f) : q = l - c * (f - 0.5f); // q = x + m
+
+                    switch (i) {
+                        case 0:
+                            r1 = p;
+                            g1 = q;
+                            b1 = m;
+                            break;
+                        case 1:
+                            r1 = q;
+                            g1 = p;
+                            b1 = m;
+                            break;
+                        case 2:
+                            r1 = m;
+                            g1 = p;
+                            b1 = q;
+                            break;
+                        case 3:
+                            r1 = m;
+                            g1 = q;
+                            b1 = p;
+                            break;
+                        case 4:
+                            r1 = q;
+                            g1 = m;
+                            b1 = p;
+                            break;
+                        case 5:
+                            r1 = p;
+                            g1 = m;
+                            b1 = q;
+                            break;
+                        default:
+                            throw new ArgumentException(
+                                "色相の値が不正です。", "hsl");
+                    }
+                }
+
+                return Color.FromArgb((int)Math.Round(r1 * 255f), (int)Math.Round(g1 * 255f), (int)Math.Round(b1 * 255f));
             }
 
             Dictionary<string, List<string>> GetReversedIdGroups(List<long> existIds, List<long> restIds) {
