@@ -26,7 +26,7 @@ namespace SeedTable {
 
             public SeedTableBase GetSeedTable(string sheetName, int columnNamesRowIndex = 2, int dataStartRowIndex = 3, IEnumerable<string> ignoreColumnNames = null, string keyColumnName = "id", string versionColumnName = null) {
                 try {
-                    return new SeedTable(Document.Workbook.Worksheets[sheetName], columnNamesRowIndex, dataStartRowIndex, ignoreColumnNames, keyColumnName, versionColumnName);
+                    return new SeedTable(Document, Document.Workbook.Worksheets[sheetName], columnNamesRowIndex, dataStartRowIndex, ignoreColumnNames, keyColumnName, versionColumnName);
                 } catch (KeyNotFoundException exception) {
                     throw new SheetNotFoundException($"sheet [{sheetName}] not found in [{Document.File}]", exception);
                 }
@@ -62,13 +62,16 @@ namespace SeedTable {
             const string FillBackgroundColorTintKey = "$fill-background-color-tint";
             const string FillBackgroundColorRgbKey = "$fill-background-color-rgb";
 
+            ExcelPackage Document;
             ExcelWorksheet Worksheet;
+            List<Color> themeColorList = new List<Color>();
 
             public List<SeedTableColumn> Columns { get; } = new List<SeedTableColumn>();
             public int VersionColumnIndex { get; private set; }
             public int IdColumnIndex { get; private set; }
 
-            public SeedTable(ExcelWorksheet worksheet, int columnNamesRowIndex = 2, int dataStartRowIndex = 3, IEnumerable<string> ignoreColumnNames = null, string keyColumnName = "id", string versionColumnName = null) : base(columnNamesRowIndex, dataStartRowIndex, ignoreColumnNames, keyColumnName, versionColumnName) {
+            public SeedTable(ExcelPackage document, ExcelWorksheet worksheet, int columnNamesRowIndex = 2, int dataStartRowIndex = 3, IEnumerable<string> ignoreColumnNames = null, string keyColumnName = "id", string versionColumnName = null) : base(columnNamesRowIndex, dataStartRowIndex, ignoreColumnNames, keyColumnName, versionColumnName) {
+                Document = document;
                 Worksheet = worksheet;
                 GetColumns();
             }
@@ -135,6 +138,8 @@ namespace SeedTable {
             Dictionary<string, object> GetCellValuesDictionary(int rowIndex) => Columns.ToDictionary(column => column.Name, column => Worksheet.Cells[rowIndex, column.Index].Value);
 
             public override void DataToExcel(DataDictionaryList data, bool delete = false) {
+                SetupThemeColor();
+
                 var indexedData = data.IndexById();
                 var idIndexes = new List<IdIndex>();
                 var restIds = new HashSet<string>(indexedData.Keys);
@@ -254,6 +259,24 @@ namespace SeedTable {
                 }
             }
 
+            void SetupThemeColor() {
+                var getXmlFromUri = typeof(ExcelPackage).GetMethod("GetXmlFromUri", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.InvokeMethod);
+                var theme1uri = new Uri("/xl/theme/theme1.xml", UriKind.Relative);
+                var theme1xml = (XmlDocument)getXmlFromUri.Invoke(Document, new object[] { theme1uri });
+
+                foreach (XmlElement element in theme1xml.GetElementsByTagName("a:sysClr")) {
+                    var colorString = element.GetAttribute("lastClr");
+                    var color = Color.FromArgb(int.Parse("FF" + colorString, System.Globalization.NumberStyles.AllowHexSpecifier));
+                    themeColorList.Add(color);
+                }
+
+                foreach (XmlElement element in theme1xml.GetElementsByTagName("a:srgbClr")) {
+                    var colorString = element.GetAttribute("val");
+                    var color = Color.FromArgb(int.Parse("FF" + colorString, System.Globalization.NumberStyles.AllowHexSpecifier));
+                    themeColorList.Add(color);
+                }
+            }
+
             void SetRowStyleFill(int rowIndex, IDictionary<string, object> rowData)
             {
                 try {
@@ -266,7 +289,19 @@ namespace SeedTable {
                     }
 
                     if (rowData.TryGetValue(FillBackgroundColorThemeKey, out var backgroundColorTheme)) {
-                        // TODO: 未実装
+                        if (!rowData.TryGetValue(FillBackgroundColorTintKey, out var backgroundColorTint)) {
+                            // Tintが無い場合は色の変換は行わない
+                        }
+
+                        var baseColor = themeColorList[int.Parse(backgroundColorTheme.ToString())];
+                        var tint = decimal.Parse(backgroundColorTint.ToString());
+
+                        var r = baseColor.R;
+                        var g = baseColor.G;
+                        var b = baseColor.B;
+
+                        var color = Color.FromArgb(baseColor.A, r, g, b);
+                        row.Style.Fill.BackgroundColor.SetColor(color);
                     } else if (rowData.TryGetValue(FillBackgroundColorRgbKey, out var backgroundColorRgb)) {
                         var color = Color.FromArgb(int.Parse(backgroundColorRgb.ToString(), System.Globalization.NumberStyles.AllowHexSpecifier));
                         row.Style.Fill.BackgroundColor.SetColor(color);
