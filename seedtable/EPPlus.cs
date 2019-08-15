@@ -289,19 +289,18 @@ namespace SeedTable {
                     }
 
                     if (rowData.TryGetValue(FillBackgroundColorThemeKey, out var backgroundColorTheme)) {
-                        if (!rowData.TryGetValue(FillBackgroundColorTintKey, out var backgroundColorTint)) {
-                            // Tintが無い場合は色の変換は行わない
-                        }
-
                         var baseColor = themeColorList[int.Parse(backgroundColorTheme.ToString())];
-                        var tint = float.Parse(backgroundColorTint.ToString());
+                        float tint = 0.0f;
+                        if (rowData.TryGetValue(FillBackgroundColorTintKey, out var backgroundColorTint)) {
+                            tint = float.Parse(backgroundColorTint.ToString());
+                        }
 
                         var hue = baseColor.GetHue();
                         var saturation = baseColor.GetSaturation();
                         var brightness = baseColor.GetBrightness();
 
                         if (tint > 0) {
-                            // TODO: 未実装
+                            brightness = brightness * (1.0f - tint) - tint;
                         } else if (tint < 0) {
                             brightness *= (1.0f + tint);
                         }
