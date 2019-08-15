@@ -292,7 +292,7 @@ namespace SeedTable {
                         var brightness = baseColor.GetBrightness();
 
                         if (tint > 0) {
-                            brightness = brightness * (1.0f - tint) - tint;
+                            brightness = brightness * (1.0f - tint) + tint;
                         } else if (tint < 0) {
                             brightness *= (1.0f + tint);
                         }
