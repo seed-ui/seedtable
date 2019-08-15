@@ -4,8 +4,6 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Linq;
-using System.Reflection;
-using System.Xml;
 
 namespace SeedTable {
     namespace EPPlus {
@@ -62,9 +60,23 @@ namespace SeedTable {
             const string FillBackgroundColorTintKey = "$fill-background-color-tint";
             const string FillBackgroundColorRgbKey = "$fill-background-color-rgb";
 
+            // Excelのデータからテーマカラーを正しく取得するのが難しいため、定数として用意する
+            readonly Color[] themeColors = new[]
+            {
+                Color.White,
+                Color.Black,
+                Color.FromArgb(255, 231, 230, 230),
+                Color.FromArgb(255, 68, 84, 106),
+                Color.FromArgb(255, 91, 155, 213),
+                Color.FromArgb(255, 237, 125, 49),
+                Color.FromArgb(255, 165, 165, 165),
+                Color.FromArgb(255, 255, 192, 0),
+                Color.FromArgb(255, 68, 114, 196),
+                Color.FromArgb(255, 112, 173, 71)
+            };
+
             ExcelPackage Document;
             ExcelWorksheet Worksheet;
-            List<Color> themeColorList = new List<Color>();
 
             public List<SeedTableColumn> Columns { get; } = new List<SeedTableColumn>();
             public int VersionColumnIndex { get; private set; }
@@ -138,8 +150,6 @@ namespace SeedTable {
             Dictionary<string, object> GetCellValuesDictionary(int rowIndex) => Columns.ToDictionary(column => column.Name, column => Worksheet.Cells[rowIndex, column.Index].Value);
 
             public override void DataToExcel(DataDictionaryList data, bool delete = false) {
-                SetupThemeColor();
-
                 var indexedData = data.IndexById();
                 var idIndexes = new List<IdIndex>();
                 var restIds = new HashSet<string>(indexedData.Keys);
@@ -259,24 +269,6 @@ namespace SeedTable {
                 }
             }
 
-            void SetupThemeColor() {
-                var getXmlFromUri = typeof(ExcelPackage).GetMethod("GetXmlFromUri", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.InvokeMethod);
-                var theme1uri = new Uri("/xl/theme/theme1.xml", UriKind.Relative);
-                var theme1xml = (XmlDocument)getXmlFromUri.Invoke(Document, new object[] { theme1uri });
-
-                foreach (XmlElement element in theme1xml.GetElementsByTagName("a:sysClr")) {
-                    var colorString = element.GetAttribute("lastClr");
-                    var color = Color.FromArgb(int.Parse("FF" + colorString, System.Globalization.NumberStyles.AllowHexSpecifier));
-                    themeColorList.Add(color);
-                }
-
-                foreach (XmlElement element in theme1xml.GetElementsByTagName("a:srgbClr")) {
-                    var colorString = element.GetAttribute("val");
-                    var color = Color.FromArgb(int.Parse("FF" + colorString, System.Globalization.NumberStyles.AllowHexSpecifier));
-                    themeColorList.Add(color);
-                }
-            }
-
             void SetRowStyleFill(int rowIndex, IDictionary<string, object> rowData)
             {
                 try {
@@ -289,7 +281,7 @@ namespace SeedTable {
                     }
 
                     if (rowData.TryGetValue(FillBackgroundColorThemeKey, out var backgroundColorTheme)) {
-                        var baseColor = themeColorList[int.Parse(backgroundColorTheme.ToString())];
+                        var baseColor = themeColors[int.Parse(backgroundColorTheme.ToString())];
                         float tint = 0.0f;
                         if (rowData.TryGetValue(FillBackgroundColorTintKey, out var backgroundColorTint)) {
                             tint = float.Parse(backgroundColorTint.ToString());
