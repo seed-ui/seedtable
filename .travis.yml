@@ -10,23 +10,17 @@ _after_success: &after_success
   - cp -R seedtable-x11/XmSeedtable/bin/Release XmSeedtable
   - zip -r -9 XmSeedtable-${TRAVIS_OS_NAME}.zip XmSeedtable
 _script_with_test: &script_with_test
-  - xbuild /p:Configuration=Release ${SOLUTION}
+  - xbuild /p:Configuration=Release seedtable.sln
   - mono ./packages/xunit.runner.console.2.3.1/tools/net452/xunit.console.exe ./seedtable-test/bin/Release/seedtable-test.dll -verbose
 language: csharp
 mono: latest
-solution: ${SOLUTION}
+solution: seedtable-x11/XmSeedtable.sln
 matrix:
   include:
-    - env:
-        - SOLUTION=seedtable.sln
-      script: *script_with_test
-    - env:
-        - SOLUTION=seedtable.sln
-      script: *script_with_test
+    - script: *script_with_test
+    - script: *script_with_test
       os: osx
-    - env:
-        - SOLUTION=seedtable-x11/XmSeedtable.sln
-      install:
+    - install:
         - sudo apt-get -qq update
         - sudo apt-get -qq install libmotif-dev libxmu-dev libxt-dev
         - nuget restore seedtable.sln
@@ -34,7 +28,6 @@ matrix:
       after_success: *after_success
       deploy: *deploy
     - env:
-        - SOLUTION=seedtable-x11/XmSeedtable.sln
         # - XQUARTZ_VERSION=2.7.8
         - PKG_CONFIG_PATH=/opt/X11/lib/pkgconfig
       os: osx
