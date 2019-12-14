@@ -33,6 +33,6 @@ deploy:
     secure: pXNt94D78LGVsrWyPtoaFzXZI1rUt8iCaEvjjhQnM1hwyH/eV1Vnh/WhJQ9eLmgR
   draft: false
   prerelease: false
-  artifact: /releases\/seedtable*\.zip/
+  artifact: /releases\/seedtable.*\.zip/
   on:
     appveyor_repo_tag: true
