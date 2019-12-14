@@ -16,22 +16,20 @@ jobs:
     executor: win/default
     steps:
       - checkout
-      - choco install dotnetcore-sdk
+      - run:
+          command: choco install dotnetcore-sdk
       - restore_cache:
           keys:
             - packages-cache-windows-{{ checksum "seedtable/seedtable.csproj" }}-{{ checksum "seedtable-gui/seedtable-gui.csproj" }}
       - run:
-          name: "Install project dependencies"
           command: dotnet restore
       - save_cache:
           paths:
             - C:\Users\circleci\.nuget\packages
           key: packages-cache-windows-{{ checksum "seedtable/seedtable.csproj" }}-{{ checksum "seedtable-gui/seedtable-gui.csproj" }}
       - run:
-          name: "Run Build step"
           command: .\publish.bat
       - run:
-          name: "Test the executable"
           command: dotnet test seedtable-test
       - store_artifacts:
           path: .\seedtable\bin\Release\netcoreapp3.1\publish\win-x86\seedtable.exe
