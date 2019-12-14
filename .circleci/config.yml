@@ -68,7 +68,7 @@ jobs:
             - packages-cache-osx-{{ checksum "seedtable/seedtable.csproj" }}-{{ checksum "seedtable-gui/seedtable-gui.csproj" }}
       - run:
           name: "Install project dependencies"
-          command: dotnet restore
+          command: dotnet restore seedtable-test
       - save_cache:
           paths:
             - ~/.nuget/packages
