@@ -11,7 +11,7 @@ before_build:
   - dotnet restore
 build_script:
   - .\publish.bat
-  - .\releases.ps1
+  - ps: .\releases.ps1
 test_script:
   - dotnet test
 artifacts:
