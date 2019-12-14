@@ -5,7 +5,7 @@
     <UseWindowsForms>true</UseWindowsForms>
     <AssemblyName>seedtable-gui</AssemblyName>
     <RootNamespace>seedtable_gui</RootNamespace>
-    <Version>3.27.2</Version>
+    <Version>4.0.0-rc</Version>
     <Authors>Narazaka</Authors>
     <Company />
     <PackageLicenseExpression>MIT</PackageLicenseExpression>

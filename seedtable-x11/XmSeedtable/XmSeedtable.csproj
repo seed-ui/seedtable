@@ -4,7 +4,7 @@
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <AssemblyName>XmSeedTable</AssemblyName>
     <RootNamespace>XmSeedTable</RootNamespace>
-    <Version>3.27.2</Version>
+    <Version>4.0.0-rc</Version>
     <Authors>Narazaka</Authors>
     <Company />
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
