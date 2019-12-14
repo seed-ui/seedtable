@@ -30,21 +30,13 @@ jobs:
             - C:\Users\circleci\.nuget\packages
           key: packages-cache-windows-{{ checksum "seedtable/seedtable.csproj" }}-{{ checksum "seedtable-gui/seedtable-gui.csproj" }}
       - run:
+          command: dotnet test seedtable-test
+      - run:
           command: .\publish.bat
       - run:
-          command: dotnet test seedtable-test
+          command: .\releases.ps1
       - store_artifacts:
-          path: .\seedtable\bin\Release\netcoreapp3.1\publish\win-x86\seedtable.exe
-      - store_artifacts:
-          path: .\seedtable\bin\Release\netcoreapp3.1\publish\linux-x64\seedtable
-      - store_artifacts:
-          path: .\seedtable\bin\Release\netcoreapp3.1\publish\osx-x64\seedtable
-      - store_artifacts:
-          path: .\seedtable\bin\Release\netcoreapp3.1\publish\portable
-      - store_artifacts:
-          path: .\seedtable-gui\bin\Release\netcoreapp3.1\publish\win-x86\seedtable-gui.exe
-      - store_artifacts:
-          path: .\seedtable-gui\bin\Release\netcoreapp3.1\publish\portable
+          path: .\releases
 
   linux-test:
     docker:

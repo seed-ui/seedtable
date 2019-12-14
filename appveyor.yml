@@ -8,22 +8,31 @@ platform:
 configuration:
   - Release
 before_build:
-  - nuget restore
-build:
-  project: seedtable.sln
-test:
-  assemblies:
-    only:
-      - "**/*-test.dll"
+  - dotnet restore
+build_script:
+  - .\publish.bat
+  - .\releases.ps1
+test_script:
+  - dotnet test
 artifacts:
-  - path: seedtable-gui/bin/Release
+  - path: releases/seedtable.zip
     name: seedtable
+  - path: releases/seedtable-linux.zip
+    name: seedtable-linux
+  - path: releases/seedtable-osx.zip
+    name: seedtable-osx
+  - path: releases/seedtable-need-runtime.zip
+    name: seedtable-need-runtime
+  - path: releases/seedtable-gui.zip
+    name: seedtable-gui
+  - path: releases/seedtable-gui-need-runtime.zip
+    name: seedtable-gui-need-runtime
 deploy:
   provider: GitHub
   auth_token:
     secure: sf2zcb1xd8VNZCqJF/VYLFGjDphmkBFXrjoFoviFndPkIJ6zj/LPPzG1c63yowsC
   draft: false
   prerelease: false
-  artifact: seedtable-gui/bin/seedtable.zip
+  artifact: /releases\/seedtable*\.zip/
   on:
     appveyor_repo_tag: true
