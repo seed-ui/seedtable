@@ -95,7 +95,7 @@ namespace SeedTable {
                 var indexedData = data.IndexById();
                 var ids = new HashSet<string>(indexedData.Keys);
                 var restIds = new HashSet<string>(indexedData.Keys);
-                Worksheet.Rows().Skip(DataStartRowIndex - 1).ForEach(row => {
+                foreach (var row in Worksheet.Rows().Skip(DataStartRowIndex - 1)) {
                     var id = row.Cell(IdColumnIndex).GetValue<string>();
                     if (ids.Contains(id)) {
                         var rowData = indexedData[id];
@@ -106,7 +106,7 @@ namespace SeedTable {
                         });
                         restIds.Remove(id);
                     }
-                });
+                };
             }
 
             public override DataDictionaryList ExcelToData(string requireVersion = "") {
