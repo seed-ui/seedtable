@@ -30,7 +30,7 @@ artifacts:
 deploy:
   provider: GitHub
   auth_token:
-    secure: sf2zcb1xd8VNZCqJF/VYLFGjDphmkBFXrjoFoviFndPkIJ6zj/LPPzG1c63yowsC
+    secure: pXNt94D78LGVsrWyPtoaFzXZI1rUt8iCaEvjjhQnM1hwyH/eV1Vnh/WhJQ9eLmgR
   draft: false
   prerelease: false
   artifact: /releases\/seedtable*\.zip/
