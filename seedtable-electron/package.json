@@ -15,5 +15,9 @@
   "bugs": {
     "url": "https://github.com/seed-ui/seedtable/issues"
   },
-  "homepage": "https://github.com/seed-ui/seedtable#readme"
+  "homepage": "https://github.com/seed-ui/seedtable#readme",
+  "dependencies": {},
+  "devDependencies": {
+    "electron": "^7.1.5"
+  }
 }
