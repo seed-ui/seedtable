@@ -3,6 +3,14 @@ version: 2.1
 orbs:
   win: circleci/windows@2.2.0
 
+workflows:
+  version: 2
+  build_and_test:
+    jobs:
+      - windows-build
+      - linux-test
+      - osx-test
+
 jobs:
   windows-build:
     executor: win/default
