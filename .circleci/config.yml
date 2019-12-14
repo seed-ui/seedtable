@@ -9,7 +9,7 @@ workflows:
     jobs:
       - windows-build
       - linux-test
-      - osx-test
+#      - osx-test
 
 jobs:
   windows-build:
