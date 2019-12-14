@@ -16,6 +16,7 @@ jobs:
     executor: win/default
     steps:
       - checkout
+      - choco install dotnetcore-sdk
       - restore_cache:
           keys:
             - packages-cache-windows-{{ checksum "seedtable/seedtable.csproj" }}-{{ checksum "seedtable-gui/seedtable-gui.csproj" }}
