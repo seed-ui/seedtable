@@ -1,87 +1,113 @@
 <!DOCTYPE html>
 <html lang="ja">
-<head>
-    <meta charset="UTF-8">
+  <head>
+    <meta charset="UTF-8" />
     <title>Title</title>
     <script>
-    const remote = require('electron').remote;
-    const dialog = remote.dialog;
-    const exec = require('child_process').exec;
+      const remote = require("electron").remote;
+      const dialog = remote.dialog;
+      const exec = require("child_process").exec;
 
-    function inputDirectorySelectClick() {
-        dialog.showOpenDialog(null, {
-            properties: ['openDirectory'],
-            title: 'フォルダ(単独選択)',
-            defaultPath: '.'
-        }).then(result => {
+      function inputDirectorySelectClick() {
+        dialog
+          .showOpenDialog(null, {
+            properties: ["openDirectory"],
+            title: "フォルダ(単独選択)",
+            defaultPath: "."
+          })
+          .then(result => {
             if (result.canceled) {
-                return;
+              return;
             }
             const filepath = result.filePaths[0];
             console.log(filepath);
-            document.getElementById('inputDirectory').value = filepath;
-        }).catch(err => {
-            console.log(err)
-        });
-    }
+            document.getElementById("inputDirectory").value = filepath;
+          })
+          .catch(err => {
+            console.log(err);
+          });
+      }
 
-    function configFileSelectClick() {
-        dialog.showOpenDialog(null, {
-            properties: ['openFile'],
-            title: '設定ファイル',
-            defaultPath: '.'
-        }).then(result => {
+      function configFileSelectClick() {
+        dialog
+          .showOpenDialog(null, {
+            properties: ["openFile"],
+            title: "設定ファイル",
+            defaultPath: "."
+          })
+          .then(result => {
             if (result.canceled) {
-                return;
+              return;
             }
             const filepath = result.filePaths[0];
             console.log(filepath);
-            document.getElementById('configFile').value = filepath;
-        }).catch(err => {
-            console.log(err)
-        });
-    }
+            document.getElementById("configFile").value = filepath;
+          })
+          .catch(err => {
+            console.log(err);
+          });
+      }
 
-    function yamlToXlsxClick() {
-        const inputDirectory = document.getElementById('inputDirectory').value;
-        const configFile = document.getElementById('configFile').value;
+      function yamlToXlsxClick() {
+        const inputDirectory = document.getElementById("inputDirectory").value;
+        const configFile = document.getElementById("configFile").value;
         return;
 
-        exec('./seedtable from ', (err, stdout, stderr) => {
-            if (err) { console.log(err); }
-            console.log(stdout);
+        exec("./seedtable from ", (err, stdout, stderr) => {
+          if (err) {
+            console.log(err);
+          }
+          console.log(stdout);
         });
-    }
+      }
 
-    function xlsxToYamlClick() {
-        const inputDirectory = document.getElementById('inputDirectory').value;
-        const configFile = document.getElementById('configFile').value;
+      function xlsxToYamlClick() {
+        const inputDirectory = document.getElementById("inputDirectory").value;
+        const configFile = document.getElementById("configFile").value;
         return;
 
-        exec('./seedtable from ', (err, stdout, stderr) => {
-            if (err) { console.log(err); }
-            console.log(stdout);
+        exec("./seedtable from ", (err, stdout, stderr) => {
+          if (err) {
+            console.log(err);
+          }
+          console.log(stdout);
         });
-    }
+      }
     </script>
     <style>
-        button {
-            min-width: 150px;
-        }
+      button {
+        min-width: 150px;
+      }
     </style>
-</head>
-<body>
-<div class="container">
-    <div>
-        <button id="inputDirectorySelect" type="button" onclick="inputDirectorySelectClick()">フォルダ選択</button>
-        <input id="inputDirectory" type="text">
+  </head>
+  <body>
+    <div class="container">
+      <div>
+        <button
+          id="inputDirectorySelect"
+          type="button"
+          onclick="inputDirectorySelectClick()"
+        >
+          フォルダ選択
+        </button>
+        <input id="inputDirectory" type="text" />
+      </div>
+      <div>
+        <button
+          id="configFileSelect"
+          type="button"
+          onclick="configFileSelectClick()"
+        >
+          設定ファイル選択
+        </button>
+        <input id="configFile" type="text" />
+      </div>
+      <button id="yamlToXlsx" type="button" onclick="yamlToXlsxClick()">
+        <img src="Resources/yamlToExcel.png" />
+      </button>
+      <button id="xlsxToYaml" type="button" onclick="xlsxToYamlClick()">
+        <img src="Resources/excelToYaml.png" />
+      </button>
     </div>
-    <div>
-        <button id="configFileSelect" type="button" onclick="configFileSelectClick()">設定ファイル選択</button>
-        <input id="configFile" type="text">
-    </div>
-    <button id="yamlToXlsx" type="button" onclick="yamlToXlsxClick()"><img src="Resources/yamlToExcel.png"></button>
-    <button id="xlsxToYaml" type="button" onclick="xlsxToYamlClick()"><img src="Resources/excelToYaml.png"></button>
-</div>
-</body>
+  </body>
 </html>
