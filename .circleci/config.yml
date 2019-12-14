@@ -19,6 +19,8 @@ jobs:
       - run:
           command: choco install dotnetcore-sdk --version 3.1.100 -y
       - run:
+          command: $ProgressPreference = "SilentlyContinue"
+      - run:
           command: nuget sources Enable -Name nuget.org
       - restore_cache:
           keys:
