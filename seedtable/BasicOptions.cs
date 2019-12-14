@@ -62,7 +62,7 @@ namespace SeedTable {
         public static BasicOptions Load(string filepath) {
             var yaml = File.ReadAllText(filepath);
             var builder = new DeserializerBuilder();
-            builder.WithNamingConvention(new HyphenatedNamingConvention());
+            builder.WithNamingConvention(HyphenatedNamingConvention.Instance);
             builder.IgnoreUnmatchedProperties();
             var deserializer = builder.Build();
             var options = deserializer.Deserialize<BasicOptions>(yaml);
@@ -71,7 +71,7 @@ namespace SeedTable {
 
         public void Save(string filepath) {
             var builder = new SerializerBuilder();
-            builder.WithNamingConvention(new HyphenatedNamingConvention());
+            builder.WithNamingConvention(HyphenatedNamingConvention.Instance);
             var serializer = builder.Build();
             var yaml = serializer.Serialize(this);
             File.WriteAllText(filepath, yaml);
