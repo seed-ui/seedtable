@@ -243,7 +243,7 @@ namespace seedtable_gui {
         }
 
         private void SaveSetting(BasicOptions options) {
-            if (SettingPath == null || SettingPath.Length == 0) SettingPath = Path.Combine(Application.StartupPath, DefaultSettingFile);
+            if (SettingPath == null || SettingPath.Length == 0) SettingPath = Path.Combine(ApplicationRootPath, DefaultSettingFile);
             options.Save(SettingPath);
         }
 
@@ -278,20 +278,22 @@ namespace seedtable_gui {
         }
 
         private string FormValuesPath {
-            get { return Path.Combine(Application.StartupPath, FormValuesFile); }
+            get { return Path.Combine(ApplicationRootPath, FormValuesFile); }
         }
         private const string FormValuesFile = "settings.yml";
 
         private string PersonalFormValuesPath {
-            get { return Path.Combine(Application.StartupPath, PersonalFormValuesFile); }
+            get { return Path.Combine(ApplicationRootPath, PersonalFormValuesFile); }
         }
         private const string PersonalFormValuesFile = "personal_settings.yml";
 
         private string SettingReadOnlyPath {
-            get { return Path.Combine(Application.StartupPath, SettingReadOnlyFile); }
+            get { return Path.Combine(ApplicationRootPath, SettingReadOnlyFile); }
         }
         private const string SettingReadOnlyFile = "options.readonly";
 
         private static HashSet<string> AllowExtensions = new HashSet<string> {".xlsx", ".xlsm"};
+
+        private static string ApplicationRootPath = Path.GetDirectoryName(System.Diagnostics.Process.GetCurrentProcess().MainModule.FileName);
     }
 }
