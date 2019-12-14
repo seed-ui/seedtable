@@ -18,6 +18,8 @@ jobs:
       - checkout
       - run:
           command: choco install dotnetcore-sdk --version 3.1.100 -y
+      - run:
+          command: nuget sources Enable -Name nuget.org
       - restore_cache:
           keys:
             - packages-cache-windows-{{ checksum "seedtable/seedtable.csproj" }}-{{ checksum "seedtable-gui/seedtable-gui.csproj" }}
