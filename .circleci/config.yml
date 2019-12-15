@@ -64,6 +64,8 @@ jobs:
     steps:
       - checkout
       - run:
+          command: git submodule update --init
+      - run:
           command: dotnet restore seedtable-x11/XmSeedtable
       - run:
           command: sh publish-xm-linux.sh
