@@ -10,6 +10,7 @@ workflows:
 #      - windows-build
       - linux-test
       - linux-xm-build
+      - linux-egui-build
 #      - osx-test
 
 jobs:
@@ -73,6 +74,24 @@ jobs:
           command: sh releases-xm-linux.sh
       - store_artifacts:
           path: ./releases
+
+  linux-egui-build:
+    docker:
+      - image: narazaka/dotnet-node:latest
+    steps:
+      - checkout
+      - run:
+          command: dotnet restore seedtable-egui
+      - run:
+          command: dotnet tool install ElectronNET.CLI -g
+      - run:
+          command: npm install -g electron-builder
+      - run:
+          command: cd seedtable-egui
+      - run:
+          command: electronize build /target linux
+      - store_artifacts:
+          path: ./seedtable-egui/bin/Desktop/*.tar.gz
 
   osx-test:
     macos:
