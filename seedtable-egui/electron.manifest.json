@@ -5,10 +5,10 @@
   },
   "singleInstance": true,
   "build": {
-    "appId": "com.seedtable-egui.app",
+    "appId": "net.narazaka.seedtable-egui.app",
     "productName": "seedtable-egui",
-    "copyright": "Copyright © 2019",
-    "buildVersion": "1.0.0",
+    "copyright": "Copyright © 2019 Narazaka",
+    "buildVersion": "4.0.0-rc",
     "compression": "maximum",
     "directories": {
       "output": "../../../bin/Desktop"
@@ -27,6 +27,18 @@
         "filter": ["**/*"]
       },
       "**/*"
-    ]
+    ],
+    "win": {
+      "target": "zip",
+      "icon": "../../../seedtable-gui.ico"
+    },
+    "linux": {
+      "target": "tar.gz",
+      "icon": "../../../seedtable-gui.png"
+    },
+    "mac": {
+      "target": "default",
+      "icon": "../../../seedtable-gui.png"
+    }
   }
 }
