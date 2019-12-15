@@ -1,6 +1,6 @@
-﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <OutputType>WinExe</OutputType>
+    <OutputType>Exe</OutputType>
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <AssemblyName>XmSeedTable</AssemblyName>
     <RootNamespace>XmSeedTable</RootNamespace>
@@ -11,24 +11,27 @@
     <PackageProjectUrl>https://github.com/seed-ui/seedtable</PackageProjectUrl>
     <RepositoryUrl>https://github.com/seed-ui/seedtable.git</RepositoryUrl>
   </PropertyGroup>
+
   <ItemGroup>
-    <ProjectReference Include="..\..\seedtable\seedtable.csproj">
-      <Project>{8bd2867d-75b8-4da7-9e62-b23e994cd3a0}</Project>
-      <Name>seedtable</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\TonNurako\TonNurako.csproj">
-      <Project>{936e32ea-d5cb-41b5-b75a-a282db26cc1c}</Project>
-      <Name>TonNurako</Name>
-    </ProjectReference>
+    <ProjectReference Include="..\..\seedtable\seedtable.csproj" />
+    <ProjectReference Include="..\TonNurako2\TonNurako\TonNurako.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="YamlDotNet">
-      <Version>8.0.0</Version>
-    </PackageReference>
+    <PackageReference Include="YamlDotNet" Version="8.0.0"/>
   </ItemGroup>
-  <PropertyGroup>
-    <PostBuildEvent>
-		  cp $(SolutionDir)bin/$(ConfigurationName)/libTonNurako.extremesports $(TargetDir)
-	  </PostBuildEvent>
-  </PropertyGroup>
+
+  <Target Name="CopyExtremeSports" AfterTargets="Build">
+      <ItemGroup>
+        <ExtremeSports 
+          Include="../TonNurako2/TonNurako/bin/$(Configuration)/netstandard2.1/libTonNurako.extremesports"/>
+      </ItemGroup>
+
+      <Message Condition="'$(OS)' != 'Unix'"
+          Text="=== SKIP TonNuraConfig ($(OS)) ===" />
+      <Copy
+          Condition="'$(OS)' == 'Unix'"
+          SourceFiles="@(ExtremeSports)"
+          DestinationFolder="$(OutputPath)">
+      </Copy>
+  </Target>
 </Project>
