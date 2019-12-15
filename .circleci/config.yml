@@ -87,9 +87,7 @@ jobs:
       - run:
           command: npm install -g electron-builder
       - run:
-          command: cd seedtable-egui
-      - run:
-          command: electronize build /target linux
+          command: cd seedtable-egui && electronize build /target linux
       - store_artifacts:
           path: ./seedtable-egui/bin/Desktop/*.tar.gz
 
