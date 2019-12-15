@@ -3,6 +3,12 @@
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <RootNamespace>seedtable_egui</RootNamespace>
+    <Authors>Narazaka</Authors>
+    <Version>4.0.0-rc</Version>
+    <Product>seedtable</Product>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageProjectUrl>https://github.com/seed-ui/seedtable</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/seed-ui/seedtable.git</RepositoryUrl>
   </PropertyGroup>
 
 </Project>
