@@ -14,7 +14,7 @@ before_build:
 build_script:
   - .\publish.bat
   - ps: .\releases.ps1
-  - .\publish_egui.bat
+  - .\publish-egui.bat
   - ps: .\releases-egui.ps1
 test_script:
   - dotnet test
