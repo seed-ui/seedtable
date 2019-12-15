@@ -5,7 +5,7 @@ VisualStudioVersion = 16.0.29609.76
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XmSeedtable", "XmSeedtable\XmSeedtable.csproj", "{0611BC07-926D-4AC7-A970-2CB939A43BE5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TonNurako", "TonNurako\TonNurako.csproj", "{936E32EA-D5CB-41B5-B75A-A282DB26CC1C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TonNurako", "TonNurako2\TonNurako\TonNurako.csproj", "{936E32EA-D5CB-41B5-B75A-A282DB26CC1C}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "seedtable", "..\seedtable\seedtable.csproj", "{8BD2867D-75B8-4DA7-9E62-B23E994CD3A0}"
 EndProject
