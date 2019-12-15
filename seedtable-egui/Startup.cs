@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using ElectronNET.API;
 using seedtable_egui.Data;
 
 namespace seedtable_egui {
@@ -42,6 +43,8 @@ namespace seedtable_egui {
                 endpoints.MapBlazorHub();
                 endpoints.MapFallbackToPage("/_Host");
             });
+
+            Electron.WindowManager.CreateWindowAsync();
         }
     }
 }
