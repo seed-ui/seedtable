@@ -4,6 +4,7 @@
     {
         static void Main(string[] args) {
             //System.Diagnostics.Debug.Listeners.Add(new System.Diagnostics.TextWriterTraceListener(System.Console.Out));
+			TonNurako.Application.RegisterGlobals();
             var app = new TonNurako.ApplicationContext();
             app.Name = "SeedTable";
             app.FallbackResource.Add("*fontList", "-misc-fixed-medium-r-normal--14-*-*-*-*-*-*-*:");

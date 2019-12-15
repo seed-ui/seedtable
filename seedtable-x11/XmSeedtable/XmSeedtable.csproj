@@ -34,4 +34,22 @@
           DestinationFolder="$(OutputPath)">
       </Copy>
   </Target>
+
+  <Target Name="CopyExtremeSportsPublish" AfterTargets="Publish">
+      <ItemGroup>
+        <ExtremeSports 
+          Include="../TonNurako2/TonNurako/bin/$(Configuration)/netstandard2.1/libTonNurako.extremesports"/>
+      </ItemGroup>
+
+      <Message Condition="'$(OS)' != 'Unix'"
+          Text="=== SKIP TonNuraConfig ($(OS)) ===" />
+      <Copy
+          Condition="'$(OS)' == 'Unix'"
+          SourceFiles="@(ExtremeSports)"
+          DestinationFolder="$(PublishDir)">
+      </Copy>
+  </Target>
+
+
+
 </Project>
