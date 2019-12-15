@@ -9,14 +9,12 @@ configuration:
   - Release
 before_build:
   - dotnet restore
+  - dotnet tool install ElectronNET.CLI -g
+  - npm install -g electron-builder
 build_script:
   - .\publish.bat
   - ps: .\releases.ps1
-  - dotnet tool install ElectronNET.CLI -g
-  - npm install -g electron-builder
-  - cd seedtable-egui
-  - electronize build /target win
-  - cd ..
+  - .\publish_egui.bat
   - ps: .\releases-egui.ps1
 test_script:
   - dotnet test

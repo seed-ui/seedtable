@@ -1,2 +1,3 @@
 New-Item -Force -ItemType Directory releases
-Compress-Archive -Force -Path ./seedtable-egui/bin/Desktop/seedtable-egui-*-win -DestinationPath releases/seedtable-egui-win.zip
+Move-Item ./seedtable-egui/bin/Desktop/win-unpacked ./seedtable-egui/bin/Desktop/seedtable-egui-win
+Compress-Archive -Force -Path ./seedtable-egui/bin/Desktop/seedtable-egui-win -DestinationPath releases/seedtable-egui-win.zip

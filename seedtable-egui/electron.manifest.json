@@ -29,7 +29,7 @@
       "**/*"
     ],
     "win": {
-      "target": "zip",
+      "target": "dir",
       "icon": "../../../seedtable-gui.ico"
     },
     "linux": {
