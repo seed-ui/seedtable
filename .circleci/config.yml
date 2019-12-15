@@ -9,6 +9,7 @@ workflows:
     jobs:
 #      - windows-build
       - linux-test
+      - linux-xm-build
 #      - osx-test
 
 jobs:
@@ -56,6 +57,20 @@ jobs:
       - run:
           name: "Test the executable"
           command: dotnet test seedtable-test
+
+  linux-xm-build:
+    docker:
+      - image: narazaka/dotnet-openmotif:latest
+    steps:
+      - checkout
+      - run:
+          command: dotnet restore seedtable-x11/XmSeedtable
+      - run:
+          command: sh publish-xm-linux.sh
+      - run:
+          command: sh releases-xm-linux.sh
+      - store_artifacts:
+          path: ./releases
 
   osx-test:
     macos:
