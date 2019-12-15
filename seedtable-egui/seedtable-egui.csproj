@@ -8,9 +8,21 @@
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageProjectUrl>https://github.com/seed-ui/seedtable</PackageProjectUrl>
     <RepositoryUrl>https://github.com/seed-ui/seedtable.git</RepositoryUrl>
+    <ApplicationIcon>seedtable-gui.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
+    <None Remove="seedtable-gui.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="seedtable-gui.ico" />
+  </ItemGroup>
+  <ItemGroup>
     <PackageReference Include="ElectronNET.API" Version="7.30.2" />
+    <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
+    <PackageReference Include="YamlDotNet" Version="8.0.0" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\seedtable\seedtable.csproj" />
   </ItemGroup>
   <ItemGroup>
     <Content Update="electron.manifest.json">

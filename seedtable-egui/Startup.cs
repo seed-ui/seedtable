@@ -9,6 +9,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using ElectronNET.API;
+using ElectronNET.API.Entities;
 using seedtable_egui.Data;
 
 namespace seedtable_egui {
@@ -24,7 +25,7 @@ namespace seedtable_egui {
         public void ConfigureServices(IServiceCollection services) {
             services.AddRazorPages();
             services.AddServerSideBlazor();
-            services.AddSingleton<WeatherForecastService>();
+            // services.AddSingleton<WeatherForecastService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -44,7 +45,11 @@ namespace seedtable_egui {
                 endpoints.MapFallbackToPage("/_Host");
             });
 
-            Electron.WindowManager.CreateWindowAsync();
+            Electron.WindowManager.CreateWindowAsync(new BrowserWindowOptions {
+                Width = 360,
+                Height = 260,
+                AutoHideMenuBar = true,
+            });
         }
     }
 }

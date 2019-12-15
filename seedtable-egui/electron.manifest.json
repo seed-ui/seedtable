@@ -3,7 +3,7 @@
   "splashscreen": {
     "imageFile": ""
   },
-  "singleInstance": false,
+  "singleInstance": true,
   "build": {
     "appId": "com.seedtable-egui.app",
     "productName": "seedtable-egui",
