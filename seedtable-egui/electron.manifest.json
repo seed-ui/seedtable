@@ -38,7 +38,7 @@
     },
     "mac": {
       "target": "dir",
-      "icon": "../../../seedtable-gui.png"
+      "icon": "../../../seedtable-gui-osx.png"
     }
   }
 }
