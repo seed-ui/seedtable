@@ -129,7 +129,7 @@ namespace SeedTable {
 
         public static void DataToYaml(TextWriter writer, Dictionary<string, Dictionary<string, object>> datatable, YamlColumnNamesType yamlColumnNames = null) {
             var builder = new SerializerBuilder();
-            builder.EmitDefaults();
+            builder.ConfigureDefaultValuesHandling(DefaultValuesHandling.Preserve);
             var serializer = builder.Build();
             var tree = yamlColumnNames == null ? datatable : ConvertDataTableWithYamlColumns(datatable, yamlColumnNames);
             serializer.Serialize(writer, tree);
@@ -137,7 +137,7 @@ namespace SeedTable {
 
         public static void DataToYaml(TextWriter writer, IEnumerable<Dictionary<string, object>> datatable, YamlColumnNamesType yamlColumnNames = null) {
             var builder = new SerializerBuilder();
-            builder.EmitDefaults();
+            builder.ConfigureDefaultValuesHandling(DefaultValuesHandling.Preserve);
             var serializer = builder.Build();
             var tree = yamlColumnNames == null ? datatable : ConvertDataTableWithYamlColumns(datatable, yamlColumnNames);
             serializer.Serialize(writer, tree);

@@ -1,13 +1,13 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25420.1
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29609.76
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "seedtable", "seedtable\seedtable.csproj", "{8BD2867D-75B8-4DA7-9E62-B23E994CD3A0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "seedtable", "seedtable\seedtable.csproj", "{8BD2867D-75B8-4DA7-9E62-B23E994CD3A0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "seedtable-gui", "seedtable-gui\seedtable-gui.csproj", "{C4F0466D-88F8-4E40-AF57-325C47B7F93D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "seedtable-gui", "seedtable-gui\seedtable-gui.csproj", "{C4F0466D-88F8-4E40-AF57-325C47B7F93D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "seedtable-test", "seedtable-test\seedtable-test.csproj", "{3E8A7E5F-5B32-40B7-BEC4-6DA114ED3E4A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "seedtable-test", "seedtable-test\seedtable-test.csproj", "{3E8A7E5F-5B32-40B7-BEC4-6DA114ED3E4A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -19,12 +19,12 @@ Global
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{8BD2867D-75B8-4DA7-9E62-B23E994CD3A0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{8BD2867D-75B8-4DA7-9E62-B23E994CD3A0}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{8BD2867D-75B8-4DA7-9E62-B23E994CD3A0}.Debug|x86.ActiveCfg = Debug|x86
-		{8BD2867D-75B8-4DA7-9E62-B23E994CD3A0}.Debug|x86.Build.0 = Debug|x86
+		{8BD2867D-75B8-4DA7-9E62-B23E994CD3A0}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{8BD2867D-75B8-4DA7-9E62-B23E994CD3A0}.Debug|x86.Build.0 = Debug|Any CPU
 		{8BD2867D-75B8-4DA7-9E62-B23E994CD3A0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8BD2867D-75B8-4DA7-9E62-B23E994CD3A0}.Release|Any CPU.Build.0 = Release|Any CPU
-		{8BD2867D-75B8-4DA7-9E62-B23E994CD3A0}.Release|x86.ActiveCfg = Release|x86
-		{8BD2867D-75B8-4DA7-9E62-B23E994CD3A0}.Release|x86.Build.0 = Release|x86
+		{8BD2867D-75B8-4DA7-9E62-B23E994CD3A0}.Release|x86.ActiveCfg = Release|Any CPU
+		{8BD2867D-75B8-4DA7-9E62-B23E994CD3A0}.Release|x86.Build.0 = Release|Any CPU
 		{C4F0466D-88F8-4E40-AF57-325C47B7F93D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{C4F0466D-88F8-4E40-AF57-325C47B7F93D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C4F0466D-88F8-4E40-AF57-325C47B7F93D}.Debug|x86.ActiveCfg = Debug|Any CPU
@@ -44,6 +44,9 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {6092105F-8C94-4678-9FBC-278C91BB1DD8}
 	EndGlobalSection
 	GlobalSection(MonoDevelopProperties) = preSolution
 		StartupItem = seedtable\seedtable.csproj

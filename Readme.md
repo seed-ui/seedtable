@@ -29,14 +29,6 @@ Excelは大きな長所と同時に大きな短所をもち、運用上の扱い
 - xlsx -> yamlの変換のみなら似たオプションを持つ[xlsx2seed](https://github.com/Narazaka/xlsx2seed.js)もあります。
   .NET/Monoランタイムをインストールするのが難しい場合などにご利用下さい。
 
-## Requires
-
-Windows: .NET Framework 4.6.1以上
-
-Linux: Mono 4.4以上
-
-Mac: Mono 4.4以上
-
 ## Install
 
 [Releases](https://github.com/seed-ui/seedtable/releases)にあるzipをダウンロードして適当な場所に配置して下さい。
@@ -45,9 +37,9 @@ Mac: Mono 4.4以上
 - seedtable.zipはWindows/Linux/Macで動作するseedtable-gui.exeを含みます。
 - XmSeedtable-{linux,mac}.zipはそれぞれLinuxとMacで動作するXmSeedtable.exeを含みます。
 
-## Usage (seedtable.exe)
+## Usage (seedtable.exe, seedtable) [Windows, Linux, Mac]
 
-Monoの場合は`mono seedtable.exe`等として下さい。
+動作環境: Windows 7以上（.NET Core 3.1の動作要件）, Linux(64bit), Mac(64bit)
 
 ```
 # xlsx -> yaml
@@ -63,7 +55,9 @@ $ seedtable to -s db/seeds -x doc foo.xlsx -o newdoc
 
 オプションの詳細は後のOptionsの節を参照下さい。
 
-## Usage (seedtable-gui.exe)
+## Usage (seedtable-gui.exe) [Windows]
+
+動作環境: Windows 7以上（.NET Core 3.1の動作要件）
 
 ![seedtable-gui.exe](seedtable-gui.png)
 
@@ -93,17 +87,21 @@ GUIの設定ダイアログは以下のようなものです。
 
 設定の詳細は後のOptionsの節を参照下さい。
 
-## Usage (XmSeedtable.exe)
+## Usage (XmSeedtable) [Linux, Mac]
 
-![XmSeedtable.exe](seedtable-x11/seedtable-x11.png)
+動作環境: Linux(64bit), Mac(64bit)
+
+必要ライブラリ: openmotifのインストールが必要です。（debian, ubuntuならmotif）
+
+Mac必要ライブラリ: X Serverが必要ですので、Mac OS XではXQuartzをインストールし、実行した状態で起動してください。
+
+`./XmSeedtable`で動作します。
+
+![XmSeedtable](seedtable-x11/seedtable-x11.png)
 
 seedtable-gui.exeと同じくseedフォルダと設定ファイルを入力します。
 
 変換するExcelファイルを変換元で指定して「yml -> xlsx」、「xlsx -> yml」それぞれをクリックすると変換できます。
-
-Unix系OSとMac OS X等で`mono XmSeedtable.exe`または`mono --arch=64 XmSeedtable.exe`(Mac OS X等)で動作します。
-
-X Serverが必要ですので、Mac OS XではXQuartz 2.7.8をインストールしてください(2.7.9以降では動作しません)。
 
 ## Excelファイルの形式
 

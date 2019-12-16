@@ -1,0 +1,95 @@
+version: 2.1
+
+orbs:
+  win: circleci/windows@2.2.0
+
+workflows:
+  version: 2
+  build_and_test:
+    jobs:
+#      - windows-build
+      - linux-test
+      - linux-xm-build
+#      - osx-test
+
+jobs:
+  windows-build:
+    executor: win/default
+    steps:
+      - checkout
+      - run:
+          command: choco install dotnetcore-sdk --version 3.1.100 -y
+      - run:
+          command: nuget sources Enable -Name nuget.org
+      - restore_cache:
+          keys:
+            - packages-cache-windows-{{ checksum "seedtable/seedtable.csproj" }}-{{ checksum "seedtable-gui/seedtable-gui.csproj" }}
+      - run:
+          command: dotnet restore
+      - save_cache:
+          paths:
+            - C:\Users\circleci\.nuget\packages
+          key: packages-cache-windows-{{ checksum "seedtable/seedtable.csproj" }}-{{ checksum "seedtable-gui/seedtable-gui.csproj" }}
+      - run:
+          command: dotnet test seedtable-test
+      - run:
+          command: .\publish.bat
+      - run:
+          command: $ProgressPreference = "SilentlyContinue"; .\releases.ps1
+      - store_artifacts:
+          path: .\releases
+
+  linux-test:
+    docker:
+      - image: mcr.microsoft.com/dotnet/core/sdk:3.1-alpine
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - packages-cache-linux-{{ checksum "seedtable/seedtable.csproj" }}-{{ checksum "seedtable-gui/seedtable-gui.csproj" }}
+      - run:
+          name: "Install project dependencies"
+          command: dotnet restore seedtable-test
+      - save_cache:
+          paths:
+            - ~/.nuget/packages
+          key: packages-cache-linux-{{ checksum "seedtable/seedtable.csproj" }}-{{ checksum "seedtable-gui/seedtable-gui.csproj" }}
+      - run:
+          name: "Test the executable"
+          command: dotnet test seedtable-test
+
+  linux-xm-build:
+    docker:
+      - image: narazaka/dotnet-openmotif:latest
+    steps:
+      - checkout
+      - run:
+          command: git submodule update --init
+      - run:
+          command: dotnet restore seedtable-x11/XmSeedtable
+      - run:
+          command: sh publish-xm-linux.sh
+      - run:
+          command: sh releases-xm-linux.sh
+      - store_artifacts:
+          path: ./releases
+
+  osx-test:
+    macos:
+      xcode: "11.0"
+    steps:
+      - checkout
+      - run: brew cask install dotnet-sdk
+      - restore_cache:
+          keys:
+            - packages-cache-osx-{{ checksum "seedtable/seedtable.csproj" }}-{{ checksum "seedtable-gui/seedtable-gui.csproj" }}
+      - run:
+          name: "Install project dependencies"
+          command: dotnet restore seedtable-test
+      - save_cache:
+          paths:
+            - ~/.nuget/packages
+          key: packages-cache-osx-{{ checksum "seedtable/seedtable.csproj" }}-{{ checksum "seedtable-gui/seedtable-gui.csproj" }}
+      - run:
+          name: "Test the executable"
+          command: dotnet test seedtable-test
