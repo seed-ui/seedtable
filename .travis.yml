@@ -12,8 +12,8 @@ matrix:
     - script:
         - dotnet tool install ElectronNET.CLI -g
         - npm install -g electron-builder
-        - cd seedtable-egui
-        - electronize build /target osx
+        - sh publish-egui-osx.sh
+        - sh releases-egui-osx.sh
       deploy:
         provider: releases
         api_key:
