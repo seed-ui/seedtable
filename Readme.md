@@ -87,6 +87,17 @@ GUIの設定ダイアログは以下のようなものです。
 
 設定の詳細は後のOptionsの節を参照下さい。
 
+## Usage (seedtable-egui.exe, seedtable-egui) [Windows, Linux, Mac]
+
+動作環境: Windows 7以上（.NET Core 3.1の動作要件）, Linux(64bit), Mac(64bit)
+
+![seedtable-egui](seedtable-egui.png)
+
+- seedフォルダ (yaml -> xlsxの変換元、およびxlsx -> yamlの変換先になる)
+- 設定 (seedtable.exeのオプション相当 seedtable-gui.exeや手書きで作ったoptions.ymlを指定してください)
+
+を入力してから、「yml -> xlsx」、「xlsx -> yml」それぞれをクリックして変換できます。
+
 ## Usage (XmSeedtable) [Linux, Mac]
 
 動作環境: Linux(64bit), Mac(64bit)
