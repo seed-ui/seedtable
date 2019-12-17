@@ -11,7 +11,18 @@ workflows:
       - linux-test
       - linux-xm-build
       - linux-egui-build
+      - github-release/create:
+          context: tool-releasing
+          requires:
+            - linux-xm-build
+            - linux-egui-build
+          filters:
+            tags:
+              only: /^v\d+\.\d+\.\d+$/
 #      - osx-test
+
+orbs:
+  github-release: izumin5210/github-release@0.1.1
 
 jobs:
   windows-build:
@@ -74,6 +85,10 @@ jobs:
           command: sh releases-xm-linux.sh
       - store_artifacts:
           path: ./releases
+      - persist_to_workspace:
+          root: .
+          paths:
+            - ./releases/*
 
   linux-egui-build:
     docker:
@@ -92,6 +107,10 @@ jobs:
           command: sh releases-egui-linux.sh
       - store_artifacts:
           path: ./releases
+      - persist_to_workspace:
+          root: .
+          paths:
+            - ./releases/*
 
   osx-test:
     macos:
