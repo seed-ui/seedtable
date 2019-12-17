@@ -1,0 +1,57 @@
+﻿@page "/"
+@namespace seedtable_egui.Pages
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>seedtable-egui</title>
+    <base href="~/" />
+    <link href="css/site.css" rel="stylesheet" />
+    <script>
+        const { BrowserWindow, dialog } = require('electron').remote;
+
+        function win() {
+            return BrowserWindow.getFocusedWindow();
+        }
+
+        function defaultNull(obj) {
+            const newObj = { ...obj };
+            for (const key of Object.keys(newObj)) {
+                if (newObj[key] === null) delete newObj[key];
+            }
+            return newObj;
+        }
+
+        function showOpenDialog(options) {
+            return dialog.showOpenDialog(win(), defaultNull(options));
+        }
+        function showErrorBox(title, content) {
+            return dialog.showErrorBox(title || undefined, content || undefined);
+        }
+    </script>
+</head>
+<body>
+    <app>
+        <component type="typeof(App)" render-mode="ServerPrerendered" />
+    </app>
+
+    <div id="blazor-error-ui">
+        <environment include="Staging,Production">
+            An error has occurred. This application may no longer respond until reloaded.
+        </environment>
+        <environment include="Development">
+            An unhandled exception has occurred. See browser dev tools for details.
+        </environment>
+        <a href="" class="reload">Reload</a>
+        <a class="dismiss">🗙</a>
+    </div>
+
+    <script src="_framework/blazor.server.js"></script>
+</body>
+</html>

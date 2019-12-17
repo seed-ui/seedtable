@@ -2,15 +2,33 @@ version: 2.1
 
 orbs:
   win: circleci/windows@2.2.0
+  github-release: izumin5210/github-release@0.1.1
 
 workflows:
   version: 2
   build_and_test:
     jobs:
-#      - windows-build
-      - linux-test
-      - linux-xm-build
-#      - osx-test
+      - linux-test:
+          filters:
+            tags:
+              only: /^v\d+\.\d+\.\d+$/
+      - linux-xm-build:
+          filters:
+            tags:
+              only: /^v\d+\.\d+\.\d+$/
+      - linux-egui-build:
+          filters:
+            tags:
+              only: /^v\d+\.\d+\.\d+$/
+      - github-release/create:
+          requires:
+            - linux-xm-build
+            - linux-egui-build
+          filters:
+            branches:
+              ignore: /.*/
+            tags:
+              only: /^v\d+\.\d+\.\d+$/
 
 jobs:
   windows-build:
@@ -73,6 +91,32 @@ jobs:
           command: sh releases-xm-linux.sh
       - store_artifacts:
           path: ./releases
+      - persist_to_workspace:
+          root: .
+          paths:
+            - ./releases/*
+
+  linux-egui-build:
+    docker:
+      - image: narazaka/dotnet-node:latest
+    steps:
+      - checkout
+      - run:
+          command: dotnet restore seedtable-egui
+      - run:
+          command: dotnet tool install ElectronNET.CLI -g
+      - run:
+          command: npm install -g electron-builder
+      - run:
+          command: sh publish-egui-linux.sh
+      - run:
+          command: sh releases-egui-linux.sh
+      - store_artifacts:
+          path: ./releases
+      - persist_to_workspace:
+          root: .
+          paths:
+            - ./releases/*
 
   osx-test:
     macos:

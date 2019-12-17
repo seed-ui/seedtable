@@ -9,9 +9,13 @@ configuration:
   - Release
 before_build:
   - dotnet restore
+  - dotnet tool install ElectronNET.CLI -g
+  - npm install -g electron-builder
 build_script:
   - .\publish.bat
   - ps: .\releases.ps1
+  - .\publish-egui.bat
+  - ps: .\releases-egui.ps1
 test_script:
   - dotnet test
 artifacts:
@@ -27,6 +31,8 @@ artifacts:
     name: seedtable-gui
   - path: releases/seedtable-gui-need-runtime.zip
     name: seedtable-gui-need-runtime
+  - path: releases/seedtable-egui-win.zip
+    name: seedtable-egui-win
 deploy:
   provider: GitHub
   auth_token:
