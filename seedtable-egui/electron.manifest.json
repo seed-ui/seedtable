@@ -33,7 +33,7 @@
       "icon": "../../../seedtable-gui.ico"
     },
     "linux": {
-      "target": "tar.gz",
+      "target": "dir",
       "icon": "../../../seedtable-gui.png"
     },
     "mac": {
