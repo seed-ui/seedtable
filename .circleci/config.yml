@@ -29,6 +29,7 @@ workflows:
               ignore: /.*/
             tags:
               only: /v.*/
+          path: ./releases/
 
 jobs:
   windows-build:
