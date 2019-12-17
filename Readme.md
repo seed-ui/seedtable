@@ -33,10 +33,6 @@ Excelは大きな長所と同時に大きな短所をもち、運用上の扱い
 
 [Releases](https://github.com/seed-ui/seedtable/releases)にあるzipをダウンロードして適当な場所に配置して下さい。
 
-- seedtable.zip、XmSeedtable-linux.zip、XmSeedtable-mac.zipのいずれも、全環境で動作するseedtable.exeを含みます。
-- seedtable.zipはWindows/Linux/Macで動作するseedtable-gui.exeを含みます。
-- XmSeedtable-{linux,mac}.zipはそれぞれLinuxとMacで動作するXmSeedtable.exeを含みます。
-
 ## Usage (seedtable.exe, seedtable) [Windows, Linux, Mac]
 
 動作環境: Windows 7以上（.NET Core 3.1の動作要件）, Linux(64bit), Mac(64bit)
@@ -90,6 +86,8 @@ GUIの設定ダイアログは以下のようなものです。
 ## Usage (seedtable-egui.exe, seedtable-egui) [Windows, Linux, Mac]
 
 動作環境: Windows 7以上（.NET Core 3.1の動作要件）, Linux(64bit), Mac(64bit)
+
+Linuxの制約: `./seedtable-egui --no-sandbox`等として起動する必要があるかもしれません。
 
 ![seedtable-egui](seedtable-egui.png)
 
