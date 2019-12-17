@@ -2,6 +2,7 @@ version: 2.1
 
 orbs:
   win: circleci/windows@2.2.0
+  github-release: izumin5210/github-release@0.1.1
 
 workflows:
   version: 2
@@ -20,9 +21,6 @@ workflows:
             tags:
               only: /^v\d+\.\d+\.\d+$/
 #      - osx-test
-
-orbs:
-  github-release: izumin5210/github-release@0.1.1
 
 jobs:
   windows-build:
