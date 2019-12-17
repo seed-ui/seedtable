@@ -41,6 +41,11 @@
         RestorePersonalFormValues();
     }
 
+    [JSInvokable]
+    public static void OnClose() {
+        ElectronNET.API.Electron.App.Quit();
+    }
+
     void EndLog() {
         LogWindow = false;
     }

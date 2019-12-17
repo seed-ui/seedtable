@@ -34,6 +34,10 @@
         function showErrorBox(title, content) {
             return dialog.showErrorBox(title || undefined, content || undefined);
         }
+
+        win().on('close', function(e) {
+            DotNet.invokeMethodAsync("seedtable-egui", "OnClose");
+        });
     </script>
 </head>
 <body>
