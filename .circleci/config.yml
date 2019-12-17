@@ -12,7 +12,6 @@ workflows:
       - linux-xm-build
       - linux-egui-build
       - github-release/create:
-          context: tool-releasing
           requires:
             - linux-xm-build
             - linux-egui-build
