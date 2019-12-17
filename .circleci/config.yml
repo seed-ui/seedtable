@@ -11,15 +11,15 @@ workflows:
       - linux-test:
           filters:
             tags:
-              only: /^v\d+\.\d+\.\d+$/
+              only: /^v\d+\.\d+\.\d+/
       - linux-xm-build:
           filters:
             tags:
-              only: /^v\d+\.\d+\.\d+$/
+              only: /^v\d+\.\d+\.\d+/
       - linux-egui-build:
           filters:
             tags:
-              only: /^v\d+\.\d+\.\d+$/
+              only: /^v\d+\.\d+\.\d+/
       - github-release/create:
           requires:
             - linux-xm-build
@@ -28,7 +28,7 @@ workflows:
             branches:
               ignore: /.*/
             tags:
-              only: /^v\d+\.\d+\.\d+$/
+              only: /^v\d+\.\d+\.\d+/
 
 jobs:
   windows-build:
