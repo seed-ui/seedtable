@@ -477,24 +477,11 @@ seedtable-gui.exeなどGUIクライアントを用いるときは、当該の--i
 
 ただし仕事の合間対応なので反応速度ははやいとは限りません。
 
+反応がない場合はTwitterの@narazakaなどにリプライください。
+
 ## Build
 
-### seedtable.exe / seedtable-gui.exe
-
-普通にseedtable.slnを開いてnugetパッケージの復元してからビルドすれば通ると思います。
-
-### XmSeedtable.exe
-
-Xlib、OpenMotif、libxpm等に依存します。詳細は[.travis.yml](.travis.yml)などを参照ください。
-
-```
-git submodule init
-git submodule update
-nuget restore
-cd seedtable-x11
-nuget restore
-```
-等したのち`seedtable-x11/TonNurako/TonNurakoEx/Config.mp3`を`seedtable-x11/TonNurako/TonNurakoEx/Site.mp3`へコピーして、include先を適切なパスへ書き換え、`seedtable-x11`ディレクトリ内でxbuildを叩いてください。
+appveyor.yml, .ciecleci/config.yml, .travis.yml等を参照ください。
 
 ## License
 
