@@ -45,15 +45,11 @@ namespace seedtable_egui {
                 endpoints.MapFallbackToPage("/_Host");
             });
 
-            var win = Electron.WindowManager.CreateWindowAsync(new BrowserWindowOptions {
+            Electron.WindowManager.CreateWindowAsync(new BrowserWindowOptions {
                 Width = 360,
                 Height = 260,
                 AutoHideMenuBar = true,
-            }).Result;
-
-            win.OnClosed += () => {
-                Environment.Exit(0);
-            };
+            });
         }
     }
 }
