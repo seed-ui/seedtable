@@ -18,8 +18,7 @@ matrix:
         provider: releases
         api_key:
           secure: "wD4X0IESRzhZoiemT88QMZRTo0WxDIwHZ/eHN/ee6DwoR8b6WrKQ0j31r+eT6XWE+BTeHwDdh3YASgL4VBpql65KQ3LMoKeq1ODl2cXqXTNSa220ArPf+5qmNhpAzSFUqa3gBil1D9fZnnzHCiDNAA4fEVbcEF7hvXHjfUN+Fbt/6sQDACtZmjiG507py5yjK0ZkrOl8vbuMbZcFkA0iQTpQVY1GsSwBiupRLF/+2KwV2/9SXgL3ZAEHTUUbfGgnV810EjxpPEotFi4xjFhEQvqcTfpJTQtFrfpGiCLScXKIelD1NFpj3E/1xxCA3txybEQImlkQQaoayyxfMUnGFENmRS6izNISFeF/Ayal24JAfy0Tez3p65Gr7cCY6thdLMrsxR0l1R/maO4DhFPr04H5CI81gEHq1o3+602RpyQDwmTeI0NPuNZdAtSLGWYKsBTi1C9zHtAUprkkqhJTyYhAX+XBRI4WCrpEybQanO1Fk4rPsT+vzV+4+6yxyxY37kRbECLJ+3p0qplNCUST92TzqOXXh+pbpnkdy3BkwYhDl3EU5D7g09DEBC38a5UNQrVjOWJQ/qcBLIWgJGvBZa5RlMlN5UV52HJOIhwfTEt2sO1fxBn3UIwYdYlP+k8v1s2mkX4aaC2EMAdtG+kpV2o85qQVXENV/v0UdMrHjDQ="
-        file: seedtable-egui/bin/Desktop/*.*
-        file_glob: true
+        file: releases/seedtable-egui-osx.zip
         skip_cleanup: true
         on:
           tags: true
