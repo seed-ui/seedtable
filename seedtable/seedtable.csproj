@@ -6,7 +6,7 @@
     <ApplicationIcon>seedtable.ico</ApplicationIcon>
     <AssemblyName>seedtable</AssemblyName>
     <RootNamespace>SeedTable</RootNamespace>
-    <Version>4.0.0-rc3</Version>
+    <Version>4.0.0-rc4</Version>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
     <Company />
     <Authors>Narazaka</Authors>
