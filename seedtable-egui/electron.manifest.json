@@ -8,7 +8,7 @@
     "appId": "net.narazaka.seedtable-egui.app",
     "productName": "seedtable-egui",
     "copyright": "Copyright © 2019 Narazaka",
-    "buildVersion": "4.0.0-rc",
+    "buildVersion": "4.0.0-rc2",
     "compression": "maximum",
     "directories": {
       "output": "../../../bin/Desktop"

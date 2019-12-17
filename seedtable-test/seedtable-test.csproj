@@ -11,7 +11,7 @@
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageProjectUrl>https://github.com/seed-ui/seedtable</PackageProjectUrl>
     <RepositoryUrl>https://github.com/seed-ui/seedtable.git</RepositoryUrl>
-    <Version>4.0.0-rc</Version>
+    <Version>4.0.0-rc2</Version>
   </PropertyGroup>
   <ItemGroup>
     <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />
