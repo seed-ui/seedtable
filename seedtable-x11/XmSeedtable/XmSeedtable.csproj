@@ -4,7 +4,7 @@
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <AssemblyName>XmSeedTable</AssemblyName>
     <RootNamespace>XmSeedTable</RootNamespace>
-    <Version>4.0.0</Version>
+    <Version>4.0.1</Version>
     <Authors>Narazaka</Authors>
     <Company />
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
@@ -17,36 +17,26 @@
     <ProjectReference Include="..\TonNurako2\TonNurako\TonNurako.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="YamlDotNet" Version="8.1.2"/>
+    <PackageReference Include="YamlDotNet" Version="8.1.2" />
   </ItemGroup>
 
   <Target Name="CopyExtremeSports" AfterTargets="Build">
       <ItemGroup>
-        <ExtremeSports 
-          Include="../TonNurako2/TonNurako/bin/$(Configuration)/netstandard2.1/libTonNurako.extremesports"/>
+        <ExtremeSports Include="../TonNurako2/TonNurako/bin/$(Configuration)/netstandard2.1/libTonNurako.extremesports" />
       </ItemGroup>
 
-      <Message Condition="'$(OS)' != 'Unix'"
-          Text="=== SKIP TonNuraConfig ($(OS)) ===" />
-      <Copy
-          Condition="'$(OS)' == 'Unix'"
-          SourceFiles="@(ExtremeSports)"
-          DestinationFolder="$(OutputPath)">
+      <Message Condition="'$(OS)' != 'Unix'" Text="=== SKIP TonNuraConfig ($(OS)) ===" />
+      <Copy Condition="'$(OS)' == 'Unix'" SourceFiles="@(ExtremeSports)" DestinationFolder="$(OutputPath)">
       </Copy>
   </Target>
 
   <Target Name="CopyExtremeSportsPublish" AfterTargets="Publish">
       <ItemGroup>
-        <ExtremeSports 
-          Include="../TonNurako2/TonNurako/bin/$(Configuration)/netstandard2.1/libTonNurako.extremesports"/>
+        <ExtremeSports Include="../TonNurako2/TonNurako/bin/$(Configuration)/netstandard2.1/libTonNurako.extremesports" />
       </ItemGroup>
 
-      <Message Condition="'$(OS)' != 'Unix'"
-          Text="=== SKIP TonNuraConfig ($(OS)) ===" />
-      <Copy
-          Condition="'$(OS)' == 'Unix'"
-          SourceFiles="@(ExtremeSports)"
-          DestinationFolder="$(PublishDir)">
+      <Message Condition="'$(OS)' != 'Unix'" Text="=== SKIP TonNuraConfig ($(OS)) ===" />
+      <Copy Condition="'$(OS)' == 'Unix'" SourceFiles="@(ExtremeSports)" DestinationFolder="$(PublishDir)">
       </Copy>
   </Target>
 
