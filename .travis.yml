@@ -3,14 +3,14 @@ mono: none
 dotnet: 3.1.100
 solution: seedtable-x11/XmSeedtable.sln
 os: osx
-osx_image: xcode11.2
+osx_image: xcode11.5
 matrix:
   include:
     - script:
         - dotnet restore seedtable-test
         - dotnet test seedtable-test
     - script:
-        - dotnet tool install ElectronNET.CLI -g
+        - dotnet tool install ElectronNET.CLI -g --version 8.31.1
         - npm install -g electron-builder
         - sh publish-egui-osx.sh
         - sh releases-egui-osx.sh

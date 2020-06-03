@@ -105,7 +105,7 @@ jobs:
       - run:
           command: dotnet restore seedtable-egui
       - run:
-          command: dotnet tool install ElectronNET.CLI -g
+          command: dotnet tool install ElectronNET.CLI -g --version 8.31.1
       - run:
           command: npm install -g electron-builder
       - run:
