@@ -9,7 +9,7 @@ configuration:
   - Release
 before_build:
   - dotnet restore
-  - dotnet tool install ElectronNET.CLI -g
+  - dotnet tool install ElectronNET.CLI -g --version 8.31.1
   - npm install -g electron-builder
 build_script:
   - .\publish.bat

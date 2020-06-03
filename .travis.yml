@@ -10,7 +10,7 @@ matrix:
         - dotnet restore seedtable-test
         - dotnet test seedtable-test
     - script:
-        - dotnet tool install ElectronNET.CLI -g
+        - dotnet tool install ElectronNET.CLI -g --version 8.31.1
         - npm install -g electron-builder
         - sh publish-egui-osx.sh
         - sh releases-egui-osx.sh
