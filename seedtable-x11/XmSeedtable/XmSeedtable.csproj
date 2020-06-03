@@ -17,7 +17,7 @@
     <ProjectReference Include="..\TonNurako2\TonNurako\TonNurako.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="YamlDotNet" Version="8.0.0"/>
+    <PackageReference Include="YamlDotNet" Version="8.1.2"/>
   </ItemGroup>
 
   <Target Name="CopyExtremeSports" AfterTargets="Build">
