@@ -3,7 +3,7 @@ mono: none
 dotnet: 3.1.100
 solution: seedtable-x11/XmSeedtable.sln
 os: osx
-osx_image: xcode11.2
+osx_image: xcode11.5
 matrix:
   include:
     - script:
