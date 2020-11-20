@@ -33,7 +33,7 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="YamlDotNet">
-      <Version>8.1.2</Version>
+      <Version>9.1.0</Version>
     </PackageReference>
   </ItemGroup>
 </Project>
