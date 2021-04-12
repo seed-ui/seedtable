@@ -29,7 +29,7 @@
       <Version>4.5.3.3</Version>
     </PackageReference>
     <PackageReference Include="YamlDotNet">
-      <Version>8.1.2</Version>
+      <Version>11.1.1</Version>
     </PackageReference>
   </ItemGroup>
 </Project>
